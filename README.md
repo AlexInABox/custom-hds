@@ -3,9 +3,9 @@
 
 How:
 
--clone repository
--edit some of the variables in index.js
--npm install
--npm run index.js
--...
--profit?
+-clone repository  
+-edit some of the variables in index.js  
+-npm install  
+-npm run index.js  
+-...  
+-profit?  
