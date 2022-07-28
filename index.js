@@ -1,40 +1,67 @@
 const WebSocket = require('ws');                          //websocket
 const fetch = require('node-fetch');                      //interact with the discord webhook
 const fs = require('fs');                                 //file-write-system
+const path = require("path");                             //used to get the relative path the file is placed in
 const schedule = require('node-schedule');                //importing node-schedule to reset the daily stepsCounter at 0'clock
 const wss = new WebSocket.Server({ port: 3476 });         //creating the server on port 3476 (thats the standard port HealthDataServer is using) 
 
-//initializing secrets
-const webhookurl = process.env['webhook']                 //normal webhook url without /messages/<message_id>
-const webhookurlPatchH = process.env['webhookPatchH']
-const webhookurlPatchO = process.env['webhookPatchO']
-const webhookurlPatchS = process.env['webhookPatchS']
-const webhookurlPatchSpeed = process.env['webhookPatchSpeed']
-const secretPass = process.env['secretPass']
-const webhookurlPatchH2 = process.env['webhookPatchH2']
-const webhookurlPatchSpeed2 = process.env['webhookPatchSpeed2']
-const webhookurlPatchS2 = process.env['webhookPatchS2']
-const webhookurlPatchO2 = process.env['webhookPatchO2']
+//initializing secrets -- here edit every constant as you will
+//const webhookurl = ''                //normal webhook url without /messages/<message_id>
+const webhookurlPatchH = ''
+const webhookurlPatchO = ''
+const webhookurlPatchS = ''
+const webhookurlPatchSpeed = ''
+//server 2 webhooks -- you need to set them rn or the server crashes (its okay to just use the same webhooks)
+const webhookurlPatchH2 = ''
+const webhookurlPatchSpeed2 = ''
+const webhookurlPatchS2 = ''
+const webhookurlPatchO2 = ''
+
+const secretPass = 'whydoiexist'; //<-------------- set a secret param like this
+//end-of secrets
+
+
+/*
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+||||    from here on: dont change anything unless you know what you are doing!    ||||          (not that i know what im even doing lol)
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+*/
+
+
 
 //a schedule wich resets the allTimeStepto0 counter at 0'clock
-const j = schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
+const whatevenisreality = schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
   console.log('Job runs every day at 0:00AM');
   resetStepCount();
 });
 
-//step variables
+
+resetStepCount = function() {
+  allTimeStepto0 = allTimeStep;
+
+  sendWebhookSteps(0, webhookurlPatchS);  //reset the webhook value manually incase the watch is not active
+  fs.writeFile(path.resolve(__dirname, "../custom-hds/stepCountTo0.txt"), allTimeStepto0.toString(), err => {
+    if (err) {
+      console.error(err);
+    }
+    // file written successfully
+  });
+};
+//end-of schedule
+
+//step-variables-initialization
 var allTimeStep;         //all steps ever
 var allTimeStepto0;      //all steps ever to 0'clock
 var stepsToday;          //all steps today
-var lastStepValue;   //last step value send by the watch
+var lastStepValue;       //last step value sent by the watch
 
-setallTimeStep();        //on startup get the last saved stepValue from stepCount.txt and stepCountTo0.txt
+setallTimeStep();        //on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
 setallTimeStepTo0();
-setlastStepValue()
+setlastStepValue();
 
 function setallTimeStep() {
 
-  fs.readFile('/home/runner/SmalHearth/stepCount.txt', 'utf8', (err, data) => {
+  fs.readFile(path.resolve(__dirname, "../custom-hds/stepCount.txt"), 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       allTimeStep = 0;
@@ -46,7 +73,7 @@ function setallTimeStep() {
 
 function setallTimeStepTo0() {
 
-  fs.readFile('/home/runner/SmalHearth/stepCountTo0.txt', 'utf8', (err, data) => {
+  fs.readFile(path.resolve(__dirname, "../custom-hds/stepCountTo0.txt"), 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       allTimeStepto0 = 0;
@@ -58,7 +85,7 @@ function setallTimeStepTo0() {
 
 function setlastStepValue() {
 
-  fs.readFile('/home/runner/SmalHearth/lastStepValue.txt', 'utf8', (err, data) => {
+  fs.readFile(path.resolve(__dirname, "../custom-hds/lastStepValue.txt"), 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       allTimeStep = 0;
@@ -68,75 +95,80 @@ function setlastStepValue() {
   });
 }
 
-//end-of step variables
+//end-of step-variables-initialization
 
 
-resetStepCount = function() {
-  allTimeStepto0 = allTimeStep;
 
-  sendWebhookSteps(0, webhookurlPatchS);
-  fs.writeFile('/home/runner/SmalHearth/stepCountTo0.txt', allTimeStepto0.toString(), err => {
-    if (err) {
-      console.error(err);
-    }
-    // file written successfully
-  });
-};
-
-//Server n stuff
+//now the interesting part:
 
 wss.on('connection', (ws, req) => {
 
-  console.log('I sense a new client!');       //logging the connection of a new client
+  console.log('I sense a new client!');                        //logging the connection of a new client
 
-  urlparam = req.url.toString();
-  console.log(urlparam);
+  urlparam = req.url.toString();                               //saving the url parameter the client connected with (wss://ip/path?param=realityfeelsslippery)
+  console.log(urlparam);                                       //logging the url (param)
 
-  if (urlparam != ('/?param=' + secretPass)) {
-    console.log('REFUSED A CONNECTION ON: ' + urlparam);
+  if (urlparam != ('/?param=' + secretPass)) {                 //check if the url parameter provided equal to our secret password
+    console.log('REFUSED A CONNECTION ON: ' + urlparam);       //if thats not the case we close the connection
     ws.close();
   }
-  else console.log('Accepted a connection on: ' + urlparam);
+  else console.log('Accepted a connection on: ' + urlparam);   //if the parameter is right we keep the connection alive and start listening to sent messages
 
 
 
-  ws.on('ping', ws.pong); //ping-pong response (dunno if that even works lol)
+  ws.on('ping', ws.pong);                                      //ping-pong response (dunno if that even works lol)
 
-  ws.on('message', message => { //when a message event is triggered 
-    handleMessage(message); //give message data to the handleMessage function
+  ws.on('message', message => {                                //when a message event is triggered
+    handleMessage(message);                                    //give message data to the handleMessage function
   })
 })
 
 
 
-handleMessage = function(message) {
-  const smessage = message.toString();
+handleMessage = function(message) {                                        //This function identifies the content of the passed message and processes it accordingly
 
+  const smessage = message.toString();                                     //lazy variable
 
-  if (smessage.startsWith('heartRate')) {                              //check if message received contains a Heart Rate
+  if (smessage.startsWith('heartRate')) {                                  //check if message received contains a Heart Rate
+    const hrate = smessage.substr(10, 3);                                  //cut the messsage so that only the heart rate remains
+    console.log(smessage);                                                 //logging for debug purposes
+    sendWebhookHeartRate(hrate, webhookurlPatchH);                         //passing the heartRate to the sendWebhookHeartRate function
+    sendWebhookHeartRate(hrate, webhookurlPatchH2);                        //passing the heartRate to the sendWebhookHeartRate function (with a different webhook url)
 
-    const hrate = smessage.substr(10, 3);                              //cut the messsage so that only the heart rate remains
-    console.log(smessage);                                             //logging for debug purposes
-    sendWebhookHeartRate(hrate, webhookurlPatchH);
-    sendWebhookHeartRate(hrate, webhookurlPatchH2);//passing the heartRate to the sendWebhookHeartRate function.
-
-    fs.writeFile('/home/runner/SmalHearth/hrate.txt', hrate, err => {  //write the heart rate to a file named hrate.txt
+    fs.writeFile(path.resolve(__dirname, "../custom-hds/hrate.txt"), hrate, err => {  //write the heartRate to a file named hrate.txt
       if (err) {
         console.error(err);
       }
       //console.log('The file with the content ' + hrate + ' has been written succesfully!');
     });
-  };
+  }; //end-of heartRate-check
 
-  if (smessage.startsWith('stepCount')) {        //check if message received contains a stepCount
-    const stepCount = smessage.substr(10, 18);   //cut the messsage so that only the stepCount remains
-    console.log(smessage);                       //logging for debug purposes
-    console.log(allTimeStep);
+  if (smessage.startsWith('oxygenSaturation')) {                           //check if message received contains a oxygenSaturation value
+    const oxygenSaturation = parseFloat(smessage.substr(17, 20));          //cut the messsage so that only the speed value remains
+    console.log(smessage);                                                 //logging for debug purposes
 
-    //TODO
-    const stepCountInt = parseInt(stepCount);    //lazy variable
+    sendWebhookOxygen(oxygenSaturation, webhookurlPatchO);                 //passing oxygenSaturation to the sendWebhookOxygen function
+    sendWebhookOxygen(oxygenSaturation, webhookurlPatchO2);                //passing oxygenSaturation to the sendWebhookOxygen function (with a different webhookurl)
 
-    if (stepCount >= allTimeStep) {              //when restarting a hds session your stepCount gets resetted to avoid inacurate DailySteps this part here adds the new (lower) stepCount to the old (higher) allTimeStep count
+    fs.writeFile(path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"), oxygenSaturation.toString(), err => {    //write the oxygenSaturation value to a file named oxygenSaturation.txt
+      if (err) {
+        console.error(err);
+      };
+      //console.log('The file with the content ' + oxygenSaturation + ' has been written succesfully!');
+    });
+  }; //end-of oxygenSaturation-check
+
+  if (smessage.startsWith('stepCount')) {                                  //check if message received contains a stepCount
+
+    //Warning: If you want to keep your sanity 
+    //then don't even try to understand the following code!
+
+    const stepCount = smessage.substr(10, 18);                             //cut the messsage so that only the stepCount remains
+    console.log(smessage);                                                 //logging for debug purposes
+    //console.log(allTimeStep);
+    const stepCountInt = parseInt(stepCount);                              //lazy variable
+
+    if (stepCount >= allTimeStep) {                                        //when restarting a hds session your stepCount gets resetted to avoid inacurate DailySteps this part here adds the new (lower) stepCount to the old (higher) allTimeStep count
       allTimeStep = stepCountInt;
     }
     else {
@@ -150,60 +182,44 @@ handleMessage = function(message) {
       }
     }
 
-    stepsToday = allTimeStep - allTimeStepto0;   //set the stepsToday var to the difference of allTimeStep and allTimeStepto0
+    stepsToday = allTimeStep - allTimeStepto0;                             //set the stepsToday var to the difference of allTimeStep and allTimeStepto0
     console.log('stepsToday: ' + stepsToday);
 
-    //END-TODO
+    sendWebhookSteps(stepsToday, webhookurlPatchS);                        //passing the stepsToday to the sendWebhookSteps function
+    sendWebhookSteps(stepsToday, webhookurlPatchS2);                       //passing the stepsToday to the sendWebhookSteps function (with a different webhookurl)
 
-    sendWebhookSteps(stepsToday, webhookurlPatchS);
-    sendWebhookSteps(stepsToday, webhookurlPatchS2);//passing the allTimeSteps to the sendWebhookSteps function.
-
-    fs.writeFile('/home/runner/SmalHearth/lastStepValue.txt', lastStepValue.toString(), err => {   //write the total stepCount to a file named stepCount.txt
+    fs.writeFile(path.resolve(__dirname, "../custom-hds/lastStepValue.txt"), lastStepValue.toString(), err => {   //write the lastStepValue to a file named lastStepValue.txt incase the server crashes or shuts down
       if (err) {
         console.error(err);
       }
       //console.log('The file with the content ' + stepsToday + ' has been written succesfully!');
     });
 
-    fs.writeFile('/home/runner/SmalHearth/stepCount.txt', allTimeStep.toString(), err => {   //write the total stepCount to a file named stepCount.txt
+    fs.writeFile(path.resolve(__dirname, "../custom-hds/stepCount.txt"), allTimeStep.toString(), err => {   //write the total stepCount to a file named stepCount.txt incase the server crashes or shuts down
       if (err) {
         console.error(err);
       }
       //console.log('The file with the content ' + stepsToday + ' has been written succesfully!');
     });
-  };
+  }; //end-of stepCount-check
 
-  if (smessage.startsWith('speed')) {            //check if message received contains a speed value
-    const speed = smessage.substr(6, 10);        //cut the messsage so that only the speed value remains
-    console.log(smessage);   //logging for debug purposes
+  if (smessage.startsWith('speed')) {                                      //check if message received contains a speed value
+    const speed = smessage.substr(6, 10);                                  //cut the messsage so that only the speed value remains
+    console.log(smessage);                                                 //logging for debug purposes
 
-    const speedNormal = Math.round(speed * 100) / 100; //round the number to 2nd decimal
+    const speedNormal = Math.round(speed * 100) / 100;                     //round the number to 2nd decimal -- you can change this but I figured the speedValue looks more pleasant this way
 
-    sendWebhookSpeed(speedNormal, webhookurlPatchSpeed);
-    sendWebhookSpeed(speedNormal, webhookurlPatchSpeed2);
+    sendWebhookSpeed(speedNormal, webhookurlPatchSpeed);                   //passing speedNormal to the sendWebhookSpeed function
+    sendWebhookSpeed(speedNormal, webhookurlPatchSpeed2);                  //passing speedNormal to the sendWebhookSpeed function (with a different webhookurl)
 
-    fs.writeFile('/home/runner/SmalHearth/speed.txt', speed, err => {           //write the speed value to a file named speed.txt
+    fs.writeFile(path.resolve(__dirname, "../custom-hds/speed.txt"), speedNormal, err => {     //write the speed value to a file named speed.txt
       if (err) {
         console.error(err);
       }
-      //console.log('The file with the content ' + speed + ' has been written succesfully!');
+      //console.log('The file with the content ' + speedNormal + ' has been written succesfully!');
     });
-  };
-
-  if (smessage.startsWith('oxygenSaturation')) {         //check if message received contains a oxygenSaturation value
-    const oxygenSaturation = parseFloat(smessage.substr(17, 20));
-    console.log(smessage);
-    sendWebhookOxygen(oxygenSaturation, webhookurlPatchO);
-    sendWebhookOxygen(oxygenSaturation, webhookurlPatchO2);
-
-    fs.writeFile('/home/runner/SmalHearth/oxygenSaturation.txt', oxygenSaturation.toString(), err => {
-      if (err) {
-        console.error(err);
-      }
-      // file written successfully
-    });
-  };
-};
+  }; //end-of speed-check
+}; //end-of handleMessage()
 
 
 
@@ -225,8 +241,6 @@ sendWebhookHeartRate = function(hrate, webhookurl) {
         }
       }
     ],
-    "username": "HeartRate",
-    "avatar_url": "https://raw.githubusercontent.com/Rexios80/Health-Data-Server-Overlay/master/assets/images/icon.png",
     "attachments": []
   }
 
@@ -258,8 +272,6 @@ sendWebhookOxygen = function(ovalue, webhookurl) {
         }
       }
     ],
-    "username": "OxygenSaturation",
-    "avatar_url": "https://tinypic.host/images/2022/07/25/82936B2B-A7E2-4A76-A35F-045467E356A7.png",
     "attachments": []
   }
 
@@ -288,8 +300,6 @@ sendWebhookSteps = function(steps, webhookurl) {
         }
       }
     ],
-    "username": "Pedometer",
-    "avatar_url": "https://tinypic.host/images/2022/07/27/peodometer_icon.png",
     "attachments": []
   }
 
@@ -318,8 +328,6 @@ sendWebhookSpeed = function(speed, webhookurl) {
         }
       }
     ],
-    "username": "Speed",
-    "avatar_url": "https://tinypic.host/images/2022/07/27/tacho_icon-1.png",
     "attachments": []
   }
 
@@ -333,3 +341,9 @@ sendWebhookSpeed = function(speed, webhookurl) {
 };
 
 //end-of WebhookSending functions
+/*end-of everything 
+                      finally it's over, felt like torture didn't it? welp, that was my code. 
+                      If for some fucked up reason you enjoyed reading this, let me tell you this: 
+                      Thank you, but you should seek help as ASAP. Reading this code now, I'm having multiple strokes at once and lost count around line 50. 
+                      Thx for reading to the end, kind stranger ~ alex
+*/
