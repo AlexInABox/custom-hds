@@ -1,2 +1,11 @@
-# custom-hds
-A custom Health Data Server written in Node.js to export your Heart Rate (and other stuff) live into a textfile, discord webhook, your webpage etc....
+# custom-hds - built for the [Health-Data-Server](https://github.com/Rexios80/Health-Data-Server-Overlay/).
+
+
+How:
+
+-clone repository  
+-edit some of the variables in index.js  
+-npm install  
+-npm run index.js  
+-...  
+-profit?  
