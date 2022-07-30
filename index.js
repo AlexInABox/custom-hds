@@ -40,6 +40,7 @@ resetStepCount = function() {
   allTimeStepto0 = allTimeStep;
 
   sendWebhookSteps(0, webhookurlPatchS);  //reset the webhook value manually incase the watch is not active
+  sendWebhookSteps(0, webhookurlPatchS2); //same for the second webhook ^^
   fs.writeFile(path.resolve(__dirname, "../custom-hds/stepCountTo0.txt"), allTimeStepto0.toString(), err => {
     if (err) {
       console.error(err);
