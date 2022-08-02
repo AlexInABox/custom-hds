@@ -5,6 +5,7 @@ const path = require("path");                             //used to get the rela
 const schedule = require('node-schedule');                //importing node-schedule to reset the daily stepsCounter at 0'clock
 const wss = new WebSocket.Server({ port: 3476 });         //creating the server on port 3476 (thats the standard port HealthDataServer is using) 
 const version_id = "1.0.0";
+process.env.TZ = 'Europe/Amsterdam'                       //set this to your timezone
 
 //initializing secrets -- here edit every constant as you will
 //const webhookurl = ''                //normal webhook url without /messages/<message_id>
@@ -228,7 +229,6 @@ handleMessage = function(message) {                                        //Thi
 //WebhookSending functions
 
 sendWebhookHeartRate = function(hrate, webhookurl) {
-  process.env.TZ = 'Europe/Amsterdam';
   var datetime = new Date();
   const ctime = datetime.toLocaleDateString() + ' ' + datetime.toLocaleTimeString();
   var params = {
@@ -259,7 +259,6 @@ sendWebhookHeartRate = function(hrate, webhookurl) {
 };
 
 sendWebhookOxygen = function(ovalue, webhookurl) {
-  process.env.TZ = 'Europe/Amsterdam';
   var datetime = new Date();
   const ctime = datetime.toLocaleDateString() + ' ' + datetime.toLocaleTimeString();
   var params = {
@@ -287,7 +286,6 @@ sendWebhookOxygen = function(ovalue, webhookurl) {
 };
 
 sendWebhookSteps = function(steps, webhookurl) {
-  process.env.TZ = 'Europe/Amsterdam';
   var datetime = new Date();
   const ctime = datetime.toLocaleDateString() + ' ' + datetime.toLocaleTimeString();
   var params = {
@@ -315,7 +313,6 @@ sendWebhookSteps = function(steps, webhookurl) {
 };
 
 sendWebhookSpeed = function(speed, webhookurl) {
-  process.env.TZ = 'Europe/Amsterdam';
   var datetime = new Date();
   const ctime = datetime.toLocaleDateString() + ' ' + datetime.toLocaleTimeString();
   var params = {
