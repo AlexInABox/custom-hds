@@ -4,6 +4,7 @@ const fs = require('fs');                                 //file-write-system
 const path = require("path");                             //used to get the relative path the file is placed in
 const schedule = require('node-schedule');                //importing node-schedule to reset the daily stepsCounter at 0'clock
 const wss = new WebSocket.Server({ port: 3476 });         //creating the server on port 3476 (thats the standard port HealthDataServer is using) 
+const version_id = "1.0.0";
 
 //initializing secrets -- here edit every constant as you will
 //const webhookurl = ''                //normal webhook url without /messages/<message_id>
@@ -238,7 +239,7 @@ sendWebhookHeartRate = function(hrate, webhookurl) {
         "description": "Aktueller Puls: **" + hrate + "**",
         "color": 16741027,
         "footer": {
-          "text": ctime
+          "text":  "custom-hds | " + version_id + " | - AlexInABox • " + ctime
         }
       }
     ],
@@ -269,7 +270,7 @@ sendWebhookOxygen = function(ovalue, webhookurl) {
         "description": "Sauerstoffgehalt: **" + (ovalue * 100) + "%**",
         "color": 8454143,
         "footer": {
-          "text": ctime
+          "text":  "custom-hds | " + version_id + " | - AlexInABox • " + ctime
         }
       }
     ],
@@ -297,7 +298,7 @@ sendWebhookSteps = function(steps, webhookurl) {
         "description": "Schrittanzahl: **" + steps + "**",
         "color": 15781936,
         "footer": {
-          "text": ctime
+          "text":  "custom-hds | " + version_id + " | - AlexInABox • " + ctime
         }
       }
     ],
@@ -325,7 +326,7 @@ sendWebhookSpeed = function(speed, webhookurl) {
         "description": "Live-Geschwindigkeit: **" + speed + "m/s**",
         "color": 16540163,
         "footer": {
-          "text": ctime
+          "text": "custom-hds | " + version_id + " | - AlexInABox • " + ctime
         }
       }
     ],
