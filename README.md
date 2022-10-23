@@ -130,6 +130,7 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 ## Roadmap
 
 - [ ] Discord Status Integration using BetterDiscord (or vanilla client dunno)
+- [ ] localization or like language thingies
 - [ ] turing machine
     - [ ] my teacher would love it!
 
