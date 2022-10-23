@@ -106,6 +106,19 @@ v8.16.0
    ```
 3. Edit the **config.js** file!
 
+```{
+    "port": 3476, <-- port goes here (left as default in most cases)
+    "timezone": "Europe/Amsterdam",  <-- your timezone goes here
+    "discordAppID": "1033806008008581240",  <---- leave as default for fancy heartrate icons (or create your own application at https://https://discord.com/developers)
+    "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",  <--- add your discord webhook like this
+    "heartRateMessageID": "<id>",  <---- message ID of the heartRate message
+    "oxygenSaturationMessageID": "<id>",  <---- message ID of the oxygen message
+    "pedoMeterMessageID": "<id>",  <---- message ID of the steps message
+    "speedMessageID": "<id>",  <---- message ID of the speed message
+    "secretPass": "secretPass"  <--- a secret pass like this (use case: http://example.com/secretPass)  ((leave blank when using locally or you just dont care))
+  }
+```
+
 4. open the desired port on your firewall (optional) 
 
 5. ???
