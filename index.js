@@ -6,23 +6,11 @@ const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
-app.listen(3476, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
+var config = require('./config.json');
+app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
 const version_id = "2.0.0";
-process.env.TZ = "Europe/Amsterdam"; // set this to your timezone
-
-// initializing secrets -- here edit every constant as you will
-// const webhookurl = ''                //normal webhook url without /messages/<message_id>
-const webhookurlPatchH = "";
-const webhookurlPatchO = "";
-const webhookurlPatchS = "";
-const webhookurlPatchSpeed = "";
-// server 2 webhooks -- you need to set them rn or the server crashes (its okay to just use the same webhooks)
-const webhookurlPatchH2 = "";
-const webhookurlPatchSpeed2 = "";
-const webhookurlPatchS2 = "";
-const webhookurlPatchO2 = "";
-
-const secretPass = ""; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
+process.env.TZ = config.timezone; // set this to your timezone
+const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
 
 /*
@@ -40,8 +28,7 @@ const whatevenisreality = schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
 resetStepCount = function () {
   allTimeStepto0 = allTimeStep;
 
-  sendWebhookSteps(0, webhookurlPatchS); // reset the webhook value manually incase the watch is not active
-  sendWebhookSteps(0, webhookurlPatchS2); // same for the second webhook ^^
+  sendWebhookSteps(0, config.webhookURL + "/messages/" + config.pedoMeterMessageID); // reset the webhook value manually incase the watch is not active
   fs.writeFile(
     path.resolve(__dirname, "../custom-hds/stepCountTo0.txt"),
     allTimeStepto0.toString(),
@@ -128,8 +115,7 @@ handleMessage = function (message) {
     // check if message received contains a Heart Rate
     const hrate = smessage.substr(10, 3); // cut the messsage so that only the heart rate remains
     console.log(smessage); // logging for debug purposes
-    sendWebhookHeartRate(hrate, webhookurlPatchH); // passing the heartRate to the sendWebhookHeartRate function
-    sendWebhookHeartRate(hrate, webhookurlPatchH2); // passing the heartRate to the sendWebhookHeartRate function (with a different webhook url)
+    sendWebhookHeartRate(hrate, config.webhookURL + "/messages/" + config.heartRateMessageID); // passing the heartRate to the sendWebhookHeartRate function
 
     fs.writeFile(
       path.resolve(__dirname, "../custom-hds/hrate.txt"),
@@ -149,8 +135,7 @@ handleMessage = function (message) {
     const oxygenSaturation = parseFloat(smessage.substr(17, 20)); // cut the messsage so that only the speed value remains
     console.log(smessage); // logging for debug purposes
 
-    sendWebhookOxygen(oxygenSaturation, webhookurlPatchO); // passing oxygenSaturation to the sendWebhookOxygen function
-    sendWebhookOxygen(oxygenSaturation, webhookurlPatchO2); // passing oxygenSaturation to the sendWebhookOxygen function (with a different webhookurl)
+    sendWebhookOxygen(oxygenSaturation, config.webhookURL + "/messages/" + config.oxygenSaturationMessageID); // passing oxygenSaturation to the sendWebhookOxygen function
 
     fs.writeFile(
       path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
@@ -191,8 +176,7 @@ handleMessage = function (message) {
     stepsToday = allTimeStep - allTimeStepto0; // set the stepsToday var to the difference of allTimeStep and allTimeStepto0
     console.log("stepsToday: " + stepsToday);
 
-    sendWebhookSteps(stepsToday, webhookurlPatchS); // passing the stepsToday to the sendWebhookSteps function
-    sendWebhookSteps(stepsToday, webhookurlPatchS2); // passing the stepsToday to the sendWebhookSteps function (with a different webhookurl)
+    sendWebhookSteps(stepsToday, config.webhookURL + "/messages/" + config.pedoMeterMessageID); // passing the stepsToday to the sendWebhookSteps function
 
     fs.writeFile(
       path.resolve(__dirname, "../custom-hds/lastStepValue.txt"),
@@ -226,8 +210,7 @@ handleMessage = function (message) {
 
     const speedNormal = Math.round(speed * 100) / 100; // round the number to 2nd decimal -- you can change this but I figured the speedValue looks more pleasant this way
 
-    sendWebhookSpeed(speedNormal, webhookurlPatchSpeed); // passing speedNormal to the sendWebhookSpeed function
-    sendWebhookSpeed(speedNormal, webhookurlPatchSpeed2); // passing speedNormal to the sendWebhookSpeed function (with a different webhookurl)
+    sendWebhookSpeed(speedNormal, config.webhookURL + "/messages/" + config.speedMessageID); // passing speedNormal to the sendWebhookSpeed function
 
     fs.writeFile(
       path.resolve(__dirname, "../custom-hds/speed.txt"),
