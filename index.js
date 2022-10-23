@@ -1,30 +1,33 @@
-const WebSocket = require("ws"); // websocket
+const request = require('request');
+const express = require('express');
+const app = express();
+app.use(express.json());
 const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
-const wss = new WebSocket.Server({ port: 3476 }); // creating the server on port 3476 (thats the standard port HealthDataServer is using)
-const version_id = "1.0.0";
+app.listen(3476, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
+const version_id = "2.0.0";
 process.env.TZ = "Europe/Amsterdam"; // set this to your timezone
 
 // initializing secrets -- here edit every constant as you will
 // const webhookurl = ''                //normal webhook url without /messages/<message_id>
-const webhookurlPatchH = "";
-const webhookurlPatchO = "";
-const webhookurlPatchS = "";
-const webhookurlPatchSpeed = "";
+const webhookurlPatchH = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
+const webhookurlPatchO = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002240280675745916";
+const webhookurlPatchS = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002240467154514061";
+const webhookurlPatchSpeed = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
 // server 2 webhooks -- you need to set them rn or the server crashes (its okay to just use the same webhooks)
-const webhookurlPatchH2 = "";
-const webhookurlPatchSpeed2 = "";
-const webhookurlPatchS2 = "";
-const webhookurlPatchO2 = "";
+const webhookurlPatchH2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
+const webhookurlPatchSpeed2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
+const webhookurlPatchS2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
+const webhookurlPatchO2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
 
-const secretPass = "whydoiexist"; // <-------------- set a secret param like this
+const secretPass = ""; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
 
 /*
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-||||    from here on: dont change anything unless you know what you are doing!    ||||          (not that i know what im even doing lol)
+||||    from here on: dont change anything unless you know what you are doing!    ||||          (not that i know what im doing but whatever)
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 */
 
@@ -111,24 +114,10 @@ function setlastStepValue() {
 
 // now the interesting part:
 
-wss.on("connection", (ws, req) => {
-  console.log("I sense a new client!"); // logging the connection of a new client
-
-  urlparam = req.url.toString(); // saving the url parameter the client connected with (wss://ip/path?param=realityfeelsslippery)
-  console.log(urlparam); // logging the url (param)
-
-  if (urlparam != "/?param=" + secretPass) {
-    // check if the url parameter provided equal to our secret password
-    console.log("REFUSED A CONNECTION ON: " + urlparam); // if thats not the case we close the connection
-    ws.close();
-  } else console.log("Accepted a connection on: " + urlparam); // if the parameter is right we keep the connection alive and start listening to sent messages
-
-  ws.on("ping", ws.pong); // ping-pong response (dunno if that even works lol)
-
-  ws.on("message", (message) => {
-    // when a message event is triggered
-    handleMessage(message); // give message data to the handleMessage function
-  });
+app.put("/" + secretPass, (req, res) => {
+  res.sendStatus(200);
+  console.log("New message!"); // logging the connection of a new client
+  handleMessage(req.body.data); // give message data to the handleMessage function
 });
 
 handleMessage = function (message) {
@@ -370,9 +359,4 @@ sendWebhookSpeed = function (speed, webhookurl) {
 };
 
 // end-of WebhookSending functions
-/* end-of everything
-                      finally it's over, felt like torture didn't it? welp, that was my code.
-                      If for some fucked up reason you enjoyed reading this, let me tell you this:
-                      Thank you, but you should seek help as ASAP. Reading this code now, I'm having multiple strokes at once and lost count around line 50.
-                      Thx for reading to the end, kind stranger ~ alex
-*/
+// end-of everything *finally*

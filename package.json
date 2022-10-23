@@ -1,21 +1,19 @@
 {
-  "name": "nodejs",
-  "version": "1.0.0",
-  "description": "",
+  "name": "custom-hds",
+  "version": "2.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "alexinabox",
+  "license": "MIT",
   "dependencies": {
     "@types/node": "^18.0.6",
+    "express": "^4.18.2",
     "fetch": "^1.1.0",
-    "node-fetch": "2.6.7",
+    "fs": "^0.0.1-security",
+    "index.js": "^0.0.3",
+    "node-fetch": "^2.6.7",
     "node-schedule": "^2.1.0",
     "path": "^0.12.7",
-    "schedule": "^0.5.0",
-    "ws": "^8.8.1"
+    "request": "^2.88.2",
+    "schedule": "^0.5.0"
   }
 }
