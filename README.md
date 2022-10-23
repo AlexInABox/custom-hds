@@ -4,7 +4,6 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-**NOT WORKING AS OF watchOS 9**
 
 
 
