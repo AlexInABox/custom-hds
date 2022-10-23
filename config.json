@@ -1,0 +1,10 @@
+{
+    "port": 3476,
+    "timezone": "Europe/Amsterdam",
+    "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",
+    "heartRateMessageID": "<id>",
+    "oxygenSaturationMessageID": "<id>",
+    "pedoMeterMessageID": "<id>",
+    "speedMessageID": "<id>",
+    "secretPass": ""
+  }
