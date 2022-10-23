@@ -58,7 +58,7 @@
 ## About The Project
 <div align="center">
   <a href="https://github.com/alexinabox/custom-hds">
-    <img src="assets/showcase1.png" alt="Screenshot" width="749" height="1620">
+    <img src="assets/showcase1.png" alt="Screenshot" width="200" height="432.58">
   </a>
 </div>
 
