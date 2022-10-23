@@ -60,6 +60,7 @@
   <a href="https://github.com/alexinabox/custom-hds">
     <img src="assets/showcase1.png" alt="Screenshot" width="300" height="648.87">
     <img src="assets/showcase2.png" alt="Discord RPC" width="327" height="117">
+    <img src="assets/showcase3.png" alt="Discord RPC" width="351" height="490">
   </a>
 </div>
 
