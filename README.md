@@ -106,7 +106,8 @@ v8.16.0
    ```
 3. Edit the **config.js** file!
 
-```{
+```json
+{
     "port": 3476, <-- port goes here (left as default in most cases)
     "timezone": "Europe/Amsterdam",  <-- your timezone goes here
     "discordAppID": "1033806008008581240",  <---- leave as default for fancy heartrate icons (or create your own application at https://https://discord.com/developers)
