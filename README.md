@@ -104,7 +104,7 @@ v8.16.0
    ```sh
    npm install
    ```
-3. Edit the **config.js** file!
+3. Edit the **config.js** file!  (dont copy the following as a whole since comments dont work in json syntax)
 
 ```json
 {
