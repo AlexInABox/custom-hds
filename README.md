@@ -10,7 +10,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/alexinabox/custom-hds">
-    <img src="assets/logo.png" alt="Logo" width="100" height="100">
+    <img src="assets/logo.png" alt="Logo" width="150" height="150">
   </a>
 
 <h3 align="center">custom-hds</h3>
