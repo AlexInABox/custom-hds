@@ -103,11 +103,13 @@ v8.16.0
    ```sh
    npm install
    ```
-3. Edit the index.js file as you will
+3. Edit the **config.js** file!
 
-4. ???
+4. open the desired port on your firewall (optional) 
+
+5. ???
  
-5. profit
+6. profit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -128,7 +130,6 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 ## Roadmap
 
 - [ ] Discord Status Integration using BetterDiscord (or vanilla client dunno)
-- [ ] a config.json file (am lazy dunno)
 - [ ] turing machine
     - [ ] my teacher would love it!
 
