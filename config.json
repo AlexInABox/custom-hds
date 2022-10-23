@@ -1,6 +1,7 @@
 {
     "port": 3476,
     "timezone": "Europe/Amsterdam",
+    "discordAppID": "1033806008008581240",
     "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",
     "heartRateMessageID": "<id>",
     "oxygenSaturationMessageID": "<id>",
