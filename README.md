@@ -56,8 +56,11 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://alexinabox.de)
+<div align="center">
+  <a href="https://github.com/alexinabox/custom-hds">
+    <img src="assets/schowcase1.png" alt="Screenshot" width="749" height="1620">
+  </a>
+[![custom-hds screen shot][product-screenshot]](https://alexinabox.de)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
