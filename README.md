@@ -18,7 +18,6 @@
   <p align="center">
     custom-hds - built for <a href="https://github.com/Rexios80/Health-Data-Server-Overlay/">Health-Data-Server</a>
     <br />
-    ·
     <a href="https://github.com/alexinabox/custom-hds/issues">Report Bug</a>
     ·
     <a href="https://github.com/alexinabox/custom-hds/issues">Request Feature</a>
