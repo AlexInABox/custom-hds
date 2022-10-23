@@ -123,9 +123,20 @@ v8.16.0
 
 4. open the desired port on your firewall (optional) 
 
-5. ???
- 
-6. profit
+5. Install NPM packages
+   ```sh
+   node index.js
+   ```
+   
+6. in the watch: click on advanced ip entry and add the ip your custom-hds server is running on
+
+<div align="left">
+  <a href="https://github.com/AlexInABox/custom-hds/tree/main/assets">
+    <img src="assets/watch-example.png" alt="Screenshot" width="150" height="150">
+  </a>
+</div>
+   
+7. profit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
