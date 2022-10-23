@@ -12,15 +12,15 @@ process.env.TZ = "Europe/Amsterdam"; // set this to your timezone
 
 // initializing secrets -- here edit every constant as you will
 // const webhookurl = ''                //normal webhook url without /messages/<message_id>
-const webhookurlPatchH = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
-const webhookurlPatchO = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002240280675745916";
-const webhookurlPatchS = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002240467154514061";
-const webhookurlPatchSpeed = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
+const webhookurlPatchH = "";
+const webhookurlPatchO = "";
+const webhookurlPatchS = "";
+const webhookurlPatchSpeed = "";
 // server 2 webhooks -- you need to set them rn or the server crashes (its okay to just use the same webhooks)
-const webhookurlPatchH2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
-const webhookurlPatchSpeed2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
-const webhookurlPatchS2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
-const webhookurlPatchO2 = "https://discord.com/api/webhooks/1002231128087875704/TjLmApNfHkfdyBFPf5oVs9I8hv4D52LtrSUFtIwUm8UFuMti1745AWrhvBHoONSa_Cdr/messages/1002239919856558212";
+const webhookurlPatchH2 = "";
+const webhookurlPatchSpeed2 = "";
+const webhookurlPatchS2 = "";
+const webhookurlPatchO2 = "";
 
 const secretPass = ""; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
