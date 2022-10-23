@@ -16,7 +16,7 @@
 <h3 align="center">custom-hds</h3>
 
   <p align="center">
-    custom-hds - built for [Health-Data-Server](https://github.com/Rexios80/Health-Data-Server-Overlay/).
+    custom-hds - built for <a href="https://github.com/Rexios80/Health-Data-Server-Overlay/">Health-Data-Server</a>
     <br />
     ·
     <a href="https://github.com/alexinabox/custom-hds/issues">Report Bug</a>
