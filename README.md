@@ -129,6 +129,12 @@ v8.16.0
    ```
    
 6. in the watch: click on advanced ip entry and add the ip your custom-hds server is running on
+
+<div align="left">
+  <a href="https://github.com/AlexInABox/custom-hds/tree/main/assets">
+    <img src="assets/watch-example.png" alt="Screenshot" width="150" height="150">
+  </a>
+</div>
    
 7. profit
 
