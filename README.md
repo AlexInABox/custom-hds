@@ -58,8 +58,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <div align="left">
-  <a href="https://github.com/alexinabox/custom-hds">
+  <a href="https://github.com/AlexInABox/custom-hds/tree/main/assets">
     <img src="assets/showcase1.png" alt="Screenshot" width="300" height="648.87">
+    <img src="assets/showcase2.png" alt="Discord RPC" width="327" height="117">
+    <img src="assets/showcase3.png" alt="Discord RPC" width="351" height="490">
   </a>
 </div>
 
@@ -103,7 +105,21 @@ v8.16.0
    ```sh
    npm install
    ```
-3. Edit the **config.js** file!
+3. Edit the **config.js** file!  (dont copy the following as a whole since comments dont work in json syntax)
+
+```json
+{
+    "port": 3476, <-- port goes here (left as default in most cases)
+    "timezone": "Europe/Amsterdam",  <-- your timezone goes here
+    "discordAppID": "1033806008008581240",  <---- leave as default for fancy heartrate icons (or create your own application at https://https://discord.com/developers)
+    "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",  <--- add your discord webhook like this
+    "heartRateMessageID": "<id>",  <---- message ID of the heartRate message
+    "oxygenSaturationMessageID": "<id>",  <---- message ID of the oxygen message
+    "pedoMeterMessageID": "<id>",  <---- message ID of the steps message
+    "speedMessageID": "<id>",  <---- message ID of the speed message
+    "secretPass": "secretPass"  <--- a secret pass like this (use case: http://example.com/secretPass)  ((leave blank when using locally or you just dont care))
+  }
+```
 
 4. open the desired port on your firewall (optional) 
 
@@ -129,8 +145,12 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 <!-- ROADMAP -->
 ## Roadmap
 
+<<<<<<< HEAD
+- [ ] dynamic icon showing the heartrate as a neat graphic (50% done)
+=======
 - [ ] Discord Status Integration using BetterDiscord (or vanilla client dunno)
 - [ ] localization or like language thingies
+>>>>>>> main
 - [ ] turing machine
     - [ ] my teacher would love it!
 

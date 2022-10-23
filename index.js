@@ -6,9 +6,15 @@ const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
+
 var config = require('./config.json');
+
+var heartRate = 0;
+var oxygenSaturation = 0;
+var speed = 0;
+
 app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
-const version_id = "2.0.0";
+const version_id = "2.0.1";
 process.env.TZ = config.timezone; // set this to your timezone
 const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
@@ -45,12 +51,19 @@ resetStepCount = function () {
 // step-variables-initialization
 let allTimeStep; // all steps ever
 let allTimeStepto0; // all steps ever to 0'clock
-let stepsToday; // all steps today
+let stepsToday = 0; // all steps today
 let lastStepValue; // last step value sent by the watch
 
 setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
 setallTimeStepTo0();
 setlastStepValue();
+setHeartRate();
+setStepCount();
+setOxygenSaturation();
+setSpeed();
+
+const client = require('discord-rich-presence')(config.discordAppID);
+
 
 function setallTimeStep() {
   fs.readFile(
@@ -97,6 +110,66 @@ function setlastStepValue() {
   );
 }
 
+function setHeartRate() {
+  fs.readFile(
+    path.resolve(__dirname, "../custom-hds/hrate.txt"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        heartRate = 0;
+      }
+      heartRate = data;
+    }
+  );
+};
+
+function setOxygenSaturation() {
+  fs.readFile(
+    path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        oxygenSaturation = 0;
+      }
+      oxygenSaturation = data;
+    }
+  );
+};
+
+function setStepCount() {
+  fs.readFile(
+    path.resolve(__dirname, "../custom-hds/stepCount.txt"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        stepCount = 0;
+      }
+      stepCount = data;
+    }
+  );
+};
+
+function setSpeed() {
+  fs.readFile(
+    path.resolve(__dirname, "../custom-hds/speed.txt"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        speed = 0;
+      }
+      speed = data;
+      console.log(speed);
+    }
+  );
+};
+
+
+
+
 // end-of step-variables-initialization
 
 // now the interesting part:
@@ -105,6 +178,15 @@ app.put("/" + secretPass, (req, res) => {
   res.sendStatus(200);
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
+
+  client.updatePresence({
+    
+    state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
+    details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
+    largeImageKey: 'logo',
+    smallImageKey: 'mini-logo',
+    instance: true,
+  });
 });
 
 handleMessage = function (message) {
@@ -113,7 +195,7 @@ handleMessage = function (message) {
 
   if (smessage.startsWith("heartRate")) {
     // check if message received contains a Heart Rate
-    const hrate = smessage.substr(10, 3); // cut the messsage so that only the heart rate remains
+    hrate = smessage.substr(10, 3); // cut the messsage so that only the heart rate remains
     console.log(smessage); // logging for debug purposes
     sendWebhookHeartRate(hrate, config.webhookURL + "/messages/" + config.heartRateMessageID); // passing the heartRate to the sendWebhookHeartRate function
 
@@ -128,11 +210,12 @@ handleMessage = function (message) {
         // console.log('The file with the content ' + hrate + ' has been written succesfully!');
       }
     );
+    heartRate = hrate;
   } // end-of heartRate-check
 
   if (smessage.startsWith("oxygenSaturation")) {
     // check if message received contains a oxygenSaturation value
-    const oxygenSaturation = parseFloat(smessage.substr(17, 20)); // cut the messsage so that only the speed value remains
+    oxygenSaturation = parseFloat(smessage.substr(17, 20)); // cut the messsage so that only the speed value remains
     console.log(smessage); // logging for debug purposes
 
     sendWebhookOxygen(oxygenSaturation, config.webhookURL + "/messages/" + config.oxygenSaturationMessageID); // passing oxygenSaturation to the sendWebhookOxygen function
@@ -205,16 +288,17 @@ handleMessage = function (message) {
 
   if (smessage.startsWith("speed")) {
     // check if message received contains a speed value
-    const speed = smessage.substr(6, 10); // cut the messsage so that only the speed value remains
+    speed = smessage.substr(6, 10); // cut the messsage so that only the speed value remains
     console.log(smessage); // logging for debug purposes
 
     const speedNormal = Math.round(speed * 100) / 100; // round the number to 2nd decimal -- you can change this but I figured the speedValue looks more pleasant this way
+    speed = speedNormal;
 
     sendWebhookSpeed(speedNormal, config.webhookURL + "/messages/" + config.speedMessageID); // passing speedNormal to the sendWebhookSpeed function
 
     fs.writeFile(
       path.resolve(__dirname, "../custom-hds/speed.txt"),
-      speedNormal,
+      String(speedNormal),
       (err) => {
         // write the speed value to a file named speed.txt
         if (err) {
