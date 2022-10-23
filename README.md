@@ -56,7 +56,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-<div align="center">
+<div align="left">
   <a href="https://github.com/alexinabox/custom-hds">
     <img src="assets/showcase1.png" alt="Screenshot" width="200" height="432.58">
   </a>
