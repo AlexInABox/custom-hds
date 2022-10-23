@@ -144,7 +144,6 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Discord Status Integration using BetterDiscord (or vanilla client dunno)
 - [ ] turing machine
     - [ ] my teacher would love it!
 
