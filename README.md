@@ -60,6 +60,7 @@
   <a href="https://github.com/alexinabox/custom-hds">
     <img src="assets/schowcase1.png" alt="Screenshot" width="749" height="1620">
   </a>
+</div>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
