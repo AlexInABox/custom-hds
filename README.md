@@ -144,6 +144,7 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 <!-- ROADMAP -->
 ## Roadmap
 
+- [ ] dynamic icon showing the heartrate as a neat graphic (50% done)
 - [ ] turing machine
     - [ ] my teacher would love it!
 
