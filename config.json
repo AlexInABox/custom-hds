@@ -7,5 +7,6 @@
     "oxygenSaturationMessageID": "<id>",
     "pedoMeterMessageID": "<id>",
     "speedMessageID": "<id>",
+    "forwardingDestination": "",
     "secretPass": ""
   }
