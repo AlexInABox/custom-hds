@@ -6,6 +6,7 @@ const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
+const forward = require('http-forward');
 
 var config = require('./config.json');
 
@@ -175,6 +176,8 @@ function setSpeed() {
 // now the interesting part:
 
 app.put("/" + secretPass, (req, res) => {
+
+  req.forward = { target: config.forwardingDestination };
   res.sendStatus(200);
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
