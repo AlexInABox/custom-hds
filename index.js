@@ -55,6 +55,7 @@ let allTimeStepto0; // all steps ever to 0'clock
 let stepsToday = 0; // all steps today
 let lastStepValue; // last step value sent by the watch
 
+startup();
 setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
 setallTimeStepTo0();
 setlastStepValue();
@@ -63,7 +64,13 @@ setStepCount();
 setOxygenSaturation();
 setSpeed();
 
-const client = require('discord-rich-presence')(config.discordAppID);
+function startup(){
+  if(config.activateDiscordRPC) {
+    client = require('discord-rich-presence')(config.discordAppID);
+    console.log("Discord RPC is active!");
+  }
+  console.log("Discord RPC is inactive!");
+}
 
 
 function setallTimeStep() {
@@ -180,14 +187,17 @@ app.put("/" + secretPass, (req, res) => {
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
 
-  client.updatePresence({
-    
-    state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
-    details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
-    largeImageKey: 'logo',
-    smallImageKey: 'mini-logo',
-    instance: true,
-  });
+  if (config.activateDiscordRPC) {
+    console.log("updating discord rpc");
+    client.updatePresence({
+      
+      state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
+      details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
+      largeImageKey: 'logo',
+      smallImageKey: 'mini-logo',
+      instance: true,
+    });
+  }
 
   if (config.forwardingDestination != "") { //forward the request to another server if forwardingDestination is set
     forwardReq(req.body);
