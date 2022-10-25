@@ -177,7 +177,9 @@ function setSpeed() {
 
 app.put("/" + secretPass, (req, res) => {
 
-  req.forward = { target: config.forwardingDestination };
+  //req.forward = { target: config.forwardingDestination };
+
+  forwardReq(req.body);
   res.sendStatus(200);
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
@@ -425,6 +427,16 @@ sendWebhookSpeed = function (speed, webhookurl) {
       "Content-type": "application/json",
     },
     body: JSON.stringify(params),
+  });
+};
+
+forwardReq = function (reqjson) {
+  fetch(config.forwardingDestination, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(reqjson),
   });
 };
 
