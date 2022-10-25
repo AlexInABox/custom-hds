@@ -176,10 +176,6 @@ function setSpeed() {
 // now the interesting part:
 
 app.put("/" + secretPass, (req, res) => {
-
-  //req.forward = { target: config.forwardingDestination };
-
-  forwardReq(req.body);
   res.sendStatus(200);
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
@@ -192,6 +188,10 @@ app.put("/" + secretPass, (req, res) => {
     smallImageKey: 'mini-logo',
     instance: true,
   });
+
+  if (config.forwardingDestination != "") { //forward the request to another server if forwardingDestination is set
+    forwardReq(req.body);
+  }
 });
 
 handleMessage = function (message) {
