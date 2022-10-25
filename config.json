@@ -7,6 +7,6 @@
     "oxygenSaturationMessageID": "<id>",
     "pedoMeterMessageID": "<id>",
     "speedMessageID": "<id>",
-    "forwardingDestination": "",
+    "forwardingDestination": "http://192.168.178.75:3476",
     "secretPass": ""
   }
