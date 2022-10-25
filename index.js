@@ -69,7 +69,8 @@ function startup(){
     client = require('discord-rich-presence')(config.discordAppID);
     console.log("Discord RPC is active!");
   }
-  console.log("Discord RPC is inactive!");
+  else console.log("Discord RPC is inactive!");
+  
 }
 
 
