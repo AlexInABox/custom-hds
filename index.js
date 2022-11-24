@@ -55,22 +55,39 @@ let allTimeStepto0; // all steps ever to 0'clock
 let stepsToday = 0; // all steps today
 let lastStepValue; // last step value sent by the watch
 
-startup();
-setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
-setallTimeStepTo0();
-setlastStepValue();
-setHeartRate();
-setStepCount();
-setOxygenSaturation();
-setSpeed();
 
-function startup(){
-  if(config.activateDiscordRPC) {
+  startup();
+  setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
+  setallTimeStepTo0();
+  setlastStepValue();
+  setHeartRate();
+  setOxygenSaturation();
+  setStepCount();
+  setSpeed();
+
+async function startup(){
+  if (config.activateDiscordRPC && isDiscordRunning()) {
+    await sleep(15000);
     client = require('discord-rich-presence')(config.discordAppID);
     console.log("Discord RPC is active!");
   }
-  else console.log("Discord RPC is inactive!");
+  else console.log("Discord RPC could not be activated!");
   
+  console.log("Starting HealthDataServer v" + version_id);
+}
+
+function isDiscordRunning() {
+  try {
+    return require('child_process').execSync('tasklist').toString().indexOf('Discord.exe' | 'DiscordCanary.exe' | 'DiscordPTB.exe') > -1;
+  } catch (e) {
+    return false;
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 
@@ -324,7 +341,29 @@ handleMessage = function (message) {
       }
     );
   } // end-of speed-check
+
+  if (smessage.startsWith("focusStatus")) {
+    // check if message received contains a speed value
+    focusStatus = smessage.substr(12, 22); // cut the messsage so that only the speed value remains
+    console.log(smessage); // logging for debug purposes
+
+    sendWebhookFocusStatus(focusStatus, config.webhookURL + "/messages/" + config.focusStatusMessageID); // passing focusStatus to the sendWebhookFocusStatus function
+
+    fs.writeFile(
+      path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
+      String(focusStatus),
+      (err) => {
+        // write the speed value to a file named speed.txt
+        if (err) {
+          console.error(err);
+        }
+        // console.log('The file with the content ' + focusStatus + ' has been written succesfully!');
+      }
+    );
+  } // end-of focusStatus-check
 }; // end-of handleMessage()
+
+
 
 // WebhookSending functions
 
@@ -423,6 +462,34 @@ sendWebhookSpeed = function (speed, webhookurl) {
       {
         title: "Wie schnell bewegt sich @cooler_alex gerade?",
         description: "Live-Geschwindigkeit: **" + speed + "m/s**",
+        color: 16540163,
+        footer: {
+          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+        },
+      },
+    ],
+    attachments: [],
+  };
+
+  fetch(webhookurl, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+};
+
+sendWebhookFocusStatus = function (focusStatus, webhookurl) {
+  const datetime = new Date();
+  const ctime =
+    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+  const params = {
+    content: null,
+    embeds: [
+      {
+        title: "Wie ist der aktuelle Fokus von @cooler_alex?",
+        description: "Fokus: **" + focusStatus + "**",
         color: 16540163,
         footer: {
           text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
