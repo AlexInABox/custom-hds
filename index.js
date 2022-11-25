@@ -7,15 +7,15 @@ const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
 const forward = require('http-forward');
+app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
 
 var config = require('./config.json');
-
 var heartRate = 0;
 var oxygenSaturation = 0;
 var speed = 0;
+var focusStatus = "";
 
-app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
-const version_id = "2.0.1";
+const version_id = "2.0.2";
 process.env.TZ = config.timezone; // set this to your timezone
 const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
@@ -64,6 +64,7 @@ let lastStepValue; // last step value sent by the watch
   setOxygenSaturation();
   setStepCount();
   setSpeed();
+  setFocusStatus();
 
 async function startup(){
   if (config.activateDiscordRPC && isDiscordRunning()) {
@@ -193,6 +194,20 @@ function setSpeed() {
   );
 };
 
+function setFocusStatus() {
+  fs.readFile(
+    path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        focusStatus = "";
+      }
+      focusStatus = data;
+    }
+  );
+};
+
 
 
 
@@ -205,13 +220,14 @@ app.put("/" + secretPass, (req, res) => {
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
 
-  if (config.activateDiscordRPC) {
+  if (config.activateDiscordRPC && isDiscordRunning()) {
     console.log("updating discord rpc");
     client.updatePresence({
       
       state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
       details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
       largeImageKey: 'logo',
+      //smallImageKey: 'hrate:' + heartRate, //for later use
       smallImageKey: 'mini-logo',
       instance: true,
     });
@@ -360,7 +376,7 @@ handleMessage = function (message) {
         // console.log('The file with the content ' + focusStatus + ' has been written succesfully!');
       }
     );
-  } // end-of focusStatus-check
+  } // end-of focus-check
 }; // end-of handleMessage()
 
 
@@ -375,7 +391,7 @@ sendWebhookHeartRate = function (hrate, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie ist der aktuelle Puls von @cooler_Alex ?",
+        title: `Wie ist der aktuelle Puls von ${config.userName} ?`,
         description: "Aktueller Puls: **" + hrate + "**",
         color: 16741027,
         footer: {
@@ -404,7 +420,7 @@ sendWebhookOxygen = function (ovalue, webhookurl) {
     embeds: [
       {
         title:
-          "Wie ist der aktuelle Sauerstoffgehalt in dem Blut von @cooler_Alex?",
+          `Wie ist der aktuelle Sauerstoffgehalt in dem Blut von ${config.userName}`,
         description: "Sauerstoffgehalt: **" + ovalue * 100 + "%**",
         color: 8454143,
         footer: {
@@ -432,7 +448,7 @@ sendWebhookSteps = function (steps, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie viele Schritte hat @cooler_Alex heute schon bewältigt?",
+        title: `Wie viele Schritte hat ${config.userName} heute schon bewältigt?`,
         description: "Schrittanzahl: **" + steps + "**",
         color: 15781936,
         footer: {
@@ -460,7 +476,7 @@ sendWebhookSpeed = function (speed, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie schnell bewegt sich @cooler_alex gerade?",
+        title: `Wie schnell bewegt sich ${config.userName} gerade?`,
         description: "Live-Geschwindigkeit: **" + speed + "m/s**",
         color: 16540163,
         footer: {
@@ -488,9 +504,9 @@ sendWebhookFocusStatus = function (focusStatus, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie ist der aktuelle Fokus von @cooler_alex?",
+        title: `Was macht ${config.userName} gerade so?`,
         description: "Fokus: **" + focusStatus + "**",
-        color: 16540163,
+        color: 4798101,
         footer: {
           text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
         },
