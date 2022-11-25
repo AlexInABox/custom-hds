@@ -157,7 +157,6 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 ## Roadmap
 
 - [ ] dynamic icon showing the heartrate as a neat graphic (50% done)
-- [ ] forward the incomming request to a running hds-overlay server for full functionality
 - [ ] turing machine
     - [ ] my teacher would love it!
 
