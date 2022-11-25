@@ -6,15 +6,16 @@ const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
+const forward = require('http-forward');
+app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
 
 var config = require('./config.json');
-
 var heartRate = 0;
 var oxygenSaturation = 0;
 var speed = 0;
+var focusStatus = "";
 
-app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
-const version_id = "2.0.1";
+const version_id = "2.0.2";
 process.env.TZ = config.timezone; // set this to your timezone
 const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
@@ -54,15 +55,41 @@ let allTimeStepto0; // all steps ever to 0'clock
 let stepsToday = 0; // all steps today
 let lastStepValue; // last step value sent by the watch
 
-setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
-setallTimeStepTo0();
-setlastStepValue();
-setHeartRate();
-setStepCount();
-setOxygenSaturation();
-setSpeed();
 
-const client = require('discord-rich-presence')(config.discordAppID);
+  startup();
+  setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
+  setallTimeStepTo0();
+  setlastStepValue();
+  setHeartRate();
+  setOxygenSaturation();
+  setStepCount();
+  setSpeed();
+  setFocusStatus();
+
+async function startup(){
+  if (config.activateDiscordRPC && isDiscordRunning()) {
+    await sleep(15000);
+    client = require('discord-rich-presence')(config.discordAppID);
+    console.log("Discord RPC is active!");
+  }
+  else console.log("Discord RPC could not be activated!");
+  
+  console.log("Starting HealthDataServer v" + version_id);
+}
+
+function isDiscordRunning() {
+  try {
+    return require('child_process').execSync('tasklist').toString().indexOf('Discord.exe' | 'DiscordCanary.exe' | 'DiscordPTB.exe') > -1;
+  } catch (e) {
+    return false;
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 
 function setallTimeStep() {
@@ -167,6 +194,20 @@ function setSpeed() {
   );
 };
 
+function setFocusStatus() {
+  fs.readFile(
+    path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        focusStatus = "";
+      }
+      focusStatus = data;
+    }
+  );
+};
+
 
 
 
@@ -179,14 +220,22 @@ app.put("/" + secretPass, (req, res) => {
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
 
-  client.updatePresence({
-    
-    state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
-    details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
-    largeImageKey: 'logo',
-    smallImageKey: 'mini-logo',
-    instance: true,
-  });
+  if (config.activateDiscordRPC && isDiscordRunning()) {
+    console.log("updating discord rpc");
+    client.updatePresence({
+      
+      state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
+      details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
+      largeImageKey: 'logo',
+      //smallImageKey: 'hrate:' + heartRate, //for later use
+      smallImageKey: 'mini-logo',
+      instance: true,
+    });
+  }
+
+  if (config.forwardingDestination != "") { //forward the request to another server if forwardingDestination is set
+    forwardReq(req.body);
+  }
 });
 
 handleMessage = function (message) {
@@ -308,7 +357,29 @@ handleMessage = function (message) {
       }
     );
   } // end-of speed-check
+
+  if (smessage.startsWith("focusStatus")) {
+    // check if message received contains a speed value
+    focusStatus = smessage.substr(12, 22); // cut the messsage so that only the speed value remains
+    console.log(smessage); // logging for debug purposes
+
+    sendWebhookFocusStatus(focusStatus, config.webhookURL + "/messages/" + config.focusStatusMessageID); // passing focusStatus to the sendWebhookFocusStatus function
+
+    fs.writeFile(
+      path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
+      String(focusStatus),
+      (err) => {
+        // write the speed value to a file named speed.txt
+        if (err) {
+          console.error(err);
+        }
+        // console.log('The file with the content ' + focusStatus + ' has been written succesfully!');
+      }
+    );
+  } // end-of focus-check
 }; // end-of handleMessage()
+
+
 
 // WebhookSending functions
 
@@ -320,7 +391,7 @@ sendWebhookHeartRate = function (hrate, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie ist der aktuelle Puls von @cooler_Alex ?",
+        title: `Wie ist der aktuelle Puls von ${config.userName} ?`,
         description: "Aktueller Puls: **" + hrate + "**",
         color: 16741027,
         footer: {
@@ -349,7 +420,7 @@ sendWebhookOxygen = function (ovalue, webhookurl) {
     embeds: [
       {
         title:
-          "Wie ist der aktuelle Sauerstoffgehalt in dem Blut von @cooler_Alex?",
+          `Wie ist der aktuelle Sauerstoffgehalt in dem Blut von ${config.userName}`,
         description: "Sauerstoffgehalt: **" + ovalue * 100 + "%**",
         color: 8454143,
         footer: {
@@ -377,7 +448,7 @@ sendWebhookSteps = function (steps, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie viele Schritte hat @cooler_Alex heute schon bewältigt?",
+        title: `Wie viele Schritte hat ${config.userName} heute schon bewältigt?`,
         description: "Schrittanzahl: **" + steps + "**",
         color: 15781936,
         footer: {
@@ -405,7 +476,7 @@ sendWebhookSpeed = function (speed, webhookurl) {
     content: null,
     embeds: [
       {
-        title: "Wie schnell bewegt sich @cooler_alex gerade?",
+        title: `Wie schnell bewegt sich ${config.userName} gerade?`,
         description: "Live-Geschwindigkeit: **" + speed + "m/s**",
         color: 16540163,
         footer: {
@@ -422,6 +493,44 @@ sendWebhookSpeed = function (speed, webhookurl) {
       "Content-type": "application/json",
     },
     body: JSON.stringify(params),
+  });
+};
+
+sendWebhookFocusStatus = function (focusStatus, webhookurl) {
+  const datetime = new Date();
+  const ctime =
+    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+  const params = {
+    content: null,
+    embeds: [
+      {
+        title: `Was macht ${config.userName} gerade so?`,
+        description: "Fokus: **" + focusStatus + "**",
+        color: 4798101,
+        footer: {
+          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+        },
+      },
+    ],
+    attachments: [],
+  };
+
+  fetch(webhookurl, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+};
+
+forwardReq = function (reqjson) {
+  fetch(config.forwardingDestination, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(reqjson),
   });
 };
 
