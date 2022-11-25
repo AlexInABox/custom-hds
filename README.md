@@ -93,7 +93,7 @@ $ npm -v && node -v
 v8.16.0
 ```
 
-(your output shuld look something like this if and only if you have those tools installed. if not, consider installing them! duh)
+(your output should look something like this if and only if you have those tools installed. if not, consider installing them! duh)
 
 ### Installation
 
@@ -123,7 +123,7 @@ v8.16.0
 
 4. open the desired port on your firewall (optional) 
 
-5. Install NPM packages
+5. start the server:
    ```sh
    node index.js
    ```
