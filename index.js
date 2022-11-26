@@ -1,4 +1,3 @@
-const request = require('request');
 const express = require('express');
 const app = express();
 app.use(express.json());
@@ -6,14 +5,15 @@ const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
-const forward = require('http-forward');
-app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
 
 var config = require('./config.json');
+app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
 var heartRate = 0;
 var oxygenSaturation = 0;
 var speed = 0;
 var focusStatus = "";
+let discordRPCactive = false; //dont change this variable!
+let initiatingRPC = false;
 
 const version_id = "2.0.2";
 process.env.TZ = config.timezone; // set this to your timezone
@@ -66,11 +66,18 @@ let lastStepValue; // last step value sent by the watch
   setSpeed();
   setFocusStatus();
 
-async function startup(){
-  if (config.activateDiscordRPC && isDiscordRunning()) {
+async function initiateDiscordRPC() {
+  console.log("Discord is running, starting DiscordRPC");
+    initiatingRPC = true; // lock the variable to prevent multiple RPCs from being initiated
     await sleep(15000);
     client = require('discord-rich-presence')(config.discordAppID);
+    discordRPCactive = true;
     console.log("Discord RPC is active!");
+  }
+
+async function startup(){
+  if (config.activateDiscordRPC && isDiscordRunning()) {
+    initiateDiscordRPC();
   }
   else console.log("Discord RPC could not be activated!");
   
@@ -79,7 +86,8 @@ async function startup(){
 
 function isDiscordRunning() {
   try {
-    return require('child_process').execSync('tasklist').toString().indexOf('Discord.exe' | 'DiscordCanary.exe' | 'DiscordPTB.exe') > -1;
+    return (require('child_process').execSync('tasklist').toString().indexOf('Discord.exe') > -1) | (require('child_process').execSync('tasklist').toString().indexOf('DiscordCanary.exe') > -1) | (require('child_process').execSync('tasklist').toString().indexOf('DiscordPTB.exe') > -1);
+    //check if discord, discord canary or discord PTB is running
   } catch (e) {
     return false;
   }
@@ -216,11 +224,15 @@ function setFocusStatus() {
 // now the interesting part:
 
 app.put("/" + secretPass, (req, res) => {
-  res.sendStatus(200);
+  res.sendStatus(200); // respond OK
   console.log("New message!"); // logging the connection of a new client
   handleMessage(req.body.data); // give message data to the handleMessage function
 
-  if (config.activateDiscordRPC && isDiscordRunning()) {
+  if (config.activateDiscordRPC && !discordRPCactive && isDiscordRunning() && !initiatingRPC) {
+    initiateDiscordRPC();
+  }
+
+  if (config.activateDiscordRPC && isDiscordRunning() && discordRPCactive) {
     console.log("updating discord rpc");
     client.updatePresence({
       
