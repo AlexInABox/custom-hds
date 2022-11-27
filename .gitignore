@@ -1,6 +1,4 @@
 node_modules
 .vscode
 /package-lock.json
-/hrate.txt
 /config.json
-hrate.txt
