@@ -262,7 +262,7 @@ handleMessage = function (message) {
 
     fs.writeFile(
       path.resolve(__dirname, "../custom-hds/hrate.txt"),
-      hrate,
+      hrate.toString(),
       (err) => {
         // write the heartRate to a file named hrate.txt
         if (err) {
