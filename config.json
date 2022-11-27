@@ -4,6 +4,7 @@
     "timezone": "Europe/Amsterdam",
     "discordAppID": "1033806008008581240",
     "activateDiscordRPC": true,
+    "activateWebhooks": false,
     "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",
     "heartRateMessageID": "<id>",
     "oxygenSaturationMessageID": "<id>",
