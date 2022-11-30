@@ -7,15 +7,18 @@ const path = require("path"); // used to get the relative path the file is place
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
 
 var config = require('./config.json');
-app.listen(config.port, () => { console.log('Server is up!') }) // creating the server on port 3476 (thats the standard port HealthDataServer is using)
+var packagejson = require('./package.json');
 var heartRate = 0;
 var oxygenSaturation = 0;
 var speed = 0;
 var focusStatus = "";
 let discordRPCactive = false; //dont change this variable!
 let initiatingRPC = false;
+let rateLimited = false; // dont change this variable!
+let speedCurrent = 0;
 
-const version_id = "2.0.2";
+  //dont change this variable!
+const version_id = packagejson.version;
 process.env.TZ = config.timezone; // set this to your timezone
 const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
 // end-of secrets
@@ -36,7 +39,7 @@ resetStepCount = function () {
   allTimeStepto0 = allTimeStep;
 
   sendWebhookSteps(0, config.webhookURL + "/messages/" + config.pedoMeterMessageID); // reset the webhook value manually incase the watch is not active
-  fs.writeFile(
+  fs.writeFileSyncSyncSync(
     path.resolve(__dirname, "../custom-hds/stepCountTo0.txt"),
     allTimeStepto0.toString(),
     (err) => {
@@ -57,6 +60,8 @@ let lastStepValue; // last step value sent by the watch
 
 
   startup();
+  console.log("Starting server on port: " + config.port);
+  app.listen(config.port, () => { console.log("\x1b[32m", 'Server is up and running!') }) // creating the server
   setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
   setallTimeStepTo0();
   setlastStepValue();
@@ -68,20 +73,33 @@ let lastStepValue; // last step value sent by the watch
 
 async function initiateDiscordRPC() {
   console.log("Discord is running, starting DiscordRPC");
-    initiatingRPC = true; // lock the variable to prevent multiple RPCs from being initiated
-    await sleep(15000);
+    initiatingRPC = true; // a lock variable to prevent multiple RPCs from being initiated
+    await sleep(14000); // wait 14 seconds to make sure discord is fully loaded
     client = require('discord-rich-presence')(config.discordAppID);
     discordRPCactive = true;
-    console.log("Discord RPC is active!");
+    console.log("\x1b[32m", "Discord RPC is active!");
+
+    //initiatingRPC stays true so the RPC wont be initiated again
+
   }
 
 async function startup(){
+  console.log("Starting up...");
+  if (config.forwardingDestination == "") {
+    console.log("\x1b[31m", "No forwarding destination set, forwarding is disabled");
+  } else console.log("\x1b[32m", "Forwarding all incomming requests to: " + config.forwardingDestination);
+  if (!config.activateWebhooks) {
+    console.log("\x1b[31m", "Webhooks are disabled!");
+  } else console.log("\x1b[32m", "Webhooks are enabled!");
+  if (!config.activateDiscordRPC) {
+    console.log("\x1b[31m", "Discord RPC is disabled!");
+  } else console.log("\x1b[32m", "Discord RPC is enabled! Searching for Discord...");
+
+
   if (config.activateDiscordRPC && isDiscordRunning()) {
     initiateDiscordRPC();
   }
-  else console.log("Discord RPC could not be activated!");
-  
-  console.log("Starting HealthDataServer v" + version_id);
+  else console.log("\x1b[31m", "Discord RPC could not be activated!");
 }
 
 function isDiscordRunning() {
@@ -109,7 +127,7 @@ function setallTimeStep() {
         console.error(err);
         allTimeStep = 0;
       }
-      console.log("Setting allTimeSteps to: " + parseInt(data));
+      //console.log("Setting allTimeSteps to: " + parseInt(data));
       allTimeStep = parseInt(data);
     }
   );
@@ -124,7 +142,7 @@ function setallTimeStepTo0() {
         console.error(err);
         allTimeStepto0 = 0;
       }
-      console.log("Setting allTimeStepto0 to: " + parseInt(data));
+      //console.log("Setting allTimeStepto0 to: " + parseInt(data));
       allTimeStepto0 = parseInt(data);
     }
   );
@@ -139,7 +157,7 @@ function setlastStepValue() {
         console.error(err);
         allTimeStep = 0;
       }
-      console.log("Setting lastStepValue to: " + parseInt(data));
+      //console.log("Setting lastStepValue to: " + parseInt(data));
       lastStepValue = parseInt(data);
     }
   );
@@ -197,7 +215,7 @@ function setSpeed() {
         speed = 0;
       }
       speed = data;
-      console.log(speed);
+      //console.log(speed);
     }
   );
 };
@@ -225,7 +243,8 @@ function setFocusStatus() {
 
 app.put("/" + secretPass, (req, res) => {
   res.sendStatus(200); // respond OK
-  console.log("New message!"); // logging the connection of a new client
+  //console.log("New message!"); // logging the connection of a new client
+
   handleMessage(req.body.data); // give message data to the handleMessage function
 
   if (config.activateDiscordRPC && !discordRPCactive && isDiscordRunning() && !initiatingRPC) {
@@ -233,7 +252,7 @@ app.put("/" + secretPass, (req, res) => {
   }
 
   if (config.activateDiscordRPC && isDiscordRunning() && discordRPCactive) {
-    console.log("updating discord rpc");
+    //console.log("updating discord rpc");
     client.updatePresence({
       
       state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
@@ -258,9 +277,11 @@ handleMessage = function (message) {
     // check if message received contains a Heart Rate
     hrate = smessage.substr(10, 3); // cut the messsage so that only the heart rate remains
     console.log(smessage); // logging for debug purposes
+
     sendWebhookHeartRate(hrate, config.webhookURL + "/messages/" + config.heartRateMessageID); // passing the heartRate to the sendWebhookHeartRate function
 
-    fs.writeFile(
+    if (heartRate != hrate) {
+    fs.writeFileSync(
       path.resolve(__dirname, "../custom-hds/hrate.txt"),
       hrate,
       (err) => {
@@ -272,6 +293,7 @@ handleMessage = function (message) {
       }
     );
     heartRate = hrate;
+    }
   } // end-of heartRate-check
 
   if (smessage.startsWith("oxygenSaturation")) {
@@ -281,7 +303,7 @@ handleMessage = function (message) {
 
     sendWebhookOxygen(oxygenSaturation, config.webhookURL + "/messages/" + config.oxygenSaturationMessageID); // passing oxygenSaturation to the sendWebhookOxygen function
 
-    fs.writeFile(
+    fs.writeFileSync(
       path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
       oxygenSaturation.toString(),
       (err) => {
@@ -322,7 +344,7 @@ handleMessage = function (message) {
 
     sendWebhookSteps(stepsToday, config.webhookURL + "/messages/" + config.pedoMeterMessageID); // passing the stepsToday to the sendWebhookSteps function
 
-    fs.writeFile(
+    fs.writeFileSync(
       path.resolve(__dirname, "../custom-hds/lastStepValue.txt"),
       lastStepValue.toString(),
       (err) => {
@@ -334,7 +356,7 @@ handleMessage = function (message) {
       }
     );
 
-    fs.writeFile(
+    fs.writeFileSync(
       path.resolve(__dirname, "../custom-hds/stepCount.txt"),
       allTimeStep.toString(),
       (err) => {
@@ -357,7 +379,8 @@ handleMessage = function (message) {
 
     sendWebhookSpeed(speedNormal, config.webhookURL + "/messages/" + config.speedMessageID); // passing speedNormal to the sendWebhookSpeed function
 
-    fs.writeFile(
+    if (speedCurrent != speedNormal) {
+    fs.writeFileSync(
       path.resolve(__dirname, "../custom-hds/speed.txt"),
       String(speedNormal),
       (err) => {
@@ -368,6 +391,8 @@ handleMessage = function (message) {
         // console.log('The file with the content ' + speedNormal + ' has been written succesfully!');
       }
     );
+    speedCurrent = speedNormal;
+    }
   } // end-of speed-check
 
   if (smessage.startsWith("focusStatus")) {
@@ -377,7 +402,7 @@ handleMessage = function (message) {
 
     sendWebhookFocusStatus(focusStatus, config.webhookURL + "/messages/" + config.focusStatusMessageID); // passing focusStatus to the sendWebhookFocusStatus function
 
-    fs.writeFile(
+    fs.writeFileSync(
       path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
       String(focusStatus),
       (err) => {
@@ -393,9 +418,10 @@ handleMessage = function (message) {
 
 
 
-// WebhookSending functions
 
 sendWebhookHeartRate = function (hrate, webhookurl) {
+  if (config.activateWebhooks && !rateLimited) {
+    // check if user wants to send a webhook
   const datetime = new Date();
   const ctime =
     datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
@@ -421,9 +447,12 @@ sendWebhookHeartRate = function (hrate, webhookurl) {
     },
     body: JSON.stringify(params),
   });
+}
 };
 
 sendWebhookOxygen = function (ovalue, webhookurl) {
+  if (config.activateWebhooks && !rateLimited) {
+
   const datetime = new Date();
   const ctime =
     datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
@@ -450,9 +479,12 @@ sendWebhookOxygen = function (ovalue, webhookurl) {
     },
     body: JSON.stringify(params),
   });
+}
 };
 
 sendWebhookSteps = function (steps, webhookurl) {
+  if (config.activateWebhooks && !rateLimited) {
+
   const datetime = new Date();
   const ctime =
     datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
@@ -478,9 +510,12 @@ sendWebhookSteps = function (steps, webhookurl) {
     },
     body: JSON.stringify(params),
   });
+}
 };
 
 sendWebhookSpeed = function (speed, webhookurl) {
+  if (config.activateWebhooks && !rateLimited) {
+
   const datetime = new Date();
   const ctime =
     datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
@@ -506,9 +541,11 @@ sendWebhookSpeed = function (speed, webhookurl) {
     },
     body: JSON.stringify(params),
   });
+}
 };
 
 sendWebhookFocusStatus = function (focusStatus, webhookurl) {
+  if (config.activateWebhooks && !rateLimited) {
   const datetime = new Date();
   const ctime =
     datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
@@ -534,6 +571,7 @@ sendWebhookFocusStatus = function (focusStatus, webhookurl) {
     },
     body: JSON.stringify(params),
   });
+}
 };
 
 forwardReq = function (reqjson) {
