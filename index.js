@@ -15,6 +15,7 @@ var focusStatus = "";
 let discordRPCactive = false; //dont change this variable!
 let initiatingRPC = false;
 let rateLimited = false; // dont change this variable!
+let speedCurrent = 0;
 
   //dont change this variable!
 const version_id = packagejson.version;
