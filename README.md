@@ -42,6 +42,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#daemonize">Daemonize</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -139,6 +140,25 @@ v8.16.0
 7. profit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Daemonize
+
+The daemonization of this application ensures that it always runs in the background and also starts itself on boot!
+
+**Create** the windows backround service:
+   ```sh
+   cd misc/
+   node createWinSvc.js
+   ```
+
+**Remove** the windows backround service:
+   ```sh
+   cd misc/
+   node removeWinSvc.js
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 
