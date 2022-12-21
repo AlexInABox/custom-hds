@@ -11,6 +11,7 @@
     "fs": "^0.0.1-security",
     "node-fetch": "2.6.7",
     "node-schedule": "^2.1.0",
+    "node-windows": "^1.0.0-beta.8",
     "path": "^0.12.7",
     "request": "^2.88.2"
   }
