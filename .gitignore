@@ -3,10 +3,10 @@ node_modules
 /package-lock.json
 /config.json
 daemon
-#focusStatus.txt
-#hrate.txt
-#lastStepValue.txt
-#oxygenSaturation.txt
-#speed.txt
-#stepCount.txt
-#stepCountTo0.txt
+focusStatus.txt
+hrate.txt
+lastStepValue.txt
+oxygenSaturation.txt
+speed.txt
+stepCount.txt
+stepCountTo0.txt
