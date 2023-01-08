@@ -1,11 +1,4 @@
 node_modules
 .vscode
-/package-lock.json
+package-lock.json
 daemon
-focusStatus.txt
-hrate.txt
-lastStepValue.txt
-oxygenSaturation.txt
-speed.txt
-stepCount.txt
-stepCountTo0.txt
