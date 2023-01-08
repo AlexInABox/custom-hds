@@ -1,7 +1,6 @@
 node_modules
 .vscode
 /package-lock.json
-/config.json
 daemon
 focusStatus.txt
 hrate.txt
