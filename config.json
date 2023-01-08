@@ -1,0 +1,16 @@
+{
+  "userName": "larry",
+  "port": 3476,
+  "timezone": "Europe/Amsterdam",
+  "discordAppID": "1033806008008581240",
+  "activateDiscordRPC": true,
+  "activateWebhooks": false,
+  "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",
+  "heartRateMessageID": "<id>",
+  "oxygenSaturationMessageID": "<id>",
+  "pedoMeterMessageID": "<id>",
+  "speedMessageID": "<id>",
+  "focusStatusMessageID": "<id>",
+  "forwardingDestination": "http://192.168.178.20:3476",
+  "secretPass": ""
+}
