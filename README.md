@@ -143,7 +143,14 @@ v8.16.0
 
 ### Daemonize
 
-The daemonization of this application ensures that it always runs in the background and also starts itself on boot!
+The daemonization of this application ensures that it always runs in the background and also starts itself on boot! 
+
+
+<br>
+
+!!! **WARNING** !!! Before you deamonize this application, make sure to at least run custom-hds once on your machine using the commands above! 
+
+<br>
 
 **Create** the windows backround service:
    ```sh
