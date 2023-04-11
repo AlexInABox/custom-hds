@@ -7,7 +7,40 @@ const path = require("path"); // used to get the relative path the file is place
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
 
 var config = require('./config.json');
+var healthData = require('./healthData.json');
 var packagejson = require('./package.json');
+async function updateJSON() {
+  fs.writeFileSync(
+    path.resolve(__dirname, "./healthData.json"),
+    JSON.stringify(healthData, null, 2),
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+      // file written successfully
+    }
+  );
+  fs.writeFileSync(
+    path.resolve(__dirname, "./config.json"),
+    JSON.stringify(config, null, 2),
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+      // file written successfully
+    }
+  );
+  fs.writeFileSync(
+    path.resolve(__dirname, "./package.json"),
+    JSON.stringify(packagejson, null, 2),
+    (err) => {
+      if (err) {
+        console.error(err);
+      }
+      // file written successfully
+    }
+  );
+}
 var heartRate = 0;
 var oxygenSaturation = 0;
 var speed = 0;
@@ -17,7 +50,7 @@ let initiatingRPC = false;
 let rateLimited = false; // dont change this variable!
 let speedCurrent = 0;
 
-  //dont change this variable!
+//dont change this variable!
 const version_id = packagejson.version;
 process.env.TZ = config.timezone; // set this to your timezone
 const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
@@ -59,31 +92,31 @@ let stepsToday = 0; // all steps today
 let lastStepValue; // last step value sent by the watch
 
 
-  startup();
-  console.log("Starting server on port: " + config.port);
-  app.listen(config.port, () => { console.log("\x1b[32m", 'Server is up and running!') }) // creating the server
-  setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
-  setallTimeStepTo0();
-  setlastStepValue();
-  setHeartRate();
-  setOxygenSaturation();
-  setStepCount();
-  setSpeed();
-  setFocusStatus();
+startup();
+console.log("Starting server on port: " + config.port);
+app.listen(config.port, () => { console.log("\x1b[32m", 'Server is up and running!') }) // creating the server
+setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
+setallTimeStepTo0();
+setlastStepValue();
+setHeartRate();
+setOxygenSaturation();
+setStepCount();
+setSpeed();
+setFocusStatus();
 
 async function initiateDiscordRPC() {
   console.log("Discord is running, starting DiscordRPC");
-    initiatingRPC = true; // a lock variable to prevent multiple RPCs from being initiated
-    await sleep(14000); // wait 14 seconds to make sure discord is fully loaded
-    client = require('discord-rich-presence')(config.discordAppID);
-    discordRPCactive = true;
-    console.log("\x1b[32m", "Discord RPC is active!");
+  initiatingRPC = true; // a lock variable to prevent multiple RPCs from being initiated
+  await sleep(14000); // wait 14 seconds to make sure discord is fully loaded
+  client = require('discord-rich-presence')(config.discordAppID);
+  discordRPCactive = true;
+  console.log("\x1b[32m", "Discord RPC is active!");
 
-    //initiatingRPC stays true so the RPC wont be initiated again
+  //initiatingRPC stays true so the RPC wont be initiated again
 
-  }
+}
 
-async function startup(){
+async function startup() {
   console.log("Starting up...");
   if (config.forwardingDestination == "") {
     console.log("\x1b[31m", "No forwarding destination set, forwarding is disabled");
@@ -91,16 +124,48 @@ async function startup(){
   if (!config.activateWebhooks) {
     console.log("\x1b[31m", "Webhooks are disabled!");
   } else console.log("\x1b[32m", "Webhooks are enabled!");
+
+  await checkConfig();
+
   if (!config.activateDiscordRPC) {
     console.log("\x1b[31m", "Discord RPC is disabled!");
   } else console.log("\x1b[32m", "Discord RPC is enabled! Searching for Discord...");
-
 
   if (config.activateDiscordRPC && isDiscordRunning()) {
     initiateDiscordRPC();
   }
   else console.log("\x1b[31m", "Discord RPC could not be activated!");
 }
+
+async function checkConfig() {
+  if (config.discordAppID == "" && config.activateDiscordRPC) {
+    console.log("\x1b[31m", "No Discord AppID set, using default AppID!")
+    config.discordAppID = "1033806008008581240";
+  }
+  if (config.webhookURL == "" && config.activateWebhooks) {
+    console.log("\x1b[31m", "No Webhook URL set, Webhooks are disabled!")
+    config.activateWebhooks = false;
+  }
+  if (config.timezone == "") {
+    console.log("\x1b[31m", "No timezone set, using Europe/Amsterdam as default!")
+    config.timezone = "Europe/Amsterdam";
+  }
+  if (config.port == "") {
+    console.log("\x1b[31m", "No port set, using 3476 as default!")
+    config.port = 3476;
+  }
+  if (config.data_save_type == "") {
+    console.log("\x1b[31m", "No data_save_type set, using both as default!")
+    config.data_save_type = "both";
+  }
+  if (config.data_save_type != "both" && config.data_save_type != "txt" && config.data_save_type != "json") {
+    console.log("\x1b[31m", "Invalid data_save_type set, using both as default!")
+    config.data_save_type = "both";
+  }
+  updateJSON();
+}
+
+
 
 function isDiscordRunning() {
   try {
@@ -164,74 +229,99 @@ function setlastStepValue() {
 }
 
 function setHeartRate() {
-  fs.readFile(
-    path.resolve(__dirname, "../custom-hds/hrate.txt"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error(err);
-        heartRate = 0;
+  if (config.data_save_type == "both" || config.data_save_type == "txt") {
+    fs.readFile(
+      path.resolve(__dirname, "../custom-hds/hrate.txt"),
+      "utf8",
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          heartRate = 0;
+        }
+        heartRate = data;
       }
-      heartRate = data;
-    }
-  );
+    );
+  }
+  if (config.data_save_type == "both" || config.data_save_type == "json") {
+    heartRate = healthData.heartRate;
+  }
 };
 
 function setOxygenSaturation() {
-  fs.readFile(
-    path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error(err);
-        oxygenSaturation = 0;
+  if (config.data_save_type == "both" || config.data_save_type == "txt") {
+    fs.readFile(
+      path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
+      "utf8",
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          oxygenSaturation = 0;
+        }
+        oxygenSaturation = data;
       }
-      oxygenSaturation = data;
-    }
-  );
+    );
+  }
+  if (config.data_save_type == "both" || config.data_save_type == "json") {
+    oxygenSaturation = healthData.oxygenSaturation;
+  }
 };
 
 function setStepCount() {
-  fs.readFile(
-    path.resolve(__dirname, "../custom-hds/stepCount.txt"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error(err);
-        stepCount = 0;
+  if (config.data_save_type == "both" || config.data_save_type == "txt") {
+    fs.readFile(
+      path.resolve(__dirname, "../custom-hds/stepCount.txt"),
+      "utf8",
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          stepCount = 0;
+        }
+        stepCount = data;
       }
-      stepCount = data;
-    }
-  );
+    );
+  }
+  if (config.data_save_type == "both" || config.data_save_type == "json") {
+    stepCount = healthData.stepCount;
+  }
 };
 
 function setSpeed() {
-  fs.readFile(
-    path.resolve(__dirname, "../custom-hds/speed.txt"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error(err);
-        speed = 0;
+  if (config.data_save_type == "both" || config.data_save_type == "txt") {
+    fs.readFile(
+      path.resolve(__dirname, "../custom-hds/speed.txt"),
+      "utf8",
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          speed = 0;
+        }
+        speed = data;
+        //console.log(speed);
       }
-      speed = data;
-      //console.log(speed);
-    }
-  );
+    );
+  }
+  if (config.data_save_type == "both" || config.data_save_type == "json") {
+    speed = healthData.speed;
+  }
 };
 
 function setFocusStatus() {
-  fs.readFile(
-    path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error(err);
-        focusStatus = "";
+  if (config.data_save_type == "both" || config.data_save_type == "txt") {
+    fs.readFile(
+      path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
+      "utf8",
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          focusStatus = "";
+        }
+        focusStatus = data;
       }
-      focusStatus = data;
-    }
-  );
+    );
+  }
+  if (config.data_save_type == "both" || config.data_save_type == "json") {
+    focusStatus = healthData.focusStatus;
+  }
 };
 
 
@@ -254,9 +344,9 @@ app.put("/" + secretPass, (req, res) => {
   if (config.activateDiscordRPC && isDiscordRunning() && discordRPCactive) {
     //console.log("updating discord rpc");
     client.updatePresence({
-      
+
       state: 'Heartrate: ' + heartRate + "\r\n" + 'Steps: ' + stepsToday,
-      details: 'Oxygen: ' + oxygenSaturation*100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
+      details: 'Oxygen: ' + oxygenSaturation * 100 + "%" + "\r\n" + 'Speed: ' + speed + "m/s",
       largeImageKey: 'logo',
       //smallImageKey: 'hrate:' + heartRate, //for later use
       smallImageKey: 'mini-logo',
@@ -281,18 +371,26 @@ handleMessage = function (message) {
     sendWebhookHeartRate(hrate, config.webhookURL + "/messages/" + config.heartRateMessageID); // passing the heartRate to the sendWebhookHeartRate function
 
     if (heartRate != hrate) {
-    fs.writeFileSync(
-      path.resolve(__dirname, "../custom-hds/hrate.txt"),
-      hrate,
-      (err) => {
-        // write the heartRate to a file named hrate.txt
-        if (err) {
-          console.error(err);
-        }
-        // console.log('The file with the content ' + hrate + ' has been written succesfully!');
+      // check if the heartRate has changed since the last message
+
+      if (config.data_save_type == "both" || config.data_save_type == "txt") {
+        fs.writeFileSync(
+          path.resolve(__dirname, "../custom-hds/hrate.txt"),
+          hrate,
+          (err) => {
+            // write the heartRate to a file named hrate.txt
+            if (err) {
+              console.error(err);
+            }
+            // console.log('The file with the content ' + hrate + ' has been written succesfully!');
+          }
+        );
       }
-    );
-    heartRate = hrate;
+      if (config.data_save_type == "both" || config.data_save_type == "json") {
+        healthData.heartRate = hrate;
+        updateJSON();
+      }
+      heartRate = hrate;
     }
   } // end-of heartRate-check
 
@@ -303,17 +401,22 @@ handleMessage = function (message) {
 
     sendWebhookOxygen(oxygenSaturation, config.webhookURL + "/messages/" + config.oxygenSaturationMessageID); // passing oxygenSaturation to the sendWebhookOxygen function
 
-    fs.writeFileSync(
-      path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
-      oxygenSaturation.toString(),
-      (err) => {
-        // write the oxygenSaturation value to a file named oxygenSaturation.txt
-        if (err) {
-          console.error(err);
+    if (config.data_save_type == "both" || config.data_save_type == "txt") {
+      fs.writeFileSync(
+        path.resolve(__dirname, "../custom-hds/oxygenSaturation.txt"),
+        oxygenSaturation.toString(),
+        (err) => {
+          // write the oxygenSaturation value to a file named oxygenSaturation.txt
+          if (err) {
+            console.error(err);
+          }
+          // console.log('The file with the content ' + oxygenSaturation + ' has been written succesfully!');
         }
-        // console.log('The file with the content ' + oxygenSaturation + ' has been written succesfully!');
-      }
-    );
+      );
+    }
+    if (config.data_save_type == "both" || config.data_save_type == "json") {
+      healthData.oxygenSaturation = oxygenSaturation;
+    }
   } // end-of oxygenSaturation-check
 
   if (smessage.startsWith("stepCount")) {
@@ -380,18 +483,23 @@ handleMessage = function (message) {
     sendWebhookSpeed(speedNormal, config.webhookURL + "/messages/" + config.speedMessageID); // passing speedNormal to the sendWebhookSpeed function
 
     if (speedCurrent != speedNormal) {
-    fs.writeFileSync(
-      path.resolve(__dirname, "../custom-hds/speed.txt"),
-      String(speedNormal),
-      (err) => {
-        // write the speed value to a file named speed.txt
-        if (err) {
-          console.error(err);
-        }
-        // console.log('The file with the content ' + speedNormal + ' has been written succesfully!');
+      if (config.data_save_type == "both" || config.data_save_type == "txt") {
+        fs.writeFileSync(
+          path.resolve(__dirname, "../custom-hds/speed.txt"),
+          String(speedNormal),
+          (err) => {
+            // write the speed value to a file named speed.txt
+            if (err) {
+              console.error(err);
+            }
+            // console.log('The file with the content ' + speedNormal + ' has been written succesfully!');
+          }
+        );
       }
-    );
-    speedCurrent = speedNormal;
+      if (config.data_save_type == "both" || config.data_save_type == "json") {
+        healthData.speed = speedNormal;
+      }
+      speedCurrent = speedNormal;
     }
   } // end-of speed-check
 
@@ -402,18 +510,24 @@ handleMessage = function (message) {
 
     sendWebhookFocusStatus(focusStatus, config.webhookURL + "/messages/" + config.focusStatusMessageID); // passing focusStatus to the sendWebhookFocusStatus function
 
-    fs.writeFileSync(
-      path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
-      String(focusStatus),
-      (err) => {
-        // write the speed value to a file named speed.txt
-        if (err) {
-          console.error(err);
+    if (config.data_save_type == "both" || config.data_save_type == "txt") {
+      fs.writeFileSync(
+        path.resolve(__dirname, "../custom-hds/focusStatus.txt"),
+        String(focusStatus),
+        (err) => {
+          // write the speed value to a file named speed.txt
+          if (err) {
+            console.error(err);
+          }
+          // console.log('The file with the content ' + focusStatus + ' has been written succesfully!');
         }
-        // console.log('The file with the content ' + focusStatus + ' has been written succesfully!');
-      }
-    );
+      );
+    }
+    if (config.data_save_type == "both" || config.data_save_type == "json") {
+      healthData.focusStatus = focusStatus;
+    }
   } // end-of focus-check
+  updateJSON(); // update the JSON file
 }; // end-of handleMessage()
 
 
@@ -422,156 +536,156 @@ handleMessage = function (message) {
 sendWebhookHeartRate = function (hrate, webhookurl) {
   if (config.activateWebhooks && !rateLimited) {
     // check if user wants to send a webhook
-  const datetime = new Date();
-  const ctime =
-    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
-  const params = {
-    content: null,
-    embeds: [
-      {
-        title: `Wie ist der aktuelle Puls von ${config.userName} ?`,
-        description: "Aktueller Puls: **" + hrate + "**",
-        color: 16741027,
-        footer: {
-          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+    const datetime = new Date();
+    const ctime =
+      datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+    const params = {
+      content: null,
+      embeds: [
+        {
+          title: `Wie ist der aktuelle Puls von ${config.userName} ?`,
+          description: "Aktueller Puls: **" + hrate + "**",
+          color: 16741027,
+          footer: {
+            text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+          },
         },
-      },
-    ],
-    attachments: [],
-  };
+      ],
+      attachments: [],
+    };
 
-  fetch(webhookurl, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(params),
-  });
-}
+    fetch(webhookurl, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+  }
 };
 
 sendWebhookOxygen = function (ovalue, webhookurl) {
   if (config.activateWebhooks && !rateLimited) {
 
-  const datetime = new Date();
-  const ctime =
-    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
-  const params = {
-    content: null,
-    embeds: [
-      {
-        title:
-          `Wie ist der aktuelle Sauerstoffgehalt in dem Blut von ${config.userName}`,
-        description: "Sauerstoffgehalt: **" + ovalue * 100 + "%**",
-        color: 8454143,
-        footer: {
-          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+    const datetime = new Date();
+    const ctime =
+      datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+    const params = {
+      content: null,
+      embeds: [
+        {
+          title:
+            `Wie ist der aktuelle Sauerstoffgehalt in dem Blut von ${config.userName}`,
+          description: "Sauerstoffgehalt: **" + ovalue * 100 + "%**",
+          color: 8454143,
+          footer: {
+            text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+          },
         },
-      },
-    ],
-    attachments: [],
-  };
+      ],
+      attachments: [],
+    };
 
-  fetch(webhookurl, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(params),
-  });
-}
+    fetch(webhookurl, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+  }
 };
 
 sendWebhookSteps = function (steps, webhookurl) {
   if (config.activateWebhooks && !rateLimited) {
 
-  const datetime = new Date();
-  const ctime =
-    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
-  const params = {
-    content: null,
-    embeds: [
-      {
-        title: `Wie viele Schritte hat ${config.userName} heute schon bewältigt?`,
-        description: "Schrittanzahl: **" + steps + "**",
-        color: 15781936,
-        footer: {
-          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+    const datetime = new Date();
+    const ctime =
+      datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+    const params = {
+      content: null,
+      embeds: [
+        {
+          title: `Wie viele Schritte hat ${config.userName} heute schon bewältigt?`,
+          description: "Schrittanzahl: **" + steps + "**",
+          color: 15781936,
+          footer: {
+            text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+          },
         },
-      },
-    ],
-    attachments: [],
-  };
+      ],
+      attachments: [],
+    };
 
-  fetch(webhookurl, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(params),
-  });
-}
+    fetch(webhookurl, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+  }
 };
 
 sendWebhookSpeed = function (speed, webhookurl) {
   if (config.activateWebhooks && !rateLimited) {
 
-  const datetime = new Date();
-  const ctime =
-    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
-  const params = {
-    content: null,
-    embeds: [
-      {
-        title: `Wie schnell bewegt sich ${config.userName} gerade?`,
-        description: "Live-Geschwindigkeit: **" + speed + "m/s**",
-        color: 16540163,
-        footer: {
-          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+    const datetime = new Date();
+    const ctime =
+      datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+    const params = {
+      content: null,
+      embeds: [
+        {
+          title: `Wie schnell bewegt sich ${config.userName} gerade?`,
+          description: "Live-Geschwindigkeit: **" + speed + "m/s**",
+          color: 16540163,
+          footer: {
+            text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+          },
         },
-      },
-    ],
-    attachments: [],
-  };
+      ],
+      attachments: [],
+    };
 
-  fetch(webhookurl, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(params),
-  });
-}
+    fetch(webhookurl, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+  }
 };
 
 sendWebhookFocusStatus = function (focusStatus, webhookurl) {
   if (config.activateWebhooks && !rateLimited) {
-  const datetime = new Date();
-  const ctime =
-    datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
-  const params = {
-    content: null,
-    embeds: [
-      {
-        title: `Was macht ${config.userName} gerade so?`,
-        description: "Fokus: **" + focusStatus + "**",
-        color: 4798101,
-        footer: {
-          text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+    const datetime = new Date();
+    const ctime =
+      datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
+    const params = {
+      content: null,
+      embeds: [
+        {
+          title: `Was macht ${config.userName} gerade so?`,
+          description: "Fokus: **" + focusStatus + "**",
+          color: 4798101,
+          footer: {
+            text: "custom-hds | " + version_id + " | - AlexInABox • " + ctime,
+          },
         },
-      },
-    ],
-    attachments: [],
-  };
+      ],
+      attachments: [],
+    };
 
-  fetch(webhookurl, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(params),
-  });
-}
+    fetch(webhookurl, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+  }
 };
 
 forwardReq = function (reqjson) {

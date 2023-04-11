@@ -2,7 +2,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![GPL-3.0 License][license-shield]][license-url]
 
 
 
@@ -110,19 +110,23 @@ v8.16.0
 
 ```json
 {
+    "userName": "larry", <-- the discord user to mention in the webhook
     "port": 3476, <-- port goes here (left as default in most cases)
     "timezone": "Europe/Amsterdam",  <-- your timezone goes here
+    "data_save_type": "json",  <-- can be "json", "txt" or "both"
     "discordAppID": "1033806008008581240",  <---- leave as default for fancy heartrate icons (or create your own application at https://https://discord.com/developers)
     "webhookURL": "https://discord.com/api/webhooks/<id>/<secret>",  <--- add your discord webhook like this
     "heartRateMessageID": "<id>",  <---- message ID of the heartRate message
     "oxygenSaturationMessageID": "<id>",  <---- message ID of the oxygen message
     "pedoMeterMessageID": "<id>",  <---- message ID of the steps message
     "speedMessageID": "<id>",  <---- message ID of the speed message
-    "secretPass": "secretPass"  <--- a secret pass like this (use case: http://example.com/secretPass)  ((leave blank when using locally or you just dont care))
+    "focusStatusMessageID": "", <---- message ID of the focus message (WIP)
+    "forwardingDestination": "", <--- the IP adress of any other custom-hds server you want to forward data to (dont forget the port!)
+    "secretPass": "secretPass"  <--- a secret pass like this (use case: http://example.com/secretPass) (optional)
   }
 ```
 
-4. open the desired port on your firewall (optional) 
+4. open the desired port in your firewall (optional) 
 
 5. start the server:
    ```sh
@@ -148,7 +152,7 @@ The daemonization of this application ensures that it always runs in the backgro
 
 <br>
 
-!!! **WARNING** !!! Before you deamonize this application, make sure to at least run custom-hds once on your machine using the commands above! 
+!!! **WARNING** !!! Before you deamonize this application, make sure to run custom-hds at least once on your machine using the commands above! 
 
 <br>
 
@@ -183,7 +187,7 @@ _For more examples, please refer to the **non existent** [Documentation](https:/
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] dynamic icon showing the heartrate as a neat graphic (50% done)
+- [ ] dynamic icon showing the heartrate as a neat graphic (80% done)
 - [ ] endpoint for iPhone Focus status
 - [ ] turing machine
     - [ ] my teacher would love it!
@@ -230,6 +234,8 @@ Project Link: [https://github.com/alexinabox/custom-hds](https://github.com/alex
 
 Website: [https://alexinabox.de](https://alexinabox.de)
 
+Minor-Implementation-Example: [https://alexinabox.de/me](https://alexinabox.de/me)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -254,7 +260,7 @@ Website: [https://alexinabox.de](https://alexinabox.de)
 [issues-shield]: https://img.shields.io/github/issues/alexinabox/custom-hds.svg?style=for-the-badge
 [issues-url]: https://github.com/alexinabox/custom-hds/issues
 [license-shield]: https://img.shields.io/github/license/alexinabox/custom-hds.svg?style=for-the-badge
-[license-url]: https://github.com/alexinabox/custom-hds/blob/master/LICENSE.txt
+[license-url]: https://github.com/alexinabox/custom-hds/blob/master/LICENSE
 [product-screenshot]: assets/showcase1.png
 [Express.js]: https://img.shields.io/badge/express.js-000000?style=for-the-badge&logo=expressdotjs&logoColor=white
 [Express-url]: https://expressjs.com
