@@ -52,9 +52,8 @@ let speedCurrent = 0;
 
 //dont change this variable!
 const version_id = packagejson.version;
-process.env.TZ = config.timezone; // set this to your timezone
-const secretPass = config.secretPass; // <-------------- set a secret param like this when using a domain name for security reasons (e.g. https://example.com/secretPass)
-// end-of secrets
+process.env.TZ = config.timezone;
+const secretPass = config.secretPass;
 
 /*
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -149,6 +148,7 @@ async function checkConfig() {
   if (config.timezone == "") {
     console.log("\x1b[31m", "No timezone set, using Europe/Amsterdam as default!")
     config.timezone = "Europe/Amsterdam";
+    process.env.TZ = config.timezone;
   }
   if (config.port == "") {
     console.log("\x1b[31m", "No port set, using 3476 as default!")
