@@ -5,11 +5,16 @@ const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
+const life360 = require('life360-node-api'); // life360 api
+var requestOptions = {
+  method: 'GET',
+};
 
 var config = require('./config.json');
 var healthData = require('./healthData.json');
 var packagejson = require('./package.json');
 async function updateJSON() {
+  console.log("Updating JSON files...");
   fs.writeFileSync(
     path.resolve(__dirname, "./healthData.json"),
     JSON.stringify(healthData, null, 2),
@@ -134,6 +139,10 @@ async function startup() {
     initiateDiscordRPC();
   }
   else console.log("\x1b[31m", "Discord RPC could not be activated!");
+  if (!config.activateLocationFetching) {
+    console.log("\x1b[31m", "Location fetching is disabled!");
+  } else console.log("\x1b[32m", "Location fetching is enabled!");
+  fetchLocation()
 }
 
 async function checkConfig() {
@@ -161,6 +170,10 @@ async function checkConfig() {
   if (config.data_save_type != "both" && config.data_save_type != "txt" && config.data_save_type != "json") {
     console.log("\x1b[31m", "Invalid data_save_type set, using both as default!")
     config.data_save_type = "both";
+  }
+  if ((config.GEOAPIFY_API_KEY == "" | config.LIFE360_USERNAME == "" | config.LIFE360_PASSWORD == "") && config.activateLocationFetching) {
+    console.log("\x1b[31m", "No GEOAPIFY_API_KEY, LIFE360_USERNAME or LIFE360_PASSWORD set, location fetching is disabled!")
+    config.activateLocationFetching = false;
   }
   updateJSON();
 }
@@ -699,4 +712,46 @@ forwardReq = function (reqjson) {
 };
 
 // end-of WebhookSending functions
+// start of locationFetching logic
+async function fetchLocation() {
+  if (!config.activateLocationFetching) return;
+
+  console.log("Fetching location...");
+  var user;
+
+  for (var i = 0; i < 5; i++) { //The API is a bit unstable, so we try to login 5 times before giving up
+    try {
+      let client = await life360.login(config.LIFE360_USERNAME, config.LIFE360_PASSWORD)
+
+      let circles = await client.listCircles()
+
+      user = (await circles[0].listMembers())[0];
+      break;
+    } catch (e) {
+      if (i == 4) {
+        console.log("Failed to login after 5 attempts, exiting...")
+        return;
+      }
+      console.log("Something went wrong, retrying... (" + (i + 1) + " / 5)")
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+  }
+  console.log("Geocoding...")
+  fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + config.GEOAPIFY_API_KEY, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      healthData.location.district = result.features[0].properties.district
+      healthData.location.city = result.features[0].properties.city
+      healthData.location.country = result.features[0].properties.country
+      healthData.location.latitude = String(result.features[0].properties.lat)
+      healthData.location.longitude = String(result.features[0].properties.lon)
+    }
+    )
+    .catch(error => console.log('error', error));
+
+  console.log("Geocoding done!")
+  updateJSON();
+}
+setInterval(function () { fetchLocation() }, 900000); //Update location every 15 minutes
+// end-of locationFetching logic
 // end-of everything *finally*
