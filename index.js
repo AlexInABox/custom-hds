@@ -737,7 +737,7 @@ async function fetchLocation() {
     }
   }
   console.log("Geocoding...")
-  fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + config.GEOAPIFY_API_KEY, requestOptions)
+  await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + config.GEOAPIFY_API_KEY, requestOptions)
     .then(response => response.json())
     .then(result => {
       healthData.location.district = result.features[0].properties.district
