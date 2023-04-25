@@ -3,5 +3,12 @@
   "speed": "0.0",
   "oxygenSaturation": "0",
   "steps": "0",
-  "focusStatus": ""
+  "focusStatus": "",
+  "location": {
+    "latitude": "",
+    "longitude": "",
+    "district": "",
+    "state": "",
+    "country": ""
+  }
 }
