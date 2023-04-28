@@ -3,7 +3,7 @@ const path = require('path');
 var parentDir = path.dirname(require.main.filename).replace(path.basename(path.dirname(require.main.filename)), '');
 // Create a new service object
 var svc = new Service({
-  name:'custom-hds',
+  name: 'custom-hds',
   description: 'The custom-hds node.js server.',
   script: `${parentDir}/index.js`,
   nodeOptions: [
@@ -16,7 +16,7 @@ var svc = new Service({
 
 // Listen for the "install" event, which indicates the
 // process is available as a service.
-svc.on('install',function(){
+svc.on('install', function () {
   svc.start();
 });
 
