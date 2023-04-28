@@ -15,9 +15,9 @@
   "focusStatusMessageID": "",
   "forwardingDestination": "",
   "activateLocationFetching": true,
-  "GEOAPIFY_API_KEY": "xxxxxxxxxxxxxxxxxxxxx",
-  "LIFE360_USERNAME": "xxx@xxx.xx",
-  "LIFE360_PASSWORD": "xxxx",
+  "GEOAPIFY_API_KEY": "",
+  "LIFE360_USERNAME": "",
+  "LIFE360_PASSWORD": "",
   "activateNetflixFetching": true,
-  "NETFLIX_COOKIE": "longasscookie"
+  "NETFLIX_COOKIE": ""
 }
