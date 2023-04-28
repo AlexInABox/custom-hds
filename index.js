@@ -6,6 +6,7 @@ const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
 const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
 const life360 = require('life360-node-api'); // life360 api
+var cheerio = require('cheerio'); //netflix related
 var requestOptions = {
   method: 'GET',
 };
@@ -13,8 +14,9 @@ var requestOptions = {
 var config = require('./config.json');
 var healthData = require('./healthData.json');
 var packagejson = require('./package.json');
+const { start } = require('repl');
 async function updateJSON() {
-  console.log("Updating JSON files...");
+  console.log("\x1b[34m", "Updating JSON files...");
   fs.writeFileSync(
     path.resolve(__dirname, "./healthData.json"),
     JSON.stringify(healthData, null, 2),
@@ -68,7 +70,7 @@ const secretPass = config.secretPass;
 
 // a schedule wich resets the allTimeStepto0 counter at 0'clock
 const whatevenisreality = schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
-  console.log("Job runs every day at 0:00AM");
+  console.log("This Job runs every day at 0:00AM");
   resetStepCount();
 });
 
@@ -95,32 +97,55 @@ let allTimeStepto0; // all steps ever to 0'clock
 let stepsToday = 0; // all steps today
 let lastStepValue; // last step value sent by the watch
 
+startupWrapper();
+async function startupWrapper() {
+  await startup();
+  discordStartup();
+  console.log("Starting server on port: " + config.port);
+  app.listen(config.port, () => { console.log("\x1b[32m", 'Server is up and running!') }) // creating the server
 
-startup();
-console.log("Starting server on port: " + config.port);
-app.listen(config.port, () => { console.log("\x1b[32m", 'Server is up and running!') }) // creating the server
-setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
-setallTimeStepTo0();
-setlastStepValue();
-setHeartRate();
-setOxygenSaturation();
-setStepCount();
-setSpeed();
-setFocusStatus();
+  console.log("\x1b[0m", "Startup complete! \n\n");
+
+  console.log("\x1b[0m", "Fetching initial data...");
+  fetchLocation()
+  fetchNetflix()
+  setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
+  setallTimeStepTo0();
+  setlastStepValue();
+  setHeartRate();
+  setOxygenSaturation();
+  setStepCount();
+  setSpeed();
+  setFocusStatus();
+}
+
+async function discordStartup() {
+  if (!config.activateDiscordRPC) {
+    console.log("\x1b[31m", "Discord RPC is disabled!");
+  } else console.log("\x1b[32m", "Discord RPC is enabled! Searching for Discord...");
+  if (config.activateDiscordRPC && isDiscordRunning()) {
+    console.log("\x1b[0m", "Trying to connect to Discord...");
+    initiateDiscordRPC();
+  } else console.log("\x1b[31m", "Discord RPC could not be activated!");
+}
 
 async function initiateDiscordRPC() {
-  console.log("Discord is running, starting DiscordRPC");
-  initiatingRPC = true; // a lock variable to prevent multiple RPCs from being initiated
-  await sleep(14000); // wait 14 seconds to make sure discord is fully loaded
-  client = require('discord-rich-presence')(config.discordAppID);
-  discordRPCactive = true;
-  console.log("\x1b[32m", "Discord RPC is active!");
-
+  try {
+    console.log("Discord is running, starting DiscordRPC");
+    initiatingRPC = true; // a lock variable to prevent multiple RPCs from being initiated
+    await sleep(14000); // wait 14 seconds to make sure discord is fully loaded
+    client = require('discord-rich-presence')(config.discordAppID);
+    discordRPCactive = true;
+    console.log("\x1b[32m", "Discord RPC is active!");
+  } catch (error) {
+    console.log("\x1b[31m", "Discord RPC could not be activated!");
+  }
   //initiatingRPC stays true so the RPC wont be initiated again
 
 }
 
 async function startup() {
+
   console.log("Starting up...");
   if (config.forwardingDestination == "") {
     console.log("\x1b[31m", "No forwarding destination set, forwarding is disabled");
@@ -128,21 +153,21 @@ async function startup() {
   if (!config.activateWebhooks) {
     console.log("\x1b[31m", "Webhooks are disabled!");
   } else console.log("\x1b[32m", "Webhooks are enabled!");
+  /*
+  if (config.NETFLIX_COOKIE.startsWith("OptanonAlertBoxClosed")) {
+    console.log("\x1b[31m", "Reformatting Netflix Cookie...");
+    config.NETFLIX_COOKIE = reformatNetflixCookie(config.NETFLIX_COOKIE);
+  }
+  */
 
   await checkConfig();
-
-  if (!config.activateDiscordRPC) {
-    console.log("\x1b[31m", "Discord RPC is disabled!");
-  } else console.log("\x1b[32m", "Discord RPC is enabled! Searching for Discord...");
-
-  if (config.activateDiscordRPC && isDiscordRunning()) {
-    initiateDiscordRPC();
-  }
-  else console.log("\x1b[31m", "Discord RPC could not be activated!");
+  updateJSON();
   if (!config.activateLocationFetching) {
     console.log("\x1b[31m", "Location fetching is disabled!");
   } else console.log("\x1b[32m", "Location fetching is enabled!");
-  fetchLocation()
+  if (!config.activateNetflixFetching) {
+    console.log("\x1b[31m", "Netflix fetching is disabled!");
+  } else console.log("\x1b[32m", "Netflix fetching is enabled!");
 }
 
 async function checkConfig() {
@@ -175,7 +200,10 @@ async function checkConfig() {
     console.log("\x1b[31m", "No GEOAPIFY_API_KEY, LIFE360_USERNAME or LIFE360_PASSWORD set, location fetching is disabled!")
     config.activateLocationFetching = false;
   }
-  updateJSON();
+  if (config.NETFLIX_COOKIE == "" && config.activateNetflixFetching) {
+    console.log("\x1b[31m", "No Netflix cookie set, Netflix fetching is disabled!")
+    config.activateNetflixFetching = false;
+  }
 }
 
 
@@ -379,7 +407,7 @@ handleMessage = function (message) {
   if (smessage.startsWith("heartRate")) {
     // check if message received contains a Heart Rate
     hrate = smessage.substr(10, 3); // cut the messsage so that only the heart rate remains
-    console.log(smessage); // logging for debug purposes
+    console.log("\x1b[34m", smessage); // logging for debug purposes
 
     sendWebhookHeartRate(hrate, config.webhookURL + "/messages/" + config.heartRateMessageID); // passing the heartRate to the sendWebhookHeartRate function
 
@@ -410,7 +438,7 @@ handleMessage = function (message) {
   if (smessage.startsWith("oxygenSaturation")) {
     // check if message received contains a oxygenSaturation value
     oxygenSaturation = parseFloat(smessage.substr(17, 20)); // cut the messsage so that only the speed value remains
-    console.log(smessage); // logging for debug purposes
+    console.log("\x1b[34m", smessage); // logging for debug purposes
 
     sendWebhookOxygen(oxygenSaturation, config.webhookURL + "/messages/" + config.oxygenSaturationMessageID); // passing oxygenSaturation to the sendWebhookOxygen function
 
@@ -438,7 +466,7 @@ handleMessage = function (message) {
     // then don't even try to understand the following code!
 
     const stepCount = smessage.substr(10, 18); // cut the messsage so that only the stepCount remains
-    console.log(smessage); // logging for debug purposes
+    console.log("\x1b[34m", smessage); // logging for debug purposes
     // console.log(allTimeStep);
     const stepCountInt = parseInt(stepCount); // lazy variable
 
@@ -456,7 +484,7 @@ handleMessage = function (message) {
     }
 
     stepsToday = allTimeStep - allTimeStepto0; // set the stepsToday var to the difference of allTimeStep and allTimeStepto0
-    console.log("stepsToday: " + stepsToday);
+    console.log("\x1b[34m", "stepsToday: " + stepsToday);
 
     sendWebhookSteps(stepsToday, config.webhookURL + "/messages/" + config.pedoMeterMessageID); // passing the stepsToday to the sendWebhookSteps function
 
@@ -488,7 +516,7 @@ handleMessage = function (message) {
   if (smessage.startsWith("speed")) {
     // check if message received contains a speed value
     speed = smessage.substr(6, 10); // cut the messsage so that only the speed value remains
-    console.log(smessage); // logging for debug purposes
+    console.log("\x1b[34m", smessage); // logging for debug purposes
 
     const speedNormal = Math.round(speed * 100) / 100; // round the number to 2nd decimal -- you can change this but I figured the speedValue looks more pleasant this way
     speed = speedNormal;
@@ -519,7 +547,7 @@ handleMessage = function (message) {
   if (smessage.startsWith("focusStatus")) {
     // check if message received contains a speed value
     focusStatus = smessage.substr(12, 22); // cut the messsage so that only the speed value remains
-    console.log(smessage); // logging for debug purposes
+    console.log("\x1b[34m", smessage); // logging for debug purposes
 
     sendWebhookFocusStatus(focusStatus, config.webhookURL + "/messages/" + config.focusStatusMessageID); // passing focusStatus to the sendWebhookFocusStatus function
 
@@ -716,7 +744,7 @@ forwardReq = function (reqjson) {
 async function fetchLocation() {
   if (!config.activateLocationFetching) return;
 
-  console.log("Fetching location...");
+  console.log("\x1b[34m", "Fetching location...");
   var user;
 
   for (var i = 0; i < 5; i++) { //The API is a bit unstable, so we try to login 5 times before giving up
@@ -729,14 +757,13 @@ async function fetchLocation() {
       break;
     } catch (e) {
       if (i == 4) {
-        console.log("Failed to login after 5 attempts, exiting...")
+        console.log("\x1b[32m", "Failed to login after 5 attempts, exiting...")
         return;
       }
-      console.log("Something went wrong, retrying... (" + (i + 1) + " / 5)")
+      console.log("\x1b[32m", "Something went wrong, retrying... (" + (i + 1) + " / 5)")
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
-  console.log("Geocoding...")
   await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + config.GEOAPIFY_API_KEY, requestOptions)
     .then(response => response.json())
     .then(result => {
@@ -747,11 +774,101 @@ async function fetchLocation() {
       healthData.location.longitude = String(result.features[0].properties.lon)
     }
     )
-    .catch(error => console.log('error', error));
+    .catch(error => console.log("\x1b[32m", 'error', error));
 
-  console.log("Geocoding done!")
+  console.log("\x1b[34m", "Successfully fetched location!")
   updateJSON();
 }
 setInterval(function () { fetchLocation() }, 900000); //Update location every 15 minutes
 // end-of locationFetching logic
+// start-of netflixFetching logic
+
+async function fetchNetflix() {
+  if (!config.activateNetflixFetching) return;
+
+  console.log("\x1b[34m", "Fetching latest Netflix stream...")
+
+  var history_url = "https://www.netflix.com/viewingactivity?raw";
+  var headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36(KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+    'Cookie': config.NETFLIX_COOKIE
+  };
+
+
+  await fetch(history_url, {
+    headers: headers
+  })
+    .then(res => {
+      //get headers from response
+      var headers = res.headers.raw();
+      //get the cookie from the headers
+      var cookie = headers['set-cookie'];
+
+      /*if (cookie) { //This does not fully work as of now, but I'm gonna leave it here for future updates. Either way, it's not really needed since a Netflix cookie is valid for a 1 year anyways
+        console.log("Netflix is suggesting to set a new cookie, trying to set it...")
+ 
+        console.log("Trying to retrieve the first cookie part...")
+        var netCookie = cookie[0].split(';')[0] + '; ' + cookie[1].split(';')[0];
+        config.NETFLIX_COOKIE = netCookie;
+        console.log("Successfully set the first cookie part, trying to retrieve the second one...");
+ 
+        // start a new (pointless) request to get the second cookie part
+        fetch(history_url, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36(KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+            'Cookie': config.NETFLIX_COOKIE
+          }
+        })
+          .then(res => {
+            var headers = res.headers.raw();
+            var cookie = headers['set-cookie'];
+            if (cookie) {
+              console.log("Second cookie part found, trying to set it...")
+              var netCookie = cookie[0] + '; ' + config.NETFLIX_COOKIE;
+              config.NETFLIX_COOKIE = netCookie;
+              console.log("Successfully set the second cookie part!")
+            } else console.log('no new cookie (something went wrong)');
+            return res.text();
+          })
+        console.log("Whole cookie successfully refreshed!")
+        updateJSON();
+      } else console.log('no new cookie');
+      */
+
+      return res.text();
+    })
+    .then(body => {
+      try {
+
+        var $ = cheerio.load(body);
+        healthData.netflix.lastWatched.title = $('.col.title').first().find('a').text();
+        healthData.netflix.lastWatched.showId = $('.col.title').first().find('a').attr('href').split('/')[2]; // "/title/80100172" -> "80100172"
+        healthData.netflix.lastWatched.date = $('.col.date').first().text();
+      } catch (e) {
+        console.log("\x1b[31m", "Failed to fetch Netflix data, probably because the cookie expired.")
+        //TODO: Send a webhook message to the user to inform them that the cookie expired
+        //or
+        //TODO: Refresh the cookie automatically
+        return;
+      }
+    });
+  console.log("\x1b[34m", "Successfully fetched latest Netflix stream!")
+  updateJSON();
+}
+setInterval(function () { fetchNetflix() }, 900000); //Update netflix every 15 minutes
+
+function reformatNetflixCookie(cookie) { //not needed since right now this script does not refresh the cookie automatically (see above)
+  var cookieParts = cookie.split('; ');
+  //iterate through all cookie parts and remove the ones that dont start with "nfvdid" or "SecureNetflixId"
+  for (var i = 0; i < cookieParts.length; i++) {
+    if (!cookieParts[i].startsWith("nfvdid") && !cookieParts[i].startsWith("SecureNetflixId")) {
+      cookieParts.splice(i, 1);
+      i--;
+    }
+  }
+  //join the cookie parts back together
+  var formattedCookie = cookieParts.join('; ');
+  return formattedCookie;
+}
+
 // end-of everything *finally*

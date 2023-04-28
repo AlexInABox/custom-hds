@@ -4,14 +4,14 @@ var parentDir = path.dirname(require.main.filename).replace(path.basename(path.d
 
 // Create a new service object
 var svc = new Service({
-  name:'custom-hds',
+  name: 'custom-hds',
   script: `${parentDir}/index.js`
 });
 
 // Listen for the "uninstall" event so we know when it's done.
-svc.on('uninstall',function(){
+svc.on('uninstall', function () {
   console.log('Uninstall complete.');
-  console.log('The service exists: ',svc.exists);
+  console.log('The service exists: ', svc.exists);
 });
 
 // Uninstall the service.

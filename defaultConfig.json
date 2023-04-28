@@ -1,0 +1,23 @@
+{
+  "userName": "larry",
+  "port": 3476,
+  "secretPass": "",
+  "timezone": "Europe/Amsterdam",
+  "data_save_type": "json",
+  "discordAppID": "1033806008008581240",
+  "activateDiscordRPC": true,
+  "activateWebhooks": false,
+  "webhookURL": "",
+  "heartRateMessageID": "",
+  "oxygenSaturationMessageID": "",
+  "pedoMeterMessageID": "",
+  "speedMessageID": "",
+  "focusStatusMessageID": "",
+  "forwardingDestination": "",
+  "activateLocationFetching": true,
+  "GEOAPIFY_API_KEY": "xxxxxxxxxxxxxxxxxxxxx",
+  "LIFE360_USERNAME": "xxx@xxx.xx",
+  "LIFE360_PASSWORD": "xxxx",
+  "activateNetflixFetching": true,
+  "NETFLIX_COOKIE": "longasscookie"
+}

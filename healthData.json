@@ -5,10 +5,17 @@
   "steps": "0",
   "focusStatus": "",
   "location": {
-    "latitude": "",
-    "longitude": "",
+    "latitude": "52.111",
+    "longitude": "13.111",
     "district": "",
-    "country": "",
-    "city": ""
+    "country": "Germany",
+    "city": "Berlin"
+  },
+  "netflix": {
+    "lastWatched": {
+      "title": "Made in Abyss: Made in Abyss: \"The Great Fault\"",
+      "date": "27/04/2023",
+      "showId": "80193172"
+    }
   }
 }
