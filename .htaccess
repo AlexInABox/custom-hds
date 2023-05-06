@@ -1,2 +1,4 @@
-DirectoryIndex index.html
-Options All - Indexes
+Order Allow,Deny
+<FilesMatch "^healthData\.json$">
+Allow from all
+</FilesMatch
