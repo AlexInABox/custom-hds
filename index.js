@@ -15,6 +15,8 @@ var config = require('./config.json');
 var healthData = require('./healthData.json');
 var packagejson = require('./package.json');
 const { start } = require('repl');
+const { error } = require('console');
+const e = require('express');
 async function updateJSON() {
   console.log("\x1b[34m", "Updating JSON files...");
   fs.writeFileSync(
@@ -109,6 +111,7 @@ async function startupWrapper() {
   console.log("\x1b[0m", "Fetching initial data...");
   fetchLocation()
   fetchNetflix()
+  fetchValorant()
   setallTimeStep(); // on startup get the last saved stepValues from stepCount.txt, lastStepValue.txt and stepCountTo0.txt
   setallTimeStepTo0();
   setlastStepValue();
@@ -203,6 +206,10 @@ async function checkConfig() {
   if (config.NETFLIX_COOKIE == "" && config.activateNetflixFetching) {
     console.log("\x1b[31m", "No Netflix cookie set, Netflix fetching is disabled!")
     config.activateNetflixFetching = false;
+  }
+  if ((config.valorant.riotID == "" | config.valorant.riotTag == "" | config.valorant.region == "") && config.activateValorantFetching) {
+    console.log("\x1b[31m", "No Valorant RiotID, RiotTag or Region set, Valorant fetching is disabled!")
+    config.activateValorantFetching = false;
   }
 }
 
@@ -798,45 +805,7 @@ async function fetchNetflix() {
   await fetch(history_url, {
     headers: headers
   })
-    .then(res => {
-      //get headers from response
-      var headers = res.headers.raw();
-      //get the cookie from the headers
-      var cookie = headers['set-cookie'];
-
-      /*if (cookie) { //This does not fully work as of now, but I'm gonna leave it here for future updates. Either way, it's not really needed since a Netflix cookie is valid for a 1 year anyways
-        console.log("Netflix is suggesting to set a new cookie, trying to set it...")
- 
-        console.log("Trying to retrieve the first cookie part...")
-        var netCookie = cookie[0].split(';')[0] + '; ' + cookie[1].split(';')[0];
-        config.NETFLIX_COOKIE = netCookie;
-        console.log("Successfully set the first cookie part, trying to retrieve the second one...");
- 
-        // start a new (pointless) request to get the second cookie part
-        fetch(history_url, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36(KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-            'Cookie': config.NETFLIX_COOKIE
-          }
-        })
-          .then(res => {
-            var headers = res.headers.raw();
-            var cookie = headers['set-cookie'];
-            if (cookie) {
-              console.log("Second cookie part found, trying to set it...")
-              var netCookie = cookie[0] + '; ' + config.NETFLIX_COOKIE;
-              config.NETFLIX_COOKIE = netCookie;
-              console.log("Successfully set the second cookie part!")
-            } else console.log('no new cookie (something went wrong)');
-            return res.text();
-          })
-        console.log("Whole cookie successfully refreshed!")
-        updateJSON();
-      } else console.log('no new cookie');
-      */
-
-      return res.text();
-    })
+    .then(res => res.text())
     .then(body => {
       try {
 
@@ -871,4 +840,44 @@ function reformatNetflixCookie(cookie) { //not needed since right now this scrip
   return formattedCookie;
 }
 
-// end-of everything *finally*
+// end-of netflixFetching logic
+
+// start-of valorantFetching logic
+
+async function fetchValorant() {
+  if (!config.valorant.active) return;
+
+  //initially set the username
+  healthData.valorant.username = config.valorant.riotID + "#" + config.valorant.riotTag;
+  updateJSON();
+
+  console.log("\x1b[34m", "Fetching latest Valorant MMR...")
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`https://api.kyroskoh.xyz/valorant/v1/mmr/${config.valorant.region}/${config.valorant.riotID}/${config.valorant.riotTag}`, requestOptions)
+    .then(res => {
+      //check if the response is valid
+      if (res.status != 200) {
+        throw "Server responded with: " + response.status + ". Check your config.json file!";
+      }
+      return res.text();
+    })
+    .then(result => {
+      var result = result.split(" - "); // "Immortal 1 - 1234RR" -> ["Immortal 1", "1234RR"]
+
+      healthData.valorant.rank = result[0];
+      healthData.valorant.elo = result[1];
+      console.log("\x1b[34m", "Successfully fetched latest Valorant MMR!")
+      updateJSON();
+    })
+    .catch(error => console.log("\x1b[31m", 'Error while trying to fetch Valorant MMR: \"' + error + "\""));
+}
+
+setInterval(function () { fetchValorant() }, (config.valorant.updateInterval * 1000)); //Update valorant every x seconds
+
+// end-of valorantFetching logic
+
+// end-of everything
