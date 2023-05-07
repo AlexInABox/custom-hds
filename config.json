@@ -19,5 +19,12 @@
   "LIFE360_USERNAME": "",
   "LIFE360_PASSWORD": "",
   "activateNetflixFetching": true,
-  "NETFLIX_COOKIE": ""
+  "NETFLIX_COOKIE": "",
+  "valorant": {
+    "active": true,
+    "riotID": "",
+    "riotTag": "",
+    "region": "",
+    "updateInterval": 60
+  }
 }
