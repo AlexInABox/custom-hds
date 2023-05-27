@@ -22,6 +22,7 @@
   "NETFLIX_COOKIE": "",
   "valorant": {
     "active": true,
+    "riotPUUID": "",
     "riotID": "",
     "riotTag": "",
     "region": "",
