@@ -4,7 +4,6 @@ app.use(express.json());
 const fetch = require("node-fetch"); // interact with the discord webhook
 const fs = require("fs"); // file-write-system
 const path = require("path"); // used to get the relative path the file is placed in
-const schedule = require("node-schedule"); // importing node-schedule to reset the daily stepsCounter at 0'clock
 const life360 = require('life360-node-api'); // life360 api
 var cheerio = require('cheerio'); //netflix related
 var requestOptions = {
@@ -14,9 +13,6 @@ var requestOptions = {
 var config = require('./config.json');
 var healthData = require('./healthData.json');
 var packagejson = require('./package.json');
-const { start } = require('repl');
-const { error } = require('console');
-const e = require('express');
 async function updateJSON() {
   console.log("\x1b[34m", "Updating JSON files...");
   fs.writeFileSync(
@@ -71,10 +67,6 @@ const secretPass = config.secretPass;
 */
 
 // a schedule wich resets the allTimeStepto0 counter at 0'clock
-const whatevenisreality = schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
-  console.log("This Job runs every day at 0:00AM");
-  resetStepCount();
-});
 
 resetStepCount = function () {
   allTimeStepto0 = allTimeStep;
@@ -207,9 +199,13 @@ async function checkConfig() {
     console.log("\x1b[31m", "No Netflix cookie set, Netflix fetching is disabled!")
     config.activateNetflixFetching = false;
   }
-  if ((config.valorant.riotID == "" | config.valorant.riotTag == "" | config.valorant.region == "") && config.activateValorantFetching) {
+  if ((config.valorant.riotID == "" | config.valorant.riotTag == "" | config.valorant.region == "") && config.valorant.active) {
     console.log("\x1b[31m", "No Valorant RiotID, RiotTag or Region set, Valorant fetching is disabled!")
-    config.activateValorantFetching = false;
+    config.valorant.active = false;
+  }
+  if (config.valorant.riotPUUID == "" && config.valorant.active) {
+    console.log("\x1b[31m", "No Valorant riotPUUID set, fetching it now...")
+    await getValorantPUUID();
   }
 }
 
@@ -826,19 +822,6 @@ async function fetchNetflix() {
 }
 setInterval(function () { fetchNetflix() }, 900000); //Update netflix every 15 minutes
 
-function reformatNetflixCookie(cookie) { //not needed since right now this script does not refresh the cookie automatically (see above)
-  var cookieParts = cookie.split('; ');
-  //iterate through all cookie parts and remove the ones that dont start with "nfvdid" or "SecureNetflixId"
-  for (var i = 0; i < cookieParts.length; i++) {
-    if (!cookieParts[i].startsWith("nfvdid") && !cookieParts[i].startsWith("SecureNetflixId")) {
-      cookieParts.splice(i, 1);
-      i--;
-    }
-  }
-  //join the cookie parts back together
-  var formattedCookie = cookieParts.join('; ');
-  return formattedCookie;
-}
 
 // end-of netflixFetching logic
 
@@ -846,18 +829,43 @@ function reformatNetflixCookie(cookie) { //not needed since right now this scrip
 
 async function fetchValorant() {
   if (!config.valorant.active) return;
-
   //initially set the username
   healthData.valorant.username = config.valorant.riotID + "#" + config.valorant.riotTag;
   updateJSON();
-
   console.log("\x1b[34m", "Fetching latest Valorant MMR...")
+
+  //Here we try to fetch the Valorant MMR using the PUUID, if that fails we try to fetch it using the username as a fallback.
+  //When using the username as a fallback we have to fetch the PUUID first, so we call the getValorantPUUID() function.
+  //TODO: Only validate the PUUID once, because once we have it we can use it forever. (even if the username changes) ((configcheck))
+  try {
+    console.log("\x1b[34m", "Fetching Valorant MMR using PUUID...")
+    await getValorantRankUsingPUUID();
+  } catch (e) {
+    console.log("\x1b[31m", "Failed to fetch Valorant MMR using PUUID: " + e)
+    try {
+      console.log("\x1b[34m", "Fetching Valorant MMR using Name...")
+      await getValorantRankUsingName();
+    }
+    catch (e) {
+      console.log("\x1b[31m", "Failed to fetch Valorant MMR using Name: " + e)
+    }
+  }
+  try {
+    getValorantTagID();
+  }
+  catch (e) {
+    console.log("\x1b[31m", "Failed to fetch Valorant TagID: " + e)
+  }
+  console.log("\x1b[34m", "Successfully fetched latest Valorant MMR!")
+}
+
+async function getValorantRankUsingPUUID() {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
 
-  fetch(`https://api.kyroskoh.xyz/valorant/v1/mmr/${config.valorant.region}/${config.valorant.riotID}/${config.valorant.riotTag}`, requestOptions)
+  await fetch(`https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr/${config.valorant.region}/${config.valorant.riotPUUID}`, requestOptions)
     .then(res => {
       //check if the response is valid
       if (res.status != 200) {
@@ -866,18 +874,98 @@ async function fetchValorant() {
       return res.text();
     })
     .then(result => {
-      var result = result.split(" - "); // "Immortal 1 - 1234RR" -> ["Immortal 1", "1234RR"]
-
-      healthData.valorant.rank = result[0];
-      healthData.valorant.elo = result[1];
-      console.log("\x1b[34m", "Successfully fetched latest Valorant MMR!")
-      updateJSON();
+      var result = JSON.parse(result);
+      healthData.valorant.elo = result.data.ranking_in_tier + "RR."
+      healthData.valorant.rank = result.data.currenttier_patched;
     })
-    .catch(error => console.log("\x1b[31m", 'Error while trying to fetch Valorant MMR: \"' + error + "\""));
+    .catch(error => {
+      throw error;
+    });
+}
+
+async function getValorantRankUsingName() {
+  //get puuid using https://api.henrikdev.xyz/valorant/v1/account/{id}/{tag}
+  //then use getValorantRankUsingPUUID()
+
+  fetch(`https://api.henrikdev.xyz/valorant/v1/account/${config.valorant.riotID}/${config.valorant.riotTag}`, requestOptions)
+    .then(res => {
+      //check if the response is valid
+      if (res.status != 200) {
+        throw "Server responded with: " + response.status + ". Check your config.json file!";
+      }
+      return res.text();
+    })
+    .then(result => {
+      var result = JSON.parse(result);
+      config.valorant.riotPUUID = result.data.puuid;
+      console.log("\x1b[34m", "Successfully fetched Valorant PUUID!" + "\n" + "PUUID: " + config.valorant.riotPUUID)
+      updateJSON();
+      getValorantRankUsingPUUID();
+    })
+    .catch(error => console.log("\x1b[31m", 'Error while trying to fetch Valorant PUUID: \"' + error + "\""));
+
 }
 
 setInterval(function () { fetchValorant() }, (config.valorant.updateInterval * 1000)); //Update valorant every x seconds
 
+async function getValorantPUUID() {
+  if (!config.valorant.active) return;
+
+  console.log("\x1b[34m", "Fetching Valorant PUUID...")
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  //using https://api.henrikdev.xyz/valorant/v1/account/{id}/{tag} to get the PUUID
+
+  fetch(`https://api.henrikdev.xyz/valorant/v1/account/${config.valorant.riotID}/${config.valorant.riotTag}`, requestOptions)
+    .then(res => {
+      //check if the response is valid
+      if (res.status != 200) {
+        throw "Server responded with: " + response.status + ". Check your config.json file!";
+      }
+      return res.text();
+    })
+    .then(result => {
+      var result = JSON.parse(result);
+      config.valorant.riotPUUID = result.data.puuid;
+      console.log("\x1b[34m", "Successfully fetched Valorant PUUID!" + "\n" + "PUUID: " + config.valorant.riotPUUID)
+      updateJSON();
+    })
+    .catch(error => console.log("\x1b[31m", 'Error while trying to fetch Valorant PUUID: \"' + error + "\""));
+}
+
+async function getValorantTagID() {
+  if (!config.valorant.active) return;
+
+  console.log("\x1b[34m", "Fetching Valorant TagID...")
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  //using https://api.henrikdev.xyz/valorant/v1/by-puuid/account/a47649bd-3ee1-54c2-b598-e5456f50dd98 to get the TagID
+
+  fetch(`https://api.henrikdev.xyz/valorant/v1/by-puuid/account/${config.valorant.riotPUUID}`, requestOptions)
+    .then(res => {
+      //check if the response is valid
+      if (res.status != 200) {
+        throw "Server responded with: " + response.status + ". Check your config.json file!";
+      }
+      return res.text();
+    }
+    )
+    .then(result => {
+      var result = JSON.parse(result);
+      config.valorant.riotID = result.data.name;
+      config.valorant.riotTag = result.data.tag;
+      config.valorant.region = result.data.region;
+
+      healthData.valorant.username = config.valorant.riotID + "#" + config.valorant.riotTag;
+      console.log("\x1b[34m", "Successfully fetched Valorant TagID!" + "\n" + "TagID: " + config.valorant.riotID + "#" + config.valorant.riotTag);
+      updateJSON();
+    })
+    .catch(error => console.log("\x1b[31m", 'Error while trying to fetch Valorant TagID: \"' + error + "\""));
+}
 // end-of valorantFetching logic
 
 // end-of everything
