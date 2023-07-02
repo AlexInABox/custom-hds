@@ -15,14 +15,14 @@
     "active": false,
     "cookie": "",
     "apilayer_apikey": "",
-    "updateInterval": 900
+    "updateInterval": 600
   },
   "valorant": {
     "active": false,
     "riotPUUID": "",
     "riotID": "",
     "riotTag": "",
-    "updateInterval": 60
+    "updateInterval": 600
   },
   "drpc": {
     "active": false,
