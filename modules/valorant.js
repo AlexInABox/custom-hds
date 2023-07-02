@@ -36,7 +36,7 @@ class valorant {
                 console.log("\x1b[35m", "[VALORANT] Fetching data...");
                 getValorantDataByIdAndTag(this.riotID, this.riotTag);
             }
-        }, this.updateInterval);
+        }, this.updateInterval * 1000); // 1000 ms = 1 second   
     }
 }
 module.exports = valorant;
