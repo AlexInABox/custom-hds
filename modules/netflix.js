@@ -59,7 +59,11 @@ async function updateNetflix(cookie, apiKey) {
 async function fetchDefaultImage(apiKey, showId, title, date) {
     showId = await fetch("https://www.netflix.com/title/" + showId)
         .then(res => {
-            return (res.url.split('/')[5]); // "https://www.netflix.com/title/80100172" -> "80100172"
+            if (res.url.split('/').length = 5) {
+                return (res.url.split('/')[5]); // "https://www.netflix.com/de-en/title/80100172" -> "80100172"
+            } else {
+                return (res.url.split('/')[4]); // "https://www.netflix.com/title/80100172" -> "80100172"
+            }
         })
 
     var fetch_url = "https://api.apilayer.com/unogs/title/details?netflix_id=" + showId;
