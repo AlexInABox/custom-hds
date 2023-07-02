@@ -27,6 +27,16 @@ class valorant {
             console.log("\x1b[35m", "[VALORANT] Fetching data...");
             getValorantDataByIdAndTag(this.riotID, this.riotTag);
         }
+
+        setInterval(() => {
+            if (this.puuid_exists) {
+                console.log("\x1b[35m", "[VALORANT] Fetching data...");
+                getValorantData(this.riotPUUID);
+            } else if (this.idandtag_complete) {
+                console.log("\x1b[35m", "[VALORANT] Fetching data...");
+                getValorantDataByIdAndTag(this.riotID, this.riotTag);
+            }
+        }, this.updateInterval);
     }
 }
 module.exports = valorant;
