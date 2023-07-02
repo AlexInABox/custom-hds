@@ -12,6 +12,8 @@ class presence {
         console.log("\x1b[36m", "[HDS] Received heart rate: " + heartRate);
         realPresence.health.heartRate = heartRate;
 
+        realPresence.health.lastUpdate.heartRate = Date.now();
+
         patchPresence();
     }
 
@@ -19,12 +21,16 @@ class presence {
         console.log("\x1b[36m", "[HDS] Received speed: " + speed);
         realPresence.health.speed = speed;
 
+        realPresence.health.lastUpdate.speed = Date.now();
+
         patchPresence();
     }
 
     patchHDSOxygenSaturation(oxygenSaturation) {
         console.log("\x1b[36m", "[HDS] Received oxygen saturation: " + oxygenSaturation);
         realPresence.health.oxygenSaturation = oxygenSaturation;
+
+        realPresence.health.lastUpdate.oxygenSaturation = Date.now();
 
         patchPresence();
     }
@@ -36,14 +42,18 @@ class presence {
         realPresence.location.country = country;
         realPresence.location.city = city;
 
+        realPresence.location.lastUpdate = Date.now();
+
         patchPresence();
     }
 
     patchNetflix(title, defaultImage, date, showId) {
         realPresence.netflix.lastWatched.title = title;
-        realPresence.netflix.lastWatched.defaultImage = defaultImage;
+        realPresence.netflix.lastWatched.defaultImage = String(defaultImage);
         realPresence.netflix.lastWatched.date = date;
-        realPresence.netflix.lastWatched.showId = showId;
+        realPresence.netflix.lastWatched.showId = Number(showId);
+
+        realPresence.netflix.lastWatched.lastUpdate = Date.now();
 
         patchPresence();
     }
@@ -53,6 +63,8 @@ class presence {
         realPresence.valorant.rank = rank;
         realPresence.valorant.rr = rr;
 
+        realPresence.valorant.lastUpdate = Date.now();
+
         patchPresence();
     }
 
@@ -60,6 +72,8 @@ class presence {
         realPresence.discord.username = username;
         realPresence.discord.status = status;
         realPresence.discord.activity = activity;
+
+        realPresence.discord.lastUpdate = Date.now();
 
         patchPresence();
     }
@@ -77,6 +91,8 @@ class presence {
         realPresence.youtube.music.thumbnail = mThumbnail;
         realPresence.youtube.music.date = mDate;
 
+        realPresence.youtube.lastUpdate = Date.now();
+
         patchPresence();
     }
 
@@ -86,6 +102,8 @@ class presence {
         realPresence.spotify.song.url = url;
         realPresence.spotify.song.cover = cover;
         realPresence.spotify.song.date = date;
+
+        realPresence.spotify.lastUpdate = Date.now();
 
         patchPresence();
     }
