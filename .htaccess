@@ -1,9 +1,0 @@
-# deny access to all files in the directory
-Order deny,allow
-Deny from all
-
-# allow access only to index.html
-<Files "healthData.json">
-    Order allow,deny
-    Allow from all
-</Files>

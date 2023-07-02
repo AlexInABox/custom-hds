@@ -1,7 +1,7 @@
 {
   "name": "custom-hds",
-  "version": "2.2.2",
-  "main": "index.js",
+  "version": "3.0.0",
+  "main": "custom-hds.js",
   "author": "alexinabox",
   "license": "MIT",
   "dependencies": {

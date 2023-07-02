@@ -1,31 +1,55 @@
 {
-  "userName": "larry",
-  "port": 3476,
-  "secretPass": "",
-  "timezone": "Europe/Amsterdam",
-  "data_save_type": "json",
-  "discordAppID": "1033806008008581240",
-  "activateDiscordRPC": true,
-  "activateWebhooks": false,
-  "webhookURL": "",
-  "heartRateMessageID": "",
-  "oxygenSaturationMessageID": "",
-  "pedoMeterMessageID": "",
-  "speedMessageID": "",
-  "focusStatusMessageID": "",
-  "forwardingDestination": "",
-  "activateLocationFetching": true,
-  "GEOAPIFY_API_KEY": "",
-  "LIFE360_USERNAME": "",
-  "LIFE360_PASSWORD": "",
-  "activateNetflixFetching": true,
-  "NETFLIX_COOKIE": "",
+  "hds": {
+    "active": false
+  },
+  "location": {
+    "active": false,
+    "credentials": {
+      "LIFE360_USERNAME": "",
+      "LIFE360_PASSWORD": "",
+      "GEOAPIFY_API_KEY": ""
+    },
+    "updateInterval": 30
+  },
+  "netflix": {
+    "active": false,
+    "cookie": "",
+    "apilayer_apikey": "",
+    "updateInterval": 900
+  },
   "valorant": {
-    "active": true,
+    "active": false,
     "riotPUUID": "",
     "riotID": "",
     "riotTag": "",
-    "region": "",
+    "updateInterval": 60
+  },
+  "drpc": {
+    "active": false,
+    "appID": "1033806008008581240",
+    "startupDelay": 10
+  },
+  "discord": {
+    "active": false,
+    "userID": "",
+    "updateInterval": 30
+  },
+  "youtube": {
+    "music": {
+      "active": false,
+      "updateInterval": 60
+    },
+    "videos": {
+      "active": false,
+      "updateInterval": 60
+    }
+  },
+  "spotify": {
+    "active": false,
+    "api": {
+      "clientID": "",
+      "clientSecret": ""
+    },
     "updateInterval": 60
   }
 }
