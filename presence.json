@@ -1,8 +1,13 @@
 {
     "health": {
-        "heartRate": 76,
+        "heartRate": 86,
         "speed": 0,
-        "oxygenSaturation": 0.98
+        "oxygenSaturation": 0.98,
+        "lastUpdate": {
+            "heartRate": 1688321405699,
+            "speed": 1683292128107,
+            "oxygenSaturation": 1688321405699
+        }
     },
     "location": {
         "latitude": 52.4733482,
@@ -10,26 +15,28 @@
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1688320447570
+        "lastUpdate": 1683292128107
     },
     "netflix": {
         "lastWatched": {
             "title": "The End of Evangelion",
-            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABRm6tLkz61Vf642kd0FoVwlDSGez0m2GoGpfoef6N3NqESC4w894WT4G7OYjFpjXN3ZYMsGF88z5BqI0OlfBmxt-LQ.jpg?r=02b",
             "date": "29/06/2023",
-            "showId": 60024788
+            "showId": 60024788,
+            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABRm6tLkz61Vf642kd0FoVwlDSGez0m2GoGpfoef6N3NqESC4w894WT4G7OYjFpjXN3ZYMsGF88z5BqI0OlfBmxt-LQ.jpg?r=02b",
+            "lastUpdate": 1683292128107
         }
     },
     "valorant": {
         "username": "Chiwooo#cutie",
         "rank": "Silver 3",
         "rr": 83,
-        "lastUpdate": 1688320446418
+        "lastUpdate": 1683292128107
     },
     "discord": {
         "username": "grosskoenig",
         "status": "online",
-        "activity": "Valorant"
+        "activity": "Valorant",
+        "lastUpdate": 1683292128107
     },
     "youtube": {
         "video": {
