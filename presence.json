@@ -1,6 +1,6 @@
 {
     "health": {
-        "heartRate": 83,
+        "heartRate": 76,
         "speed": 0,
         "oxygenSaturation": 0.98
     },
@@ -9,7 +9,8 @@
         "longitude": 13.3064315,
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
-        "city": "Berlin"
+        "city": "Berlin",
+        "lastUpdate": 1688320447570
     },
     "netflix": {
         "lastWatched": {
@@ -22,7 +23,8 @@
     "valorant": {
         "username": "Chiwooo#cutie",
         "rank": "Silver 3",
-        "rr": 83
+        "rr": 83,
+        "lastUpdate": 1688320446418
     },
     "discord": {
         "username": "grosskoenig",
