@@ -182,7 +182,7 @@ async function getLatestYTMusicThumbnail(history) {
         for (let i = 0; i < thumbnailURLs.length; i++) {
             try {
                 if (await isNotDefault(thumbnailURLs[i])) {
-                    console.log("Found thumbnail: " + i)
+                    console.log("\x1b[34m", `[YOUTUBE] Best thumbnail found: ` + i);
                     return res(thumbnailURLs[i]);
                 }
             } catch (error) {
