@@ -59,11 +59,11 @@ async function main(musicEnabled, videosEnabled) {
 
 var vTitle, vChannel, vUrl, vThumbnail, vDate, mTitle, mArtist, mUrl, mThumbnail, mDate;
 function patchPresenceMusic() {
-    presence.patchYouTubeMusic(String(mTitle), String(mArtist), String(mUrl), String(mThumbnail), Date(mDate));
+    presence.patchYouTubeMusic(String(mTitle), String(mArtist), String(mUrl), String(mThumbnail), (mDate));
 }
 
 function patchPresenceVideo() {
-    presence.patchYouTubeVideo(String(vTitle), String(vChannel), String(vUrl), String(vThumbnail), Date(vDate));
+    presence.patchYouTubeVideo(String(vTitle), String(vChannel), String(vUrl), String(vThumbnail), (vDate));
 }
 
 async function fetchYTMusicData() {
