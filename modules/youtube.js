@@ -144,10 +144,18 @@ function getLatestYTMusicArtist(history) {
             }
         }
     } else {
-        artists = history.contents_memo.get("MusicResponsiveListItem")[0].authors.name
+        try {
+            artists = history.contents_memo.get("MusicResponsiveListItem")[0].authors.name
+        } catch (error) {
+            artists = "Unknown"
+        }
     }
-    if (artists == undefined) {
-        artists = history.contents_memo.get("MusicResponsiveListItem")[0].authors[0].name;
+    if (artists == "Unknown" || artists == undefined) {
+        try {
+            artists = history.contents_memo.get("MusicResponsiveListItem")[0].flex_columns[1].title.text
+        } catch (error) {
+            artists = "Unknown"
+        }
     }
     return artists;
 }
