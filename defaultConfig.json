@@ -9,7 +9,7 @@
       "LIFE360_PASSWORD": "",
       "GEOAPIFY_API_KEY": ""
     },
-    "updateInterval": 30
+    "updateInterval": 60
   },
   "netflix": {
     "active": false,
@@ -36,13 +36,12 @@
   },
   "youtube": {
     "music": {
-      "active": false,
-      "updateInterval": 60
+      "active": false
     },
     "videos": {
-      "active": false,
-      "updateInterval": 60
-    }
+      "active": false
+    },
+    "updateInterval": 60
   },
   "spotify": {
     "active": false,

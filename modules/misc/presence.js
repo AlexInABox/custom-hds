@@ -78,22 +78,32 @@ class presence {
         patchPresence();
     }
 
-    patchYouTube(vTitle, vChannel, vUrl, vThumbnail, vDate, mTitle, mArtist, mUrl, mThumbnail, mDate) {
-        realPresence.youtube.video.title = vTitle;
-        realPresence.youtube.video.channel = vChannel;
-        realPresence.youtube.video.url = vUrl;
-        realPresence.youtube.video.thumbnail = vThumbnail;
-        realPresence.youtube.video.date = vDate;
-
-        realPresence.youtube.music.title = mTitle;
-        realPresence.youtube.music.artist = mArtist;
-        realPresence.youtube.music.url = mUrl;
-        realPresence.youtube.music.thumbnail = mThumbnail;
-        realPresence.youtube.music.date = mDate;
-
-        realPresence.youtube.lastUpdate = Date.now();
+    patchYouTubeMusic(title, artist, url, thumbnail, date) {
+        realPresence.youtube.music.title = title;
+        realPresence.youtube.music.artist = artist;
+        realPresence.youtube.music.url = url;
+        realPresence.youtube.music.thumbnail = thumbnail;
+        realPresence.youtube.music.lastUpdate = date;
 
         patchPresence();
+    }
+
+    patchYouTubeVideo(title, channel, url, thumbnail, date) {
+        realPresence.youtube.video.title = title;
+        realPresence.youtube.video.channel = channel;
+        realPresence.youtube.video.url = url;
+        realPresence.youtube.video.thumbnail = thumbnail;
+        realPresence.youtube.video.lastUpdate = date;
+
+        patchPresence();
+    }
+
+    getYouTubeMusicURL() {
+        return realPresence.youtube.music.url;
+    }
+
+    getYouTubeVideoURL() {
+        return realPresence.youtube.video.url;
     }
 
     patchSpotify(title, artist, url, cover, date) {

@@ -2,10 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 var config_valid = {
-    "hds": {
-        "enabled": false,
-        "webhooks": false,
-    },
+    "hds": false,
     "location": false,
     "netflix": false,
     "valorant": false,
@@ -26,7 +23,7 @@ class config {
     }
 
     check() {
-        config_valid.hds.enabled = realConfig.hds.active;
+        config_valid.hds = realConfig.hds.active;
 
         config_valid.location = realConfig.location.active;
 
@@ -79,11 +76,8 @@ class config {
         config_valid.youtube.videos = realConfig.youtube.videos.active;
         config_valid.youtube.music = realConfig.youtube.music.active;
 
-        if (realConfig.youtube.videos.updateInterval === "") {
-            realConfig.youtube.videos.updateInterval = 60;
-        }
-        if (realConfig.youtube.music.updateInterval === "") {
-            realConfig.youtube.music.updateInterval = 60;
+        if (realConfig.youtube.updateInterval === "") {
+            realConfig.youtube.updateInterval = 60;
         }
 
         config_valid.spotify = realConfig.spotify.active;

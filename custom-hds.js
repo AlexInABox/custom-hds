@@ -64,7 +64,8 @@ function initializeModules() {
     }
     if (validModules.youtube.videos || validModules.youtube.music) {
         // Initialize YouTube with validModules.youtube.videos and validModules.youtube.music
-        console.log("\x1b[36m", "[YOUTUBE] Initializing YouTube");
+        console.log("\x1b[34m", "[YOUTUBE] Initializing YouTube");
+        youtube = new youtube(cfg.youtube.music.active, cfg.youtube.videos.active, cfg.youtube.updateInterval, presence);
     }
     if (validModules.spotify) {
         // Initialize Spotify

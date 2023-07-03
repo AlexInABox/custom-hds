@@ -15,22 +15,22 @@
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1683292128107
+        "lastUpdate": 1688344160149
     },
     "netflix": {
         "lastWatched": {
-            "title": "The End of Evangelion",
-            "date": "29/06/2023",
-            "showId": 60024788,
-            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABRm6tLkz61Vf642kd0FoVwlDSGez0m2GoGpfoef6N3NqESC4w894WT4G7OYjFpjXN3ZYMsGF88z5BqI0OlfBmxt-LQ.jpg?r=02b",
-            "lastUpdate": 1683292128107
+            "title": "Black Mirror: Season 1: \"Fifteen Million Merits\"",
+            "date": "02/07/2023",
+            "showId": 70264888,
+            "defaultImage": "https://occ-0-2773-2774.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABaueJzSII5XSe6J_DEa6AqX108ZCoRIKZ95wFtrl_DlUl-gzG3Fp3ACoCsiyjHv9a4gb8w6cwVldnOJQxxkKvtZlQyKXlJ4HE7xYjFWIevsyQos3WX7DpnCVvMI.jpg?r=176",
+            "lastUpdate": 1688344091312
         }
     },
     "valorant": {
         "username": "Chiwooo#cutie",
-        "rank": "Silver 3",
-        "rr": 83,
-        "lastUpdate": 1683292128107
+        "rank": "Gold 2",
+        "rr": 44,
+        "lastUpdate": 1688344088987
     },
     "discord": {
         "username": "grosskoenig",
@@ -40,18 +40,18 @@
     },
     "youtube": {
         "video": {
-            "title": "you teleported in the wrong neighborhood",
-            "channel": "Darken",
-            "url": "https://www.youtube.com/watch?v=r9_oDHsbHiw",
-            "thumbnail": "https://i.ytimg.com/vi/r9_oDHsbHiw/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBpR8e7qmwHRC9bWubzn5OORKqSEQ",
-            "date": 1683292128107
+            "title": "THE BOYS: Season 4 Teaser 2 (2023) 'Homelander's Legal Battle' Trailer 4K",
+            "channel": "MovieGasm.com",
+            "url": "https://www.youtube.com/watch?v=4IlF715Yn00",
+            "thumbnail": "https://i.ytimg.com/vi/4IlF715Yn00/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvfpwTOanTAHWeUtRZne8FslxT7w",
+            "lastUpdate": "1688343929099"
         },
         "music": {
-            "title": "Do Better",
-            "artist": "Cuco",
-            "url": "https://music.youtube.com/watch?v=ERbL3iD7euo",
-            "thumbnail": "https://i.ytimg.com/vi/ERbL3iD7euo/maxresdefault.jpg",
-            "date": 1683292128107
+            "title": "feliz jueves!~",
+            "artist": "undefined",
+            "lastUpdate": "1688344097203",
+            "thumbnail": "https://i.ytimg.com/vi/J9PHO6ZgW0Q/hqdefault.jpg",
+            "url": "https://music.youtube.com/watch?v=J9PHO6ZgW0Q"
         }
     },
     "spotify": {
