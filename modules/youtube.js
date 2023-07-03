@@ -146,7 +146,9 @@ function getLatestYTMusicArtist(history) {
     } else {
         artists = history.contents_memo.get("MusicResponsiveListItem")[0].authors.name
     }
-
+    if (artists == undefined) {
+        artists = history.contents_memo.get("MusicResponsiveListItem")[0].authors[0].name;
+    }
     return artists;
 }
 
