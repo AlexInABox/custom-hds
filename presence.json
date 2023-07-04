@@ -15,22 +15,28 @@
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1688344160149
+        "lastUpdate": 1688514427348
     },
     "netflix": {
         "lastWatched": {
-            "title": "Black Mirror: Season 1: \"Fifteen Million Merits\"",
-            "date": "02/07/2023",
-            "showId": 70264888,
-            "defaultImage": "https://occ-0-2773-2774.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABaueJzSII5XSe6J_DEa6AqX108ZCoRIKZ95wFtrl_DlUl-gzG3Fp3ACoCsiyjHv9a4gb8w6cwVldnOJQxxkKvtZlQyKXlJ4HE7xYjFWIevsyQos3WX7DpnCVvMI.jpg?r=176",
-            "lastUpdate": 1688344091312
+            "title": "Stranger Things: Stranger Things: \"Chapter One: The Vanishing of Will Byers\"",
+            "date": "04/07/2023",
+            "showId": 80057281,
+            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABTL65qyo8vAVdBubGEaZO30gWLpk__rJa7dph61nnnfga7WNoKBixHuV7SEU6-XP9rh-NnCMd6z35UntYvOfE0Biw9GiO3p7NO6x0h_XRD5KawPqcD-ol4_GyfU.jpg?r=594",
+            "lastUpdate": 1688514242445
+        }
+    },
+    "plex": {
+        "lastWatched": {
+            "cover": "/modules/public/plex_covers/undefined.jpg",
+            "lastUpdate": 1688514425356
         }
     },
     "valorant": {
         "username": "Chiwooo#cutie",
         "rank": "Gold 2",
-        "rr": 44,
-        "lastUpdate": 1688344088987
+        "rr": 30,
+        "lastUpdate": 1688514425852
     },
     "discord": {
         "username": "grosskoenig",
@@ -40,18 +46,18 @@
     },
     "youtube": {
         "video": {
-            "title": "THE BOYS: Season 4 Teaser 2 (2023) 'Homelander's Legal Battle' Trailer 4K",
-            "channel": "MovieGasm.com",
-            "url": "https://www.youtube.com/watch?v=4IlF715Yn00",
-            "thumbnail": "https://i.ytimg.com/vi/4IlF715Yn00/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvfpwTOanTAHWeUtRZne8FslxT7w",
-            "lastUpdate": "1688343929099"
+            "title": "How the Reddit Blackout is Hurting Big Tech",
+            "channel": "Mental Outlaw",
+            "url": "https://www.youtube.com/watch?v=OoFueyYXh80",
+            "thumbnail": "https://i.ytimg.com/vi/OoFueyYXh80/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBOF776cAOzPhqY4MgcGz2UQQ20Ig",
+            "lastUpdate": 1688501867983
         },
         "music": {
-            "title": "feliz jueves!~",
-            "artist": "undefined",
-            "lastUpdate": "1688344097203",
-            "thumbnail": "https://i.ytimg.com/vi/J9PHO6ZgW0Q/hqdefault.jpg",
-            "url": "https://music.youtube.com/watch?v=J9PHO6ZgW0Q"
+            "title": "Perfect",
+            "artist": "Channel Blue",
+            "lastUpdate": 1688510671654,
+            "thumbnail": "https://i.ytimg.com/vi/f9JXFroPsIY/maxresdefault.jpg",
+            "url": "https://music.youtube.com/watch?v=f9JXFroPsIY"
         }
     },
     "spotify": {

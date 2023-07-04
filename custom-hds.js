@@ -3,6 +3,7 @@ var presence = require('./modules/misc/presence.js');
 var hds = require('./modules/hds.js');
 var location = require('./modules/location.js');
 var netflix = require('./modules/netflix.js');
+var plex = require('./modules/plex.js');
 var valorant = require('./modules/valorant.js');
 var drpc = require('./modules/drpc.js');
 var discord = require('./modules/discord.js');
@@ -47,6 +48,11 @@ function initializeModules() {
         // Initialize Netflix
         console.log("\x1b[31m", "[NETFLIX] Initializing Netflix");
         netflix = new netflix(cfg.netflix.cookie, cfg.netflix.apilayer_apikey, cfg.netflix.updateInterval, presence);
+    }
+    if (validModules.plex) {
+        // Initialize Plex
+        console.log("\x1b[31m", "[PLEX] Initializing Plex");
+        plex = new plex(cfg.plex.publicURL, cfg.plex.plexToken, cfg.plex.username, cfg.plex.updateInterval, presence);
     }
     if (validModules.valorant) {
         // Initialize Valorant

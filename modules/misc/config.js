@@ -5,6 +5,7 @@ var config_valid = {
     "hds": false,
     "location": false,
     "netflix": false,
+    "plex": false,
     "valorant": false,
     "drpc": false,
     "discord": false,
@@ -44,6 +45,15 @@ class config {
         }*/
         if (realConfig.netflix.updateInterval === "") {
             realConfig.netflix.updateInterval = 900;
+        }
+
+        config_valid.plex = realConfig.plex.active;
+
+        if (realConfig.plex.active && (realConfig.plex.serverURL === "" || realConfig.plex.token === "" || realConfig.plex.username === "")) {
+            config_valid.plex = false;
+        }
+        if (realConfig.plex.updateInterval === "") {
+            realConfig.plex.updateInterval = 60;
         }
 
         config_valid.valorant = realConfig.valorant.active;

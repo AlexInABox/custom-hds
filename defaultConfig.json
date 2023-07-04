@@ -17,6 +17,13 @@
     "apilayer_apikey": "",
     "updateInterval": 600
   },
+  "plex": {
+    "active": false,
+    "username": "",
+    "publicURL": "",
+    "plexToken": "",
+    "updateInterval": 60
+  },
   "valorant": {
     "active": false,
     "riotPUUID": "",

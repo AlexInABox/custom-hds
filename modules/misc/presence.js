@@ -58,6 +58,14 @@ class presence {
         patchPresence();
     }
 
+    patchPlex(title, cover, publicURL) {
+        realPresence.plex.lastWatched.title = title;
+        realPresence.plex.lastWatched.cover = cover;
+        realPresence.plex.lastWatched.publicURL = publicURL;
+
+        realPresence.plex.lastWatched.lastUpdate = Date.now();
+    }
+
     patchValorant(username, rank, rr) {
         realPresence.valorant.username = username;
         realPresence.valorant.rank = rank;
