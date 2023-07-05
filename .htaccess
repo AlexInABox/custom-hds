@@ -7,3 +7,9 @@ Deny from all
     Order allow,deny
     Allow from all
 </Files>
+
+# allow access to all files in the directory /modules/public
+<Directory "/modules/public">
+    Order allow,deny
+    Allow from all
+</Directory>
