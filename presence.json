@@ -15,7 +15,7 @@
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1688514427348
+        "lastUpdate": 1688515927079
     },
     "netflix": {
         "lastWatched": {
@@ -23,20 +23,22 @@
             "date": "04/07/2023",
             "showId": 80057281,
             "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABTL65qyo8vAVdBubGEaZO30gWLpk__rJa7dph61nnnfga7WNoKBixHuV7SEU6-XP9rh-NnCMd6z35UntYvOfE0Biw9GiO3p7NO6x0h_XRD5KawPqcD-ol4_GyfU.jpg?r=594",
-            "lastUpdate": 1688514242445
+            "lastUpdate": 1688515928421
         }
     },
     "plex": {
         "lastWatched": {
-            "cover": "/modules/public/plex_covers/undefined.jpg",
-            "lastUpdate": 1688514425356
+            "cover": "/modules/public/plex_covers/1687398018.jpg",
+            "lastUpdate": 1688515925498,
+            "title": "My Dress-Up Darling: Backlighting Is the Best",
+            "publicURL": ""
         }
     },
     "valorant": {
         "username": "Chiwooo#cutie",
         "rank": "Gold 2",
         "rr": 30,
-        "lastUpdate": 1688514425852
+        "lastUpdate": 1688515926015
     },
     "discord": {
         "username": "grosskoenig",

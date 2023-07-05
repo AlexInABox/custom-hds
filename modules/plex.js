@@ -48,9 +48,20 @@ async function updateplex(serverURL, token, username) {
         console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
         saveCoverForPublicViewing(serverURL, cover, token);
     }
+    else {
+        title = data.MediaContainer.Video[0].$.grandparentTitle + ": " + data.MediaContainer.Video[0].$.title;
+        cover = data.MediaContainer.Video[0].$.grandparentThumb;
+        publicURL = "";
+        console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
+        saveCoverForPublicViewing(serverURL, cover, token);
+    }
 
     coverPath = "/modules/public/plex_covers/" + String(cover).split("/")[String(cover).split("/").length - 1] + ".jpg";
 
+    console.log("\x1b[31m", "[PLEX] Patching presence...");
+    console.log("\x1b[31m", "[PLEX] Title: " + title);
+    console.log("\x1b[31m", "[PLEX] Cover: " + coverPath);
+    console.log("\x1b[31m", "[PLEX] Public URL: " + publicURL);
     presence.patchPlex(title, coverPath, publicURL);
 }
 
