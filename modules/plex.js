@@ -23,6 +23,8 @@ async function updateplex(serverURL, token, username) {
     const response = await fetch(activeSessionsURL); //get xml
     const data = await new xml2js.Parser().parseStringPromise(await response.text());
 
+    console.log(data.MediaContainer.Video[0]);
+
     if (data.MediaContainer.$.size == 0) {
         console.log("\x1b[31m", "[PLEX] No active sessions found!");
         return;
@@ -33,8 +35,14 @@ async function updateplex(serverURL, token, username) {
         console.log("\x1b[31m", "[PLEX] Multiple active sessions found! Finding the one with the username " + username + "...");
         for (var i = 0; i < data.MediaContainer.$.size; i++) {
             if (data.MediaContainer.Video[i].User[0].$.title == username) {
-                title = data.MediaContainer.Video[i].$.grandparentTitle + ": " + data.MediaContainer.Video[i].$.title;
-                cover = data.MediaContainer.Video[i].$.grandparentThumb;
+                if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies") {
+                    title = data.MediaContainer.Video[i].$.title;
+                    cover = data.MediaContainer.Video[i].$.thumb;
+                } else {
+                    title = data.MediaContainer.Video[i].$.grandparentTitle + ": " + data.MediaContainer.Video[i].$.title;
+                    cover = data.MediaContainer.Video[i].$.grandparentThumb;
+                }
+
                 publicURL = "";
                 found = true;
                 break;
@@ -49,8 +57,13 @@ async function updateplex(serverURL, token, username) {
         saveCoverForPublicViewing(serverURL, cover, token);
     }
     else {
-        title = data.MediaContainer.Video[0].$.grandparentTitle + ": " + data.MediaContainer.Video[0].$.title;
-        cover = data.MediaContainer.Video[0].$.grandparentThumb;
+        if (data.MediaContainer.Video[0].$.librarySectionTitle == "Movies") {
+            title = data.MediaContainer.Video[0].$.title;
+            cover = data.MediaContainer.Video[0].$.thumb;
+        } else {
+            title = data.MediaContainer.Video[0].$.grandparentTitle + ": " + data.MediaContainer.Video[0].$.title;
+            cover = data.MediaContainer.Video[0].$.grandparentThumb;
+        }
         publicURL = "";
         console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
         saveCoverForPublicViewing(serverURL, cover, token);
