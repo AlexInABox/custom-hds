@@ -8,8 +8,7 @@ Deny from all
     Allow from all
 </Files>
 
-# allow access to all files in the directory /modules/public
-<Directory "/modules/public">
+<Files *.html>
     Order allow,deny
     Allow from all
-</Directory>
+</Files>
