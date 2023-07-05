@@ -22,16 +22,11 @@ async function updateplex(serverURL, token, username) {
 
     const response = await fetch(activeSessionsURL); //get xml
     const data = await new xml2js.Parser().parseStringPromise(await response.text());
-
-    console.log(data.MediaContainer.Video[0]);
-
+    var found = false;
     if (data.MediaContainer.$.size == 0) {
         console.log("\x1b[31m", "[PLEX] No active sessions found!");
         return;
-    }
-
-    var found = false;
-    if (data.MediaContainer.$.size > 1) {
+    } else if (data.MediaContainer.$.size > 1) {
         console.log("\x1b[31m", "[PLEX] Multiple active sessions found! Finding the one with the username " + username + "...");
         for (var i = 0; i < data.MediaContainer.$.size; i++) {
             if (data.MediaContainer.Video[i].User[0].$.title == username) {
