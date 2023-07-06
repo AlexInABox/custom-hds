@@ -7,7 +7,6 @@ var config_valid = {
     "netflix": false,
     "plex": false,
     "valorant": false,
-    "drpc": false,
     "discord": false,
     "youtube": {
         "videos": false,
@@ -64,16 +63,6 @@ class config {
         if (realConfig.valorant.updateInterval === "") {
             realConfig.valorant.updateInterval = 60;
         }
-
-        config_valid.drpc = realConfig.drpc.active;
-
-        if (realConfig.drpc.appID === "") {
-            realConfig.drpc.appID = "1033806008008581240";
-        }
-        if (realConfig.drpc.startupDelay === "") {
-            realConfig.drpc.startupDelay = 10;
-        }
-
         config_valid.discord = realConfig.discord.active;
 
         if (realConfig.discord.active && (realConfig.discord.userID === "")) {

@@ -5,7 +5,6 @@ var location = require('./modules/location.js');
 var netflix = require('./modules/netflix.js');
 var plex = require('./modules/plex.js');
 var valorant = require('./modules/valorant.js');
-var drpc = require('./modules/drpc.js');
 var discord = require('./modules/discord.js');
 var youtube = require('./modules/youtube.js');
 var spotify = require('./modules/spotify.js');
@@ -59,13 +58,9 @@ function initializeModules() {
         console.log("\x1b[34m", "[VALORANT] Initializing Valorant");
         valorant = new valorant(cfg.valorant.riotPUUID, cfg.valorant.riotID, cfg.valorant.riotTag, cfg.valorant.updateInterval, presence, config);
     }
-    if (validModules.drpc) {
-        // Initialize DRPC
-        console.log("\x1b[33m", "[DRPC] Initializing DRPC");
-    }
     if (validModules.discord) {
         // Initialize Discord
-        console.log("\x1b[35m", "[DISCORD]Initializing Discord");
+        console.log("\x1b[35m", "[DISCORD] Initializing Discord");
         discord = new discord(cfg.discord.userID, cfg.discord.updateInterval, presence);
     }
     if (validModules.youtube.videos || validModules.youtube.music) {
@@ -76,5 +71,6 @@ function initializeModules() {
     if (validModules.spotify) {
         // Initialize Spotify
         console.log("\x1b[35m", "[SPOTIFY] Initializing Spotify");
+        spotify = new spotify(cfg.spotify.clientID, cfg.spotify.clientSecret, cfg.spotify.updateInterval, presence);
     }
 }

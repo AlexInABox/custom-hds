@@ -31,11 +31,6 @@
     "riotTag": "",
     "updateInterval": 600
   },
-  "drpc": {
-    "active": false,
-    "appID": "1033806008008581240",
-    "startupDelay": 10
-  },
   "discord": {
     "active": false,
     "userID": "",

@@ -15,4 +15,9 @@ class spotify {
 
 }
 
+//Needs a web interface for the client to authenticate with spotify
+//Therefore this module is backlogged until I start developing the frontend
+//hence: 
+//TODO: Spotify module
+
 module.exports = spotify;
