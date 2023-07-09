@@ -22,14 +22,16 @@ async function updateplex(serverURL, token, username) {
 
     const response = await fetch(activeSessionsURL); //get xml
     const data = await new xml2js.Parser().parseStringPromise(await response.text());
+
     var found = false;
     if (data.MediaContainer.$.size == 0) {
         console.log("\x1b[31m", "[PLEX] No active sessions found!");
         return;
-    } else if (data.MediaContainer.$.size > 1) {
+    } else if (data.MediaContainer.$.size >= 1) {
         console.log("\x1b[31m", "[PLEX] Multiple active sessions found! Finding the one with the username " + username + "...");
         for (var i = 0; i < data.MediaContainer.$.size; i++) {
             if (data.MediaContainer.Video[i].User[0].$.title == username) {
+                console.log("\x1b[31m", "[PLEX] Found active session with the username " + username + "!");
                 if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies") {
                     title = data.MediaContainer.Video[i].$.title;
                     cover = data.MediaContainer.Video[i].$.thumb;
@@ -48,18 +50,6 @@ async function updateplex(serverURL, token, username) {
             console.log("\x1b[31m", "[PLEX] No active sessions found with the username " + username + "!");
             return;
         }
-        console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
-        saveCoverForPublicViewing(serverURL, cover, token);
-    }
-    else {
-        if (data.MediaContainer.Video[0].$.librarySectionTitle == "Movies") {
-            title = data.MediaContainer.Video[0].$.title;
-            cover = data.MediaContainer.Video[0].$.thumb;
-        } else {
-            title = data.MediaContainer.Video[0].$.grandparentTitle + ": " + data.MediaContainer.Video[0].$.title;
-            cover = data.MediaContainer.Video[0].$.grandparentThumb;
-        }
-        publicURL = "";
         console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
         saveCoverForPublicViewing(serverURL, cover, token);
     }
