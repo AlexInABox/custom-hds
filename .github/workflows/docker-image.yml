@@ -26,4 +26,3 @@ jobs:
         with:
           push: true
           tags: alexinabox/custom-hds:v3
-
