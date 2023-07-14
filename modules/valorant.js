@@ -29,6 +29,13 @@ class valorant {
         }
 
         setInterval(() => {
+            this.riotPUUID = config.getValorantPUUID();
+            this.riotID = config.getValorantRiotID();
+            this.riotTag = config.getValorantRiotTag();
+
+            this.idandtag_complete = (this.riotID != "" && this.riotTag != "");
+            this.puuid_exists = (this.riotPUUID != "");
+
             if (this.puuid_exists) {
                 console.log("\x1b[35m", "[VALORANT] Fetching data...");
                 getValorantData(this.riotPUUID);

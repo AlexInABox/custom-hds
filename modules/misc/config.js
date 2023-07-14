@@ -131,6 +131,18 @@ class config {
 
         patchConfig(realConfig);
     }
+
+    getValorantPUUID() {
+        return realConfig.valorant.riotPUUID;
+    }
+
+    getValorantRiotID() {
+        return realConfig.valorant.riotID;
+    }
+
+    getValorantRiotTag() {
+        return realConfig.valorant.riotTag;
+    }
 }
 
 module.exports = config;
