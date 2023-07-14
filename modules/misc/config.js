@@ -8,6 +8,7 @@ var config_valid = {
     "plex": false,
     "valorant": false,
     "discord": false,
+    "duolingo": false,
     "youtube": {
         "videos": false,
         "music": false,
@@ -63,6 +64,7 @@ class config {
         if (realConfig.valorant.updateInterval === "") {
             realConfig.valorant.updateInterval = 60;
         }
+
         config_valid.discord = realConfig.discord.active;
 
         if (realConfig.discord.active && (realConfig.discord.userID === "")) {
@@ -70,6 +72,15 @@ class config {
         }
         if (realConfig.discord.updateInterval === "") {
             realConfig.discord.updateInterval = 30;
+        }
+
+        config_valid.duolingo = realConfig.duolingo.active;
+
+        if (realConfig.duolingo.active && (realConfig.duolingo.username === "" || realConfig.duolingo.cookie === "")) {
+            config_valid.duolingo = false;
+        }
+        if (realConfig.duolingo.updateInterval === "") {
+            realConfig.duolingo.updateInterval = 120;
         }
 
         config_valid.youtube.videos = realConfig.youtube.videos.active;

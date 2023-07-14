@@ -86,6 +86,21 @@ class presence {
         patchPresence();
     }
 
+    patchDuolingo(username, streak, xp, language) {
+        realPresence.duolingo.username = username;
+        realPresence.duolingo.streak = streak;
+        realPresence.duolingo.xp = xp;
+        realPresence.duolingo.language = language;
+
+        realPresence.duolingo.lastUpdate = Date.now();
+
+        patchPresence();
+    }
+
+    getDuolingo() {
+        return realPresence.duolingo;
+    }
+
     patchYouTubeMusic(title, artist, url, thumbnail, date) {
         realPresence.youtube.music.title = title;
         realPresence.youtube.music.artist = artist;

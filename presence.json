@@ -10,35 +10,35 @@
         }
     },
     "location": {
-        "latitude": 52.4733482,
-        "longitude": 13.3064315,
+        "latitude": 52.4713692,
+        "longitude": 13.3059968,
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1688515927079
+        "lastUpdate": 1688687765870
     },
     "netflix": {
         "lastWatched": {
-            "title": "Stranger Things: Stranger Things: \"Chapter One: The Vanishing of Will Byers\"",
-            "date": "04/07/2023",
-            "showId": 80057281,
-            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABTL65qyo8vAVdBubGEaZO30gWLpk__rJa7dph61nnnfga7WNoKBixHuV7SEU6-XP9rh-NnCMd6z35UntYvOfE0Biw9GiO3p7NO6x0h_XRD5KawPqcD-ol4_GyfU.jpg?r=594",
-            "lastUpdate": 1688515928421
+            "title": "The End of Evangelion",
+            "date": "05/07/2023",
+            "showId": 60024788,
+            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABRm6tLkz61Vf642kd0FoVwlDSGez0m2GoGpfoef6N3NqESC4w894WT4G7OYjFpjXN3ZYMsGF88z5BqI0OlfBmxt-LQ.jpg?r=02b",
+            "lastUpdate": 1688687728510
         }
     },
     "plex": {
         "lastWatched": {
-            "cover": "/modules/public/plex_covers/1687398018.jpg",
-            "lastUpdate": 1688515925498,
-            "title": "My Dress-Up Darling: Backlighting Is the Best",
+            "cover": "/modules/public/plex_covers/1687397959.jpg",
+            "lastUpdate": 1688687764330,
+            "title": "Evangelion: 2.0 You Can (Not) Advance",
             "publicURL": ""
         }
     },
     "valorant": {
         "username": "Chiwooo#cutie",
         "rank": "Gold 2",
-        "rr": 30,
-        "lastUpdate": 1688515926015
+        "rr": 7,
+        "lastUpdate": 1688687764571
     },
     "discord": {
         "username": "grosskoenig",
@@ -46,20 +46,27 @@
         "activity": "Valorant",
         "lastUpdate": 1683292128107
     },
+    "duolingo": { 
+        "username": "AlexInABox",
+        "xp": 384,
+        "streak": 0,
+        "lastUpdate": 1689360107363,
+        "language": "Ukrainian"
+    },
     "youtube": {
         "video": {
-            "title": "How the Reddit Blackout is Hurting Big Tech",
-            "channel": "Mental Outlaw",
-            "url": "https://www.youtube.com/watch?v=OoFueyYXh80",
-            "thumbnail": "https://i.ytimg.com/vi/OoFueyYXh80/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBOF776cAOzPhqY4MgcGz2UQQ20Ig",
-            "lastUpdate": 1688501867983
+            "title": "I SURVIVED 1 DAY IN SUBNAUTICA BELOW ZERO",
+            "channel": "ButchX3",
+            "url": "https://www.youtube.com/watch?v=50rj4KwKsa4",
+            "thumbnail": "https://i.ytimg.com/vi/50rj4KwKsa4/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCszW9-Tw2UxB2BTVYih57cqf7tQQ",
+            "lastUpdate": 1688687592544
         },
         "music": {
-            "title": "Perfect",
-            "artist": "Channel Blue",
-            "lastUpdate": 1688510671654,
-            "thumbnail": "https://i.ytimg.com/vi/f9JXFroPsIY/maxresdefault.jpg",
-            "url": "https://music.youtube.com/watch?v=f9JXFroPsIY"
+            "title": "KOMM, SUSSER TOD (M-10 Director's Edit Version)",
+            "artist": "Arianne",
+            "lastUpdate": 1688687592198,
+            "thumbnail": "https://i.ytimg.com/vi/rQiHzcdUPAU/maxresdefault.jpg",
+            "url": "https://music.youtube.com/watch?v=rQiHzcdUPAU"
         }
     },
     "spotify": {

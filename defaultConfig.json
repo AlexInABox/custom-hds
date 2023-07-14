@@ -36,6 +36,12 @@
     "userID": "",
     "updateInterval": 30
   },
+  "duolingo": {
+    "active": false,
+    "username": "",
+    "cookie": "",
+    "updateInterval": 120
+  },
   "youtube": {
     "music": {
       "active": false

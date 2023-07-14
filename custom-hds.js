@@ -6,6 +6,7 @@ var netflix = require('./modules/netflix.js');
 var plex = require('./modules/plex.js');
 var valorant = require('./modules/valorant.js');
 var discord = require('./modules/discord.js');
+var duolingo = require('./modules/duolingo.js');
 var youtube = require('./modules/youtube.js');
 var spotify = require('./modules/spotify.js');
 
@@ -62,6 +63,11 @@ function initializeModules() {
         // Initialize Discord
         console.log("\x1b[35m", "[DISCORD] Initializing Discord");
         discord = new discord(cfg.discord.userID, cfg.discord.updateInterval, presence);
+    }
+    if (validModules.duolingo) {
+        // Initialize Duolingo
+        console.log("\x1b[34m", "[DUOLINGO] Initializing Duolingo");
+        duolingo = new duolingo(cfg.duolingo.username, cfg.duolingo.cookie, cfg.duolingo.updateInterval, presence);
     }
     if (validModules.youtube.videos || validModules.youtube.music) {
         // Initialize YouTube with validModules.youtube.videos and validModules.youtube.music
