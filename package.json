@@ -2,6 +2,9 @@
   "name": "custom-hds",
   "version": "3.2.0",
   "main": "custom-hds.js",
+  "scripts": {
+    "start": "node custom-hds.js"
+  },
   "author": "alexinabox",
   "license": "MIT",
   "dependencies": {

@@ -1,0 +1,14 @@
+node_modules
+assets
+.vscode
+.git
+.gitignore
+package-lock.json
+modules/.cache/*
+modules/public/plex_covers/*.jpg
+config.json
+
+# Do not ignore these folders for structure
+!modules/.cache
+!modules/public/
+!modules/public/plex_covers/
