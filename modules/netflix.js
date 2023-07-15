@@ -48,9 +48,6 @@ async function updateNetflix(cookie, apiKey) {
                 }
             } catch (e) {
                 console.log("\x1b[31m", "[NETFLIX] Failed to fetch Netflix data, probably because the cookie expired.")
-                //TODO: Send a webhook message to the user to inform them that the cookie expired
-                //or
-                //TODO: Refresh the cookie automatically
                 return;
             }
         });
