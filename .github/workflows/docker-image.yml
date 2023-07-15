@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}:v3
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   docker:
