@@ -9,7 +9,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  docker:
+  docker-to-dockerhub:
     runs-on: ubuntu-latest
     steps:
       -
@@ -31,7 +31,7 @@ jobs:
           push: true
           tags: alexinabox/custom-hds:v3
 
-  build-and-push-image:
+  docker-to-ghcr:
       runs-on: ubuntu-latest
       permissions:
         contents: read
