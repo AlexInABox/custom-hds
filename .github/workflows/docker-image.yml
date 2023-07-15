@@ -4,12 +4,8 @@ on:
   push:
     branches: [ "v3" ]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
-  docker-to-dockerhub:
+  docker:
     runs-on: ubuntu-latest
     steps:
       -
