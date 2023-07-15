@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
 
 jobs:
   docker:
@@ -33,5 +33,5 @@ jobs:
         with:
           push: true
           tags: |
-            alexinabox/custom-hds:latest
-            ghcr.io/alexinabox/custom-hds:latest
+            alexinabox/custom-hds:dev
+            ghcr.io/alexinabox/custom-hds:dev
