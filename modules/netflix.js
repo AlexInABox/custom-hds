@@ -36,7 +36,7 @@ async function updateNetflix(cookie, apiKey) {
                 var $ = cheerio.load(body);
                 title = $('.col.title').first().find('a').text();
                 date = $('.col.date').first().text();
-                showId = $('.col.title').first().find('a').attr('href').split('/')[2]; // "/title/80100172" -> "80100172"
+                showId = String($('.col.title').first().find('a').attr('href')).split('/')[2]; // "/title/80100172" -> "80100172"
 
                 if (apiKey != "") {
                     defaultImage = fetchDefaultImage(apiKey, showId, title, date);
@@ -70,13 +70,26 @@ async function fetchDefaultImage(apiKey, showId, title, date) {
 
     console.log("\x1b[31m", "[NETFLIX] Fetching Netflix cover image for " + showId + "...")
 
-    await fetch(fetch_url, {
-        headers: headers
-    })
-        .then(res => res.json())
-        .then(body => {
-            console.log("\x1b[31m", "[NETFLIX] Successfully fetched Netflix cover image!")
-            var defaultImage = body.default_image;
-            presence.patchNetflix(title, defaultImage, date, Number(showId));
-        });
+    for (var i = 0; i < 5; i++) { //As of recently, the API is a bit unstable, so we try to fetch the image 5 times before giving up
+        try {
+            await fetch(fetch_url, {
+                headers: headers
+            })
+                .then(res => res.json())
+                .then(body => {
+                    console.log("\x1b[31m", "[NETFLIX] Successfully fetched Netflix cover image!")
+                    var defaultImage = body.default_image;
+                    presence.patchNetflix(title, defaultImage, date, Number(showId));
+                });
+            break;
+        } catch (e) {
+            if (i == 4) {
+                console.log("\x1b[31m", "[NETFLIX] Failed to fetch Netflix cover image after 5 attempts, exiting...")
+                console.log("\x1b[31m", e)
+                return;
+            }
+            console.log("\x1b[31m", "[NETFLIX] Something went wrong, retrying... (" + (i + 1) + " / 5)")
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+    }
 }
