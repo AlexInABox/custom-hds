@@ -10,20 +10,20 @@
         }
     },
     "location": {
-        "latitude": 52.4733482,
-        "longitude": 13.3064315,
+        "latitude": 52.471366,
+        "longitude": 13.3061007,
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1689374818286
+        "lastUpdate": 1689769321022
     },
     "netflix": {
         "lastWatched": {
-            "title": "Run Rabbit Run",
-            "date": "13/07/2023",
-            "showId": 81664196,
-            "defaultImage": "https://occ-0-3271-2567.1.nflxso.net/dnm/api/v6/WNk1mr9x_Cd_2itp6pUM7-lXMJg/AAAABQtvH11wIQLQP-FFj7EwlZxrE07e2B6C5wcJrpI6sn5OhR46WcnEC4751ut3MHRUFmQ38QGvRyiYiiv2_B52Vw0Tb3N3GqeFUqjFUBbqjaaaOIhg0KsJpmEcpNiQN6rULz8.jpg?r=ab8",
-            "lastUpdate": 1689374819249
+            "title": "",
+            "date": "",
+            "showId": null,
+            "defaultImage": "undefined",
+            "lastUpdate": 1689769331716
         }
     },
     "plex": {
@@ -36,9 +36,9 @@
     },
     "valorant": {
         "username": "Chiwooo#cutie",
-        "rank": "Gold 3",
-        "rr": 0,
-        "lastUpdate": 1689374816598
+        "rank": "Gold 2",
+        "rr": 18,
+        "lastUpdate": 1689769319536
     },
     "discord": {
         "username": "grosskoenig",
@@ -55,18 +55,18 @@
     },
     "youtube": {
         "video": {
-            "title": "Learn Docker in 7 Easy Steps - Full Beginner's Tutorial",
-            "channel": "Fireship",
-            "url": "https://www.youtube.com/watch?v=gAkwW2tuIqE",
-            "thumbnail": "https://i.ytimg.com/vi/gAkwW2tuIqE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLA_MUF6Bdvkd_Z6IzKZ4LF2GVtypw",
-            "lastUpdate": 1689374677835
+            "title": "『 Trailer Eva Special』- [Shiro Sagisu Music from Evangelion] - {EXTENDED}",
+            "channel": "TVthePunisher",
+            "url": "https://www.youtube.com/watch?v=xiKZYiWc5j8",
+            "thumbnail": "https://i.ytimg.com/vi/xiKZYiWc5j8/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB1AaAAuADigIMCAAQARhTID4ofzAP&rs=AOn4CLDWmNS0KiCaiDYuwEkKnJL4oPr9mA",
+            "lastUpdate": 1689769199265
         },
         "music": {
-            "title": "KK_A09_miyagi",
-            "artist": "鷺巣詩郎",
-            "lastUpdate": 1689374677401,
-            "thumbnail": "https://i.ytimg.com/vi/TBXq50l2B7Q/maxresdefault.jpg",
-            "url": "https://music.youtube.com/watch?v=TBXq50l2B7Q"
+            "title": "Dream Sweet in Sea Major",
+            "artist": "ミラクルミュージカル",
+            "lastUpdate": 1689769198680,
+            "thumbnail": "https://i.ytimg.com/vi/uxyM7vhU0uU/maxresdefault.jpg",
+            "url": "https://music.youtube.com/watch?v=uxyM7vhU0uU"
         }
     },
     "spotify": {
