@@ -260,7 +260,7 @@ Minor-Implementation-Example: [https://alexinabox.de/me](https://alexinabox.de/m
 [issues-shield]: https://img.shields.io/github/issues/alexinabox/custom-hds.svg?style=for-the-badge
 [issues-url]: https://github.com/alexinabox/custom-hds/issues
 [license-shield]: https://img.shields.io/github/license/alexinabox/custom-hds.svg?style=for-the-badge
-[license-url]: https://github.com/alexinabox/custom-hds/blob/master/LICENSE
+[license-url]: https://github.com/alexinabox/custom-hds/blob/main/LICENSE
 [product-screenshot]: assets/showcase1.png
 [Express.js]: https://img.shields.io/badge/express.js-000000?style=for-the-badge&logo=expressdotjs&logoColor=white
 [Express-url]: https://expressjs.com
