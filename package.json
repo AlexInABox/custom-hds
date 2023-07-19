@@ -8,7 +8,7 @@
   "author": "alexinabox",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^18.11.10",
+    "@types/node": "^20.4.2",
     "cheerio": "^1.0.0-rc.12",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
