@@ -3,7 +3,6 @@ assets
 .vscode
 .git
 .gitignore
-package-lock.json
 modules/.cache/*
 modules/public/plex_covers/*.jpg
 config.json
