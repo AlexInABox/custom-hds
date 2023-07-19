@@ -38,13 +38,15 @@ async function updateLocation(username, password, apikey) {
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
     }
-    await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + apikey, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            presence.patchLocation(result.features[0].properties.lat, result.features[0].properties.lon, result.features[0].properties.district, result.features[0].properties.country, result.features[0].properties.city);
-        }
-        )
-        .catch(error => console.log("\x1b[32m", '[LIFE360] error', error));
-
+    try {
+        await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + apikey, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                presence.patchLocation(result.features[0].properties.lat, result.features[0].properties.lon, result.features[0].properties.district, result.features[0].properties.country, result.features[0].properties.city);
+            });
+    } catch (e) {
+        console.log("\x1b[35m", "[LIFE360] Failed to fetch location, due to an invalid API key. (Presumably)")
+        return;
+    }
     console.log("\x1b[35m", "[LIFE360] Successfully fetched location!")
 }
