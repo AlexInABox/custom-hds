@@ -24,34 +24,39 @@ async function updateplex(serverURL, token, username) {
     const data = await new xml2js.Parser().parseStringPromise(await response.text());
 
     var found = false;
-    if (data.MediaContainer.$.size == 0) {
-        console.log("\x1b[31m", "[PLEX] No active sessions found!");
-        return;
-    } else if (data.MediaContainer.$.size >= 1) {
-        console.log("\x1b[31m", "[PLEX] Multiple active sessions found! Finding the one with the username " + username + "...");
-        for (var i = 0; i < data.MediaContainer.$.size; i++) {
-            if (data.MediaContainer.Video[i].User[0].$.title == username) {
-                console.log("\x1b[31m", "[PLEX] Found active session with the username " + username + "!");
-                if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies") {
-                    title = data.MediaContainer.Video[i].$.title;
-                    cover = data.MediaContainer.Video[i].$.thumb;
-                } else {
-                    title = data.MediaContainer.Video[i].$.grandparentTitle + ": " + data.MediaContainer.Video[i].$.title;
-                    cover = data.MediaContainer.Video[i].$.grandparentThumb;
-                }
-
-                publicURL = "";
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            console.log("\x1b[31m", "[PLEX] No active sessions found with the username " + username + "!");
+    try {
+        if (data.MediaContainer.$.size == 0) {
+            console.log("\x1b[31m", "[PLEX] No active sessions found!");
             return;
+        } else if (data.MediaContainer.$.size >= 1) {
+            console.log("\x1b[31m", "[PLEX] Multiple active sessions found! Finding the one with the username " + username + "...");
+            for (var i = 0; i < data.MediaContainer.$.size; i++) {
+                if (data.MediaContainer.Video[i].User[0].$.title == username) {
+                    console.log("\x1b[31m", "[PLEX] Found active session with the username " + username + "!");
+                    if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies") {
+                        title = data.MediaContainer.Video[i].$.title;
+                        cover = data.MediaContainer.Video[i].$.thumb;
+                    } else {
+                        title = data.MediaContainer.Video[i].$.grandparentTitle + ": " + data.MediaContainer.Video[i].$.title;
+                        cover = data.MediaContainer.Video[i].$.grandparentThumb;
+                    }
+
+                    publicURL = "";
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                console.log("\x1b[31m", "[PLEX] No active sessions found with the username " + username + "!");
+                return;
+            }
+            console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
+            saveCoverForPublicViewing(serverURL, cover, token);
         }
-        console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
-        saveCoverForPublicViewing(serverURL, cover, token);
+    } catch (e) {
+        console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the token expired.")
+        return;
     }
 
     coverPath = "/modules/public/plex_covers/" + String(cover).split("/")[String(cover).split("/").length - 1] + ".jpg";
