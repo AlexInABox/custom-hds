@@ -44,3 +44,12 @@ jobs:
           tags: |
             alexinabox/custom-hds:dev-alpine
             ghcr.io/alexinabox/custom-hds:dev-alpine
+      
+      - name: Build and push -scratch
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          file: Dockerfile.scratch
+          tags: |
+            alexinabox/custom-hds:dev-scratch
+            ghcr.io/alexinabox/custom-hds:dev-scratch
