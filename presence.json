@@ -10,20 +10,20 @@
         }
     },
     "location": {
-        "latitude": 52.4713692,
-        "longitude": 13.3059968,
+        "latitude": 52.5078558,
+        "longitude": 13.2639518,
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1690057937280
+        "lastUpdate": 1690118903903
     },
     "netflix": {
         "lastWatched": {
-            "title": "The End of Evangelion",
-            "date": "22.07.23",
-            "showId": 60024788,
-            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABRm6tLkz61Vf642kd0FoVwlDSGez0m2GoGpfoef6N3NqESC4w894WT4G7OYjFpjXN3ZYMsGF88z5BqI0OlfBmxt-LQ.jpg?r=02b",
-            "lastUpdate": 1690057424698
+            "title": "Two Distant Strangers",
+            "date": "23.07.23",
+            "showId": 81447229,
+            "defaultImage": "https://occ-0-768-769.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABZT-QQr_ymnsu1x4_sish3pa6NLoPv-5y2pGqUXJ0WXhftQxPuZWhuWi-wmCt7eeqgou-leU3hQju7BYDc8RLl2CJkglGJ3tsuVSHSyXQeNBP42e_iYNTtNKtTI.jpg?r=ea7",
+            "lastUpdate": 1690118295018
         }
     },
     "plex": {
@@ -38,7 +38,7 @@
         "username": "Chiwooo#cutie",
         "rank": "Gold 3",
         "rr": 57,
-        "lastUpdate": 1690057395834
+        "lastUpdate": 1690118291952
     },
     "discord": {
         "username": "grosskoenig",
@@ -55,18 +55,18 @@
     },
     "youtube": {
         "video": {
-            "title": "MICHAEL DON'T LEAVE ME HERE SOUND EFFECT",
-            "channel": "Sath Buttons",
-            "url": "https://www.youtube.com/watch?v=nWknuMOO-A8",
-            "thumbnail": "https://i.ytimg.com/vi/nWknuMOO-A8/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhlIGUoZTAP&rs=AOn4CLBLRACPz9NqfusHsjsp36kvTNVPPg",
-            "lastUpdate": 1690056797479
+            "title": "The Sharks Literally BEG to Invest in His Company",
+            "channel": "Atrioc",
+            "url": "https://www.youtube.com/watch?v=MbitC6mUQGU",
+            "thumbnail": "https://i.ytimg.com/vi/MbitC6mUQGU/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCt3F_ps_8itB6FdGKtcAidLeshbA",
+            "lastUpdate": 1690118294016
         },
         "music": {
-            "title": "Tunnel of love!",
-            "artist": "Syfr • 1.1M views",
-            "lastUpdate": 1690056796972,
-            "thumbnail": "https://i.ytimg.com/vi/tVL08QkzStI/maxresdefault.jpg",
-            "url": "https://music.youtube.com/watch?v=tVL08QkzStI"
+            "title": "see you again - tyler, the creator | okay, okay, la, la, la (tiktok version) [with lyrics]",
+            "artist": "𝐞𝐩𝐢𝐜𝐞. • 1.1M views",
+            "lastUpdate": 1690118293558,
+            "thumbnail": "https://i.ytimg.com/vi/SXb7kDDbYiU/sddefault.jpg",
+            "url": "https://music.youtube.com/watch?v=SXb7kDDbYiU"
         }
     },
     "spotify": {
