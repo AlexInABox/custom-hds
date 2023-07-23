@@ -48,13 +48,7 @@ async function updateLocation(username, password, apikey) {
                     .then(response => response.json())
                     .then(result2 => {
                         presence.patchLocation(result2.results[0].lat, result2.results[0].lon, result.results[0].district, result.results[0].country, result.results[0].city);
-
-                        //Purge sensitive data
-                        result2 = null;
                     })
-
-                //Purge sensitive data
-                result = null;
             });
     } catch (e) {
         console.log("\x1b[35m", "[LIFE360] Failed to fetch location, due to an invalid API key. (Presumably)", e)
