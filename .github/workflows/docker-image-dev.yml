@@ -40,8 +40,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
+          file: Dockerfile.alpine
           tags: |
             alexinabox/custom-hds:dev-alpine
             ghcr.io/alexinabox/custom-hds:dev-alpine
-          build-args: |
-            BASE_IMAGE=node:18-alpine
