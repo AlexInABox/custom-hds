@@ -44,7 +44,7 @@ async function updateLocation(username, password, apikey) {
             .then(result => {
 
                 //Now we geocode the aproximate coordinates of the district inorder not to leak the exact location of the user
-                fetch("https://api.geoapify.com/v1/geocode/search?text=" + result.results[0].district + ", " + result.results[0].city + "&lang=en&limit=1&format=json&apiKey=" + apikey, requestOptions)
+                fetch("https://api.geoapify.com/v1/geocode/search?text=" + String(result.results[0].postcode) + ", " + String(result.results[0].district) + ", " + String(result.results[0].suburb) + ", " + String(result.results[0].city) + ", " + String(result.results[0].state) + ", " + String(result.results[0].country) + "&lang=en&limit=1&format=json&apiKey=" + apikey, requestOptions)
                     .then(response => response.json())
                     .then(result2 => {
                         presence.patchLocation(result2.results[0].lat, result2.results[0].lon, result.results[0].district, result.results[0].country, result.results[0].city);
