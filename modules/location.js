@@ -39,14 +39,24 @@ async function updateLocation(username, password, apikey) {
         }
     }
     try {
-        await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&apiKey=" + apikey, requestOptions)
+        await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&lang=en&limit=1&format=json&apiKey=" + apikey, requestOptions)
             .then(response => response.json())
             .then(result => {
-                presence.patchLocation(result.features[0].properties.lat, result.features[0].properties.lon, result.features[0].properties.district, result.features[0].properties.country, result.features[0].properties.city);
+
+                //Now we geocode the aproximate coordinates of the district inorder not to leak the exact location of the user
+                fetch("https://api.geoapify.com/v1/geocode/search?text=" + result.results[0].district + ", " + result.results[0].city + "&lang=en&limit=1&format=json&apiKey=" + apikey, requestOptions)
+                    .then(response => response.json())
+                    .then(result2 => {
+                        presence.patchLocation(result2.results[0].lat, result2.results[0].lon, result.results[0].district, result.results[0].country, result.results[0].city);
+                    })
             });
     } catch (e) {
-        console.log("\x1b[35m", "[LIFE360] Failed to fetch location, due to an invalid API key. (Presumably)")
+        console.log("\x1b[35m", "[LIFE360] Failed to fetch location, due to an invalid API key. (Presumably)", e)
+        //Purge sensitive data
+        user = null;
         return;
     }
     console.log("\x1b[35m", "[LIFE360] Successfully fetched location!")
+    //Purge sensitive data
+    user = null;
 }
