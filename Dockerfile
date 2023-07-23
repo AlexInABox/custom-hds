@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /app
+WORKDIR /custom-hds
 
 COPY package*.json ./
 
