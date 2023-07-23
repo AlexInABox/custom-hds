@@ -3,9 +3,13 @@ assets
 .vscode
 .git
 .gitignore
+.github
 modules/.cache/*
 modules/public/plex_covers/*.jpg
 config.json
+defaultConfig.json
+LICENSE
+README.md
 
 # Do not ignore these folders for structure
 !modules/.cache
