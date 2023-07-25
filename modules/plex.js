@@ -13,6 +13,7 @@ const fetch = require('node-fetch');
 const xml2js = require('xml2js');
 const fs = require('fs');
 const path = require('path');
+const { xml } = require('cheerio');
 
 async function updateplex(serverURL, token, username) {
     console.log("\x1b[31m", "[PLEX] Fetching current stream...");
@@ -20,8 +21,21 @@ async function updateplex(serverURL, token, username) {
     var activeSessionsURL = "http://" + serverURL + "/status/sessions?X-Plex-Token=" + token;
     var title, cover, publicURL;
 
-    const response = await fetch(activeSessionsURL); //get xml
-    const data = await new xml2js.Parser().parseStringPromise(await response.text());
+    let response, data;
+    try {
+        response = await fetch(activeSessionsURL); //get xml
+        data = await new xml2js.Parser().parseStringPromise(await response.text());
+    } catch (e) {
+        if (e.code == "ECONNREFUSED") { //server offline or maintenance mode
+            console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the server is offline or in maintenance mode.")
+        } else if (e.code == "ENOTFOUND") { //server not found
+            console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the server URL is incorrect.")
+        }
+        else {
+            console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the token expired.")
+        }
+        return;
+    }
 
     var found = false;
     try {
