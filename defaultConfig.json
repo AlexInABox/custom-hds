@@ -15,7 +15,7 @@
     "active": false,
     "cookie": "",
     "apilayer_apikey": "",
-    "updateInterval": 600
+    "updateInterval": 900
   },
   "plex": {
     "active": false,
