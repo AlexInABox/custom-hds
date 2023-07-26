@@ -3,6 +3,10 @@ class netflix {
     constructor(cookie, apiKey, updateInterval, superPresence) {
         presence = superPresence;
 
+        if (updateInterval < 900 && apiKey) {
+            console.log("\x1b[31m", "[NETFLIX] [WARNING] The update interval is less than 15 minutes, this will result in more than 3000 API requests per month, which is the free limit of the uNoGS API. If you want to avoid this, please set the update interval to more than 15 minutes or consider upgrading to the pro version of the API. You can find more information here: https://apilayer.com/subscriptions")
+        }
+
         updateNetflix(cookie, apiKey);
         setInterval(function () { updateNetflix(cookie, apiKey) }, updateInterval * 1000);
     }
@@ -39,11 +43,12 @@ async function updateNetflix(cookie, apiKey) {
                 showId = String($('.col.title').first().find('a').attr('href')).split('/')[2]; // "/title/80100172" -> "80100172"
 
                 if (apiKey != "") {
+                    console.log("\x1b[31m", "[NETFLIX] Successfully fetched latest Netflix stream!")
                     defaultImage = fetchDefaultImage(apiKey, showId, title, date);
                     return;
                 } else {
                     presence.patchNetflix(title, defaultImage, date, showId);
-                    console.log("\x1b[31m", "[NETFLIX] Successfully fetched latest Netflix stream!")
+                    console.log("\x1b[31m", "[NETFLIX] Successfully fetched latest Netflix stream (without cover image)!")
                     return;
                 }
             } catch (e) {
@@ -77,6 +82,13 @@ async function fetchDefaultImage(apiKey, showId, title, date) {
             })
                 .then(res => res.json())
                 .then(body => {
+                    if (body.message) {
+                        console.log("\x1b[31m", "[NETFLIX] Failed to fetch Netflix cover image, API error: ")
+                        console.log("\x1b[31m", body.message)
+
+                        presence.patchNetflix(title, undefined, date, Number(showId));
+                        return;
+                    }
                     console.log("\x1b[31m", "[NETFLIX] Successfully fetched Netflix cover image!")
                     var defaultImage = body.default_image;
                     presence.patchNetflix(title, defaultImage, date, Number(showId));
