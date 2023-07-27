@@ -28,10 +28,16 @@ async function updateDuolingo(username, cookie, username) {
         "Cookie": cookie
     }
 
-    const response = await fetch(duolingoURL, { headers: headers }); //get json
-    const data = await response.json();
-    if (data.error) {
-        console.log("\x1b[34m", "[DUOLINGO] Error: " + data.error);
+    var data;
+    try {
+        const response = await fetch(duolingoURL, { headers: headers }); //get json
+        data = await response.json();
+        if (data.error) {
+            console.log("\x1b[34m", "[DUOLINGO] Error: " + data.error);
+            return;
+        }
+    } catch (error) {
+        console.log("\x1b[34m", "[DUOLINGO] Error: " + error);
         return;
     }
 

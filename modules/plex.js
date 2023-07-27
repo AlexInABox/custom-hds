@@ -13,7 +13,6 @@ const fetch = require('node-fetch');
 const xml2js = require('xml2js');
 const fs = require('fs');
 const path = require('path');
-const { xml } = require('cheerio');
 
 async function updateplex(serverURL, token, username) {
     console.log("\x1b[31m", "[PLEX] Fetching current stream...");
@@ -91,25 +90,30 @@ async function saveCoverForPublicViewing(serverURL, cover, token) {
     const coverSplit = String(cover).split("/");
     const filename = coverSplit[coverSplit.length - 1];
 
-    fetch(imageUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const imagePath = path.join(directoryPath, filename + ".jpg");
-            const writer = fs.createWriteStream(imagePath);
-            response.body.pipe(writer);
+    try {
+        fetch(imageUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const imagePath = path.join(directoryPath, filename + ".jpg");
+                const writer = fs.createWriteStream(imagePath);
+                response.body.pipe(writer);
 
-            return new Promise((resolve, reject) => {
-                writer.on('finish', resolve);
-                writer.on('error', reject);
+                return new Promise((resolve, reject) => {
+                    writer.on('finish', resolve);
+                    writer.on('error', reject);
+                });
+            })
+            .then(() => {
+                console.log("\x1b[31m", "[PLEX] Successfully saved cover for public viewing!");
+            })
+            .catch(error => {
+                console.error("\x1b[31m", "[PLEX] Failed to save cover for public viewing!", error);
             });
-        })
-        .then(() => {
-            console.log("\x1b[31m", "[PLEX] Successfully saved cover for public viewing!");
-        })
-        .catch(error => {
-            console.error("\x1b[31m", "[PLEX] Failed to save cover for public viewing!", error);
-        });
 
+    } catch (e) {
+        console.log("\x1b[31m", "[PLEX] Failed to save cover for public viewing!", e);
+        return;
+    }
 }
