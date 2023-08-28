@@ -10,35 +10,35 @@
         }
     },
     "location": {
-        "latitude": 52.5078558,
-        "longitude": 13.2639518,
+        "latitude": 52.472818197,
+        "longitude": 13.313600376,
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1690119091103
+        "lastUpdate": 1690490979467
     },
     "netflix": {
         "lastWatched": {
-            "title": "Two Distant Strangers",
-            "date": "23.07.23",
-            "showId": 81447229,
-            "defaultImage": "https://occ-0-768-769.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABZT-QQr_ymnsu1x4_sish3pa6NLoPv-5y2pGqUXJ0WXhftQxPuZWhuWi-wmCt7eeqgou-leU3hQju7BYDc8RLl2CJkglGJ3tsuVSHSyXQeNBP42e_iYNTtNKtTI.jpg?r=ea7",
-            "lastUpdate": 1690118295018
+            "title": "Along with the Gods: The Two Worlds",
+            "date": "21/08/2023",
+            "showId": 80214451,
+            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABQxaXluhZsAoIdXrJMEep422yrBgpbErjAexiYx8Y13jCF4jVzYFTOHxf8spNDTa64414IEPjL5YX6Iy_QOTU7WSHQ.jpg?r=fb2",
+            "lastUpdate": 1693257608583
         }
     },
     "plex": {
         "lastWatched": {
-            "cover": "/modules/public/plex_covers/1687397959.jpg",
-            "lastUpdate": 1688687764330,
-            "title": "Evangelion: 2.0 You Can (Not) Advance",
+            "cover": "/modules/public/plex_covers/1690299824.jpg",
+            "lastUpdate": 1690491274599,
+            "title": "Blue Period: Awakening to the Joy of Painting",
             "publicURL": ""
         }
     },
     "valorant": {
         "username": "Chiwooo#cutie",
-        "rank": "Gold 3",
-        "rr": 57,
-        "lastUpdate": 1690118291952
+        "rank": "Platinum 1",
+        "rr": 0,
+        "lastUpdate": 1693257610255
     },
     "discord": {
         "username": "grosskoenig",
@@ -55,18 +55,18 @@
     },
     "youtube": {
         "video": {
-            "title": "The Sharks Literally BEG to Invest in His Company",
-            "channel": "Atrioc",
-            "url": "https://www.youtube.com/watch?v=MbitC6mUQGU",
-            "thumbnail": "https://i.ytimg.com/vi/MbitC6mUQGU/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCt3F_ps_8itB6FdGKtcAidLeshbA",
-            "lastUpdate": 1690118294016
+            "title": "The Fousey Situation Can’t Get Worse…",
+            "channel": "oompaville",
+            "url": "https://www.youtube.com/watch?v=GdL4et8gEqM",
+            "thumbnail": "https://i.ytimg.com/vi/GdL4et8gEqM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCwAS5W2ILTTLNW2nonhIC-SJSkJg",
+            "lastUpdate": 1693257608298
         },
         "music": {
-            "title": "see you again - tyler, the creator | okay, okay, la, la, la (tiktok version) [with lyrics]",
-            "artist": "𝐞𝐩𝐢𝐜𝐞. • 1.1M views",
-            "lastUpdate": 1690118293558,
-            "thumbnail": "https://i.ytimg.com/vi/SXb7kDDbYiU/sddefault.jpg",
-            "url": "https://music.youtube.com/watch?v=SXb7kDDbYiU"
+            "title": "All Alone (Official Video)",
+            "artist": "Freddie Dredd • 18M views",
+            "lastUpdate": 1693257607800,
+            "thumbnail": "https://i.ytimg.com/vi/mQOV11xi4SM/maxresdefault.jpg",
+            "url": "https://music.youtube.com/watch?v=mQOV11xi4SM"
         }
     },
     "spotify": {
