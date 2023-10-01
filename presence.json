@@ -10,12 +10,12 @@
         }
     },
     "location": {
-        "latitude": 52.472818197,
-        "longitude": 13.313600376,
+        "latitude": 52.4731866,
+        "longitude": 13.310298461371033,
         "district": "Charlottenburg-Wilmersdorf",
         "country": "Germany",
         "city": "Berlin",
-        "lastUpdate": 1690490979467
+        "lastUpdate": 1696167936378
     },
     "netflix": {
         "lastWatched": {

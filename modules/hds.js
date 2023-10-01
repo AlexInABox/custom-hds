@@ -9,7 +9,6 @@ As of now the data being received is the following:
 
 This data is then regularly patched into the presence.json file for publicazation on the web.
 */
-const { start } = require('repl');
 var presence = require('./misc/presence.js');
 class hds {
     constructor(superPresence) {
