@@ -46,7 +46,7 @@ async function updateplex(serverURL, token, username) {
             for (var i = 0; i < data.MediaContainer.$.size; i++) {
                 if (data.MediaContainer.Video[i].User[0].$.title == username) {
                     console.log("\x1b[31m", "[PLEX] Found active session with the username " + username + "!");
-                    if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies") {
+                    if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies" || data.MediaContainer.Video[i].$.librarySectionTitle == "Movies (Anime)") { //TODO: Make the user set all the categories that are movies OR try both and select the one thats not undefined?
                         title = data.MediaContainer.Video[i].$.title;
                         cover = data.MediaContainer.Video[i].$.thumb;
                     } else {
