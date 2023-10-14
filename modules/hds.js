@@ -7,7 +7,7 @@ As of now the data being received is the following:
 - speed (acceleration)
 - ~steps~ (does not work reliably will therefore never be implemented)
 
-This data is then regularly patched into the presence.json file for publicazation on the web.
+This data is then regularly patched into the presence.json file for publication on the web.
 */
 var presence = require('./misc/presence.js');
 class hds {
