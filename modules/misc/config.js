@@ -9,6 +9,7 @@ var config_valid = {
     "valorant": false,
     "discord": false,
     "duolingo": false,
+    "applePay": false,
     "youtube": {
         "videos": false,
         "music": false,
@@ -82,6 +83,8 @@ class config {
         if (realConfig.duolingo.updateInterval === "") {
             realConfig.duolingo.updateInterval = 120;
         }
+
+        config_valid.applePay = realConfig.applePay.active;
 
         config_valid.youtube.videos = realConfig.youtube.videos.active;
         config_valid.youtube.music = realConfig.youtube.music.active;

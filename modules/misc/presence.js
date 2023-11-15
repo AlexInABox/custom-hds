@@ -101,6 +101,16 @@ class presence {
         return realPresence.duolingo;
     }
 
+    patchApplePay(merchant, amount, cardOrPass) {
+        realPresence.applePay.merchant = merchant;
+        realPresence.applePay.amount = amount;
+        realPresence.applePay.cardOrPass = cardOrPass;
+
+        realPresence.applePay.lastUpdate = Date.now();
+
+        patchPresence();
+    }
+
     patchYouTubeMusic(title, artist, url, thumbnail, date) {
         realPresence.youtube.music.title = title;
         realPresence.youtube.music.artist = artist;

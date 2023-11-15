@@ -7,6 +7,9 @@ var plex = require('./modules/plex.js');
 var valorant = require('./modules/valorant.js');
 var discord = require('./modules/discord.js');
 var duolingo = require('./modules/duolingo.js');
+var applePay = require('./modules/applePay.js');
+//var revolut = require('./modules/revolut.js');
+//var screenTime = require('./modules/screenTime.js');
 var youtube = require('./modules/youtube.js');
 var spotify = require('./modules/spotify.js');
 
@@ -68,6 +71,11 @@ function initializeModules() {
         // Initialize Duolingo
         console.log("\x1b[34m", "[DUOLINGO] Initializing Duolingo");
         duolingo = new duolingo(cfg.duolingo.username, cfg.duolingo.cookie, cfg.duolingo.updateInterval, presence);
+    }
+    if (validModules.applePay) {
+        // Initialize Duolingo
+        console.log("\x1b[34m", "[ApplePay] Initializing ApplePay");
+        applePay = new applePay(presence);
     }
     if (validModules.youtube.videos || validModules.youtube.music) {
         // Initialize YouTube with validModules.youtube.videos and validModules.youtube.music
