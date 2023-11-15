@@ -53,6 +53,12 @@
         "lastUpdate": 1689360107363,
         "language": "Ukrainian"
     },
+    "applePay": {
+        "merchant": "Apple",
+        "amount": 19.99,
+        "cardOrPass": "card",
+        "lastUpdate": 1689360107363
+    },
     "youtube": {
         "video": {
             "title": "The Fousey Situation Can’t Get Worse…",
