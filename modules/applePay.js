@@ -20,7 +20,7 @@ module.exports = applePay;
 
 const express = require('express');
 const app = express();
-const port = 2053;
+const port = 2082; //cloudflare http port
 
 //variables
 var merchant;
