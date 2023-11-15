@@ -44,6 +44,7 @@ function initializeServer() {
         amount = message.amount;
         cardOrPass = message.cardOrPass;
 
+        res.sendStatus(200);
         //Patch presence
 
         presence.patchApplePay(String(merchant), Number(amount), String(cardOrPass));
