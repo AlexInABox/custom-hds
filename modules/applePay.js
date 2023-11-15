@@ -32,10 +32,13 @@ function initializeServer() {
     app.use(express.json());
 
     app.listen(port, () => {
-        console.log("\x1b[36m", "[applePay] ApplePay is now listening on port " + port);
+        console.log("\x1b[36m", "[ApplePay] ApplePay is now listening on port " + port);
     });
 
     app.put('/', (req, res) => {
+
+        console.log("\x1b[36m", "[ApplePay] Received a PUT request!");
+
         message = String(req.body);
         merchant = message.merchant;
         amount = message.amount;
