@@ -54,6 +54,12 @@
         "language": "Ukrainian",
         "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge"
     },
+    "applePay": {
+        "merchant": "Apple",
+        "amount": 19.99,
+        "cardOrPass": "card",
+        "lastUpdate": 1689360107363
+    },
     "youtube": {
         "video": {
             "title": "The Fousey Situation Can’t Get Worse…",

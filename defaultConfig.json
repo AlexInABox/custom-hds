@@ -42,6 +42,9 @@
     "cookie": "",
     "updateInterval": 120
   },
+  "applePay": {
+    "active": false
+  },
   "youtube": {
     "music": {
       "active": false

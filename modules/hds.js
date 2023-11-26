@@ -7,7 +7,7 @@ As of now the data being received is the following:
 - speed (acceleration)
 - ~steps~ (does not work reliably will therefore never be implemented)
 
-This data is then regularly patched into the presence.json file for publicazation on the web.
+This data is then regularly patched into the presence.json file for publication on the web.
 */
 var presence = require('./misc/presence.js');
 class hds {
@@ -54,52 +54,4 @@ function initializeServer() {
 
         }
     });
-    app.post('/', (req, res) => { //auto export health
-        metrics = req.body.data.metrics;
-
-        if (!metrics) {
-            console.log("\x1b[36m", "[HDS] Received faulty POST request.");
-            res.sendStatus(400);
-            return;
-        }
-
-        if (metrics.length === 0) {
-            console.log("\x1b[36m", "[HDS] Received faulty (empty) POST request.");
-            res.sendStatus(400);
-            return;
-        }
-
-        try {
-            if (convertDateToUnixTimestamp(metrics[0].data[metrics[0].data.length - 1].date) < presence.getHDSHeartRateTimestamp()) {
-                //the data we received is older than currently available data
-                res.sendStatus(409); //conflict
-                return;
-            }
-
-            console.log("\x1b[36m", "[HDS] Received regular AutoExport data: " + metrics[0].data[metrics[0].data.length - 1].Max + "BPM"); //min and max are the same when setting aggregation to seconds
-            //console.log("\x1b[36m", "[HDS] Above data was generated at: " + convertDateToUnixTimestamp(metrics[0].data[metrics[0].data.length - 1].date)); //min and max are the same when setting aggregation to seconds
-
-            presence.patchHDSHeartRateWithTimestamp(Number(metrics[0].data[metrics[0].data.length - 1].Max), convertDateToUnixTimestamp(metrics[0].data[metrics[0].data.length - 1].date));
-
-        } catch {
-            console.log("\x1b[36m", "[HDS] Something went wrong when handling AutoExport data...");
-            console.log(metrics);
-            res.sendStatus(500);
-            return;
-        }
-
-        res.sendStatus(200);
-
-    });
-}
-
-
-function convertDateToUnixTimestamp(dateString) {
-    // Parse the date string
-    const date = new Date(dateString);
-
-    // Get the Unix timestamp in milliseconds since January 1, 1970
-    const unixTimestampInMilliseconds = date.getTime();
-
-    return unixTimestampInMilliseconds;
 }
