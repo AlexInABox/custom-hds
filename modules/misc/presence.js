@@ -16,6 +16,16 @@ class presence {
 
         patchPresence();
     }
+    patchHDSHeartRateWithTimestamp(heartRate, timestamp) {
+        realPresence.health.heartRate = heartRate;
+
+        realPresence.health.lastUpdate.heartRate = timestamp;
+
+        patchPresence();
+    }
+    getHDSHeartRateTimestamp() {
+        return realPresence.health.lastUpdate.heartRate;
+    }
 
     patchHDSSpeed(speed) {
         console.log("\x1b[36m", "[HDS] Received speed: " + speed);
@@ -86,11 +96,12 @@ class presence {
         patchPresence();
     }
 
-    patchDuolingo(username, streak, xp, language) {
+    patchDuolingo(username, streak, xp, language, avatar) {
         realPresence.duolingo.username = username;
         realPresence.duolingo.streak = streak;
         realPresence.duolingo.xp = xp;
         realPresence.duolingo.language = language;
+        realPresence.duolingo.avatar = avatar;
 
         realPresence.duolingo.lastUpdate = Date.now();
 

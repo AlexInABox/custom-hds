@@ -1,10 +1,10 @@
 {
     "health": {
-        "heartRate": 80,
+        "heartRate": 79,
         "speed": 0,
         "oxygenSaturation": 0.98,
         "lastUpdate": {
-            "heartRate": 1688321405699,
+            "heartRate": 1700953560000,
             "speed": 1683292128107,
             "oxygenSaturation": 1688321405699
         }
@@ -19,11 +19,11 @@
     },
     "netflix": {
         "lastWatched": {
-            "title": "Along with the Gods: The Two Worlds",
-            "date": "21/08/2023",
-            "showId": 80214451,
-            "defaultImage": "https://occ-0-2851-38.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABQxaXluhZsAoIdXrJMEep422yrBgpbErjAexiYx8Y13jCF4jVzYFTOHxf8spNDTa64414IEPjL5YX6Iy_QOTU7WSHQ.jpg?r=fb2",
-            "lastUpdate": 1693257608583
+            "title": "",
+            "date": "",
+            "showId": null,
+            "defaultImage": "undefined",
+            "lastUpdate": 1701024579599
         }
     },
     "plex": {
@@ -50,8 +50,9 @@
         "username": "AlexInABox",
         "xp": 384,
         "streak": 0,
-        "lastUpdate": 1689360107363,
-        "language": "Ukrainian"
+        "lastUpdate": 1701024580702,
+        "language": "Ukrainian",
+        "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge"
     },
     "youtube": {
         "video": {

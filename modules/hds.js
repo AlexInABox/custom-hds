@@ -24,7 +24,7 @@ const app = express();
 const port = 2052;
 
 function initializeServer() {
-    app.use(express.json());
+    app.use(express.json({ limit: '50mb' })); //incase auto export sends data of the past week...
 
     app.listen(port, () => {
         console.log("\x1b[36m", "[HDS] HDS is now listening on port " + port);
@@ -54,4 +54,52 @@ function initializeServer() {
 
         }
     });
+    app.post('/', (req, res) => { //auto export health
+        metrics = req.body.data.metrics;
+
+        if (!metrics) {
+            console.log("\x1b[36m", "[HDS] Received faulty POST request.");
+            res.sendStatus(400);
+            return;
+        }
+
+        if (metrics.length === 0) {
+            console.log("\x1b[36m", "[HDS] Received faulty (empty) POST request.");
+            res.sendStatus(400);
+            return;
+        }
+
+        try {
+            if (convertDateToUnixTimestamp(metrics[0].data[metrics[0].data.length - 1].date) < presence.getHDSHeartRateTimestamp()) {
+                //the data we received is older than currently available data
+                res.sendStatus(409); //conflict
+                return;
+            }
+
+            console.log("\x1b[36m", "[HDS] Received regular AutoExport data: " + metrics[0].data[metrics[0].data.length - 1].Max + "BPM"); //min and max are the same when setting aggregation to seconds
+            //console.log("\x1b[36m", "[HDS] Above data was generated at: " + convertDateToUnixTimestamp(metrics[0].data[metrics[0].data.length - 1].date)); //min and max are the same when setting aggregation to seconds
+
+            presence.patchHDSHeartRateWithTimestamp(Number(metrics[0].data[metrics[0].data.length - 1].Max), convertDateToUnixTimestamp(metrics[0].data[metrics[0].data.length - 1].date));
+
+        } catch {
+            console.log("\x1b[36m", "[HDS] Something went wrong when handling AutoExport data...");
+            console.log(metrics);
+            res.sendStatus(500);
+            return;
+        }
+
+        res.sendStatus(200);
+
+    });
+}
+
+
+function convertDateToUnixTimestamp(dateString) {
+    // Parse the date string
+    const date = new Date(dateString);
+
+    // Get the Unix timestamp in milliseconds since January 1, 1970
+    const unixTimestampInMilliseconds = date.getTime();
+
+    return unixTimestampInMilliseconds;
 }

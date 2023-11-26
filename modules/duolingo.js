@@ -22,7 +22,7 @@ const fetch = require('node-fetch');
 
 async function updateDuolingo(username, cookie, username) {
 
-    var username, streak, totalXP, language; //For (unauthenticated) public user data, the xp value is only for the user's currently learning language.
+    var username, streak, totalXP, language, avatar; //For (unauthenticated) public user data, the xp value is only for the user's currently learning language.
     var duolingoURL = "https://www.duolingo.com/api/1/users/show?username=" + username;
     var headers = {
         "Cookie": cookie
@@ -52,13 +52,14 @@ async function updateDuolingo(username, cookie, username) {
         username: String(data.fullname),
         streak: Number(data.site_streak),
         totalXP: Number(totalXP),
-        language: String(data.learning_language_string)
+        language: String(data.learning_language_string),
+        avatar: String(data.avatar) + "/xxlarge"
     }
     var oldData = presence.getDuolingo();
 
-    if (oldData.username == newData.username && oldData.streak == newData.streak && oldData.xp == newData.totalXP && oldData.language == newData.language) {
+    if (oldData.username == newData.username && oldData.streak == newData.streak && oldData.xp == newData.totalXP && oldData.language == newData.language && oldData.avatar == newData.avatar) {
         console.log("\x1b[34m", "[DUOLINGO] No changes detected. Skipping patching presence.");
         return;
     }
-    presence.patchDuolingo(String(data.fullname), Number(data.site_streak), Number(totalXP), String(data.learning_language_string));
+    presence.patchDuolingo(newData.username, newData.streak, newData.totalXP, newData.language, newData.avatar);
 }
