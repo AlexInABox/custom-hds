@@ -54,7 +54,7 @@ function initializeServer() {
 
         }
     });
-    app.post('/', (req, res) => { //auto export health
+    app.post('/', (req, res) => { //auto export health - works in theory but auto export health as an app doesnt work as expected at times...
         metrics = req.body.data.metrics;
 
         if (!metrics) {
