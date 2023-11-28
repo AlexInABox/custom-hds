@@ -29,3 +29,5 @@ function logWarning(module, error) { //Low priority, cookie will expire soon, wi
 function logInfo(module, error) { //No priority, solely for debugging, will not send any messages
     console.log("[" + module + "] " + error);
 }
+
+//TODO

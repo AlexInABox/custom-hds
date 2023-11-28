@@ -96,11 +96,12 @@ class presence {
         patchPresence();
     }
 
-    patchDuolingo(username, streak, xp, language, avatar) {
+    patchDuolingo(username, streak, xp, language, language_icon_URL, avatar) {
         realPresence.duolingo.username = username;
         realPresence.duolingo.streak = streak;
         realPresence.duolingo.xp = xp;
         realPresence.duolingo.language = language;
+        realPresence.duolingo.language_icon_URL = language_icon_URL;
         realPresence.duolingo.avatar = avatar;
 
         realPresence.duolingo.lastUpdate = Date.now();

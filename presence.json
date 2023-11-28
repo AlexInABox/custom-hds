@@ -48,11 +48,12 @@
     },
     "duolingo": {
         "username": "AlexInABox",
-        "xp": 384,
-        "streak": 0,
-        "lastUpdate": 1701024580702,
-        "language": "Ukrainian",
-        "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge"
+        "xp": 640,
+        "streak": 2,
+        "lastUpdate": 1701176011694,
+        "language": "Swedish",
+        "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge",
+        "language_icon_URL": "https://ardslot.com/s/sv.svg"
     },
     "applePay": {
         "merchant": "Apple",
