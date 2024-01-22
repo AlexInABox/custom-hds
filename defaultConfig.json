@@ -5,11 +5,8 @@
   "location": {
     "active": false,
     "credentials": {
-      "LIFE360_USERNAME": "",
-      "LIFE360_PASSWORD": "",
       "GEOAPIFY_API_KEY": ""
-    },
-    "updateInterval": 60
+    }
   },
   "netflix": {
     "active": false,

@@ -1,62 +1,53 @@
 var presence = require('./misc/presence.js');
 
 class location {
-    constructor(username, password, apikey, updateInterval, superPresence) {
+    constructor(GEOAPIFY_API_KEY, superPresence) {
         presence = superPresence;
 
-        updateLocation(username, password, apikey);
-        setInterval(function () { updateLocation(username, password, apikey) }, updateInterval * 1000);
+        initializeServer(GEOAPIFY_API_KEY);
     }
+
+    update() { }
 }
 module.exports = location;
 
-const life360 = require('life360-node-api');
+const express = require('express');
+const app = express();
+const port = 2086; //cloudflare http port
+
 const fetch = require('node-fetch');
 var requestOptions = {
     method: 'GET',
 };
 
-async function updateLocation(username, password, apikey) {
-    console.log("\x1b[35m", "[LIFE360] Fetching location...");
-    var user;
+function initializeServer(GEOAPIFY_API_KEY) {
+    //Listen for POST requestst and search request body for the "lon" and "lat" variables
+    app.use(express.json());
 
-    for (var i = 0; i < 5; i++) { //The API is a bit unstable, so we try to login 5 times before giving up
+    app.listen(port, () => {
+        console.log("\x1b[36m", "[Location] Location is now listening on port " + port);
+    });
+
+    app.post('/', async (req, res) => {
+
+        console.log("\x1b[36m", "[Location] Received a location update request!");
+
         try {
-            let client = await life360.login(username, password)
+            await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + req.body.lat + "&lon=" + req.body.lon + "&lang=en&limit=1&format=json&apiKey=" + GEOAPIFY_API_KEY, requestOptions)
+                .then(response => response.json())
+                .then(result => {
 
-            let circles = await client.listCircles()
-
-            user = (await circles[0].listMembers())[0];
-            break;
+                    //Now we geocode the aproximate coordinates of the district inorder not to leak the exact location of the user
+                    fetch("https://api.geoapify.com/v1/geocode/search?text=" + String(result.results[0].postcode) + ", " + String(result.results[0].district) + ", " + String(result.results[0].suburb) + ", " + String(result.results[0].city) + ", " + String(result.results[0].state) + ", " + String(result.results[0].country) + "&lang=en&limit=1&format=json&apiKey=" + GEOAPIFY_API_KEY, requestOptions)
+                        .then(response => response.json())
+                        .then(result2 => {
+                            presence.patchLocation(Number(result2.results[0].lat.toFixed(2)), Number(result2.results[0].lon.toFixed(2)), result.results[0].district, result.results[0].country, result.results[0].city);
+                        })
+                });
         } catch (e) {
-            if (i == 4) {
-                console.log("\x1b[35m", "[LIFE360] Failed to login after 5 attempts, exiting...")
-                console.log("\x1b[31m", e)
-                return;
-            }
-            console.log("\x1b[35m", "[LIFE360] Something went wrong, retrying... (" + (i + 1) + " / 5)")
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.log("\x1b[35m", "[LIFE360] Failed to fetch location, due to an invalid API key. (Presumably)", e)
+            return;
         }
-    }
-    try {
-        await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + user.location.latitude + "&lon=" + user.location.longitude + "&lang=en&limit=1&format=json&apiKey=" + apikey, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-
-                //Now we geocode the aproximate coordinates of the district inorder not to leak the exact location of the user
-                fetch("https://api.geoapify.com/v1/geocode/search?text=" + String(result.results[0].postcode) + ", " + String(result.results[0].district) + ", " + String(result.results[0].suburb) + ", " + String(result.results[0].city) + ", " + String(result.results[0].state) + ", " + String(result.results[0].country) + "&lang=en&limit=1&format=json&apiKey=" + apikey, requestOptions)
-                    .then(response => response.json())
-                    .then(result2 => {
-                        presence.patchLocation(result2.results[0].lat, result2.results[0].lon, result.results[0].district, result.results[0].country, result.results[0].city);
-                    })
-            });
-    } catch (e) {
-        console.log("\x1b[35m", "[LIFE360] Failed to fetch location, due to an invalid API key. (Presumably)", e)
-        //Purge sensitive data
-        user = null;
-        return;
-    }
-    console.log("\x1b[35m", "[LIFE360] Successfully fetched location!")
-    //Purge sensitive data
-    user = null;
+        res.sendStatus(200);
+    })
 }

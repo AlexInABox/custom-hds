@@ -42,10 +42,10 @@ function initializeModules() {
         console.log("\x1b[36m", "[HDS] Initializing HDS");
         hds = new hds(presence);
     }
-    if (false) { //life360 stopped working and is not providing a public API. (https://github.com/home-assistant/core/issues/106967) TODO: Find alternative
+    if (validModules.location) {
         // Initialize location
-        console.log("\x1b[35m", "[LIFE360] Initializing location");
-        location = new location(cfg.location.credentials.LIFE360_USERNAME, cfg.location.credentials.LIFE360_PASSWORD, cfg.location.credentials.GEOAPIFY_API_KEY, cfg.location.updateInterval, presence);
+        console.log("\x1b[35m", "[LOCATION] Initializing location");
+        location = new location(cfg.location.credentials.GEOAPIFY_API_KEY, presence);
     }
     if (validModules.netflix) {
         // Initialize Netflix

@@ -29,11 +29,8 @@ class config {
 
         config_valid.location = realConfig.location.active;
 
-        if (realConfig.location.active && (realConfig.location.credentials.LIFE360_USERNAME === "" || realConfig.location.credentials.LIFE360_PASSWORD === "" || realConfig.location.credentials.GEOAPIFY_API_KEY === "")) {
+        if (realConfig.location.active && realConfig.location.credentials.GEOAPIFY_API_KEY === "") {
             config_valid.location = false;
-        }
-        if (realConfig.location.updateInterval === "") {
-            realConfig.location.updateInterval = 30;
         }
 
         config_valid.netflix = realConfig.netflix.active;
