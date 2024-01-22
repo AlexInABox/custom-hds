@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 2052 2082
+EXPOSE 2052 2082 2086
 
 CMD ["npm", "start"]
