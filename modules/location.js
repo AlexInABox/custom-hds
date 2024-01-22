@@ -10,6 +10,9 @@ class location {
     update() { }
 }
 module.exports = location;
+//We open a server to listen for POST requests which contain the location of the user in their body stored in the "lon" and "lat" variables.
+//The aproach here is to use a mobile app like "OwnTracks" to send the location of the user to us the server via HTTP POST requests.
+
 
 const express = require('express');
 const app = express();
