@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/node": "^18.11.10",
     "cheerio": "^1.0.0-rc.12",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "fs": "^0.0.1-security",
     "life360-node-api": "^0.0.10",
     "node-fetch": "2.6.12",
