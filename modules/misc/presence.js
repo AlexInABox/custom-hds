@@ -58,6 +58,11 @@ class presence {
     }
 
     patchNetflix(title, defaultImage, date, showId) {
+        var netflix = realPresence.netflix;
+
+        if (netflix.lastWatched.title == title && netflix.lastWatched.defaultImage == String(defaultImage) && netflix.lastWatched.date == date && netflix.lastWatched.showId == Number(showId))
+            return;
+
         realPresence.netflix.lastWatched.title = title;
         realPresence.netflix.lastWatched.defaultImage = String(defaultImage);
         realPresence.netflix.lastWatched.date = date;
