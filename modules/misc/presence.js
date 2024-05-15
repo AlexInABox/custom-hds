@@ -77,6 +77,11 @@ class presence {
     }
 
     patchValorant(username, rank, rr) {
+        var valorant = realPresence.valorant;
+
+        if (valorant.username == username && valorant.rank == rank && valorant.rr == rr)
+            return;
+
         realPresence.valorant.username = username;
         realPresence.valorant.rank = rank;
         realPresence.valorant.rr = rr;
