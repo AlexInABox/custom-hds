@@ -59,6 +59,9 @@ class config {
         if (realConfig.valorant.active && ((realConfig.valorant.riotID === "" || realConfig.valorant.riotTag === "") && realConfig.valorant.riotPUUID === "")) {
             config_valid.valorant = false;
         }
+        if (realConfig.valorant.henrikDevAPIKey === "") {
+            config_valid.valorant = false;
+        }
         if (realConfig.valorant.updateInterval === "") {
             realConfig.valorant.updateInterval = 60;
         }

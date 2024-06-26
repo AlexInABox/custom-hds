@@ -1,5 +1,7 @@
 var presence = require('./misc/presence.js');
 var config = require('./misc/config.js');
+var henrikDevAPIKey;
+
 class valorant {
     riotPUUID;
     riotID;
@@ -9,9 +11,10 @@ class valorant {
     idandtag_complete = false;
     puuid_exists = false;
 
-    constructor(riotPUUID, riotID, riotTag, updateInterval, superPresence, superConfig) {
+    constructor(henrikDevAPIKey, riotPUUID, riotID, riotTag, updateInterval, superPresence, superConfig) {
         presence = superPresence;
         config = superConfig;
+        this.henrikDevAPIKey = henrikDevAPIKey;
         this.riotPUUID = riotPUUID;
         this.riotID = riotID;
         this.riotTag = riotTag;
@@ -76,7 +79,11 @@ async function getValorantData(puuid) {
 async function getValorantUsernameAndRegion(puuid) {
     apiurl = "https://api.henrikdev.xyz/valorant/v1/by-puuid/account/" + puuid;
 
-    const response = await fetch(apiurl);
+    const response = await fetch(apiurl, {
+        headers: {
+            'Authorization': henrikDevAPIKey
+        }
+    });
     const json = await response.json();
 
     const name = json.data.name;
@@ -92,7 +99,11 @@ async function getValorantDataByIdAndTag(id, tag) {
     try {
         apiurl = "https://api.henrikdev.xyz/valorant/v1/account/" + id + "/" + tag;
 
-        const response = await fetch(apiurl);
+        const response = await fetch(apiurl, {
+            headers: {
+                'Authorization': henrikDevAPIKey
+            }
+        });
         const json = await response.json();
 
         console.log("\x1b[35m", "[VALORANT] Fetched PUUID: " + json.data.puuid + "\x1b[0m");
@@ -107,7 +118,11 @@ async function getValorantDataByIdAndTag(id, tag) {
 async function getValorantRank(puuid, region) {
     apiurl = "https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr/" + region + "/" + puuid;
 
-    const response = await fetch(apiurl);
+    const response = await fetch(apiurl, {
+        headers: {
+            'Authorization': henrikDevAPIKey
+        }
+    });
     const json = await response.json();
 
     return [json.data.currenttierpatched, json.data.ranking_in_tier]

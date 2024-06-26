@@ -23,6 +23,7 @@
   },
   "valorant": {
     "active": false,
+    "henrikDevAPIKey": "",
     "riotPUUID": "",
     "riotID": "",
     "riotTag": "",

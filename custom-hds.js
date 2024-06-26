@@ -60,7 +60,7 @@ function initializeModules() {
     if (validModules.valorant) {
         // Initialize Valorant
         console.log("\x1b[34m", "[VALORANT] Initializing Valorant");
-        valorant = new valorant(cfg.valorant.riotPUUID, cfg.valorant.riotID, cfg.valorant.riotTag, cfg.valorant.updateInterval, presence, config);
+        valorant = new valorant(cfg.valorant.henrikDevAPIKey, cfg.valorant.riotPUUID, cfg.valorant.riotID, cfg.valorant.riotTag, cfg.valorant.updateInterval, presence, config);
     }
     if (validModules.discord) {
         // Initialize Discord
