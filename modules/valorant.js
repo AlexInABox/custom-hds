@@ -1,6 +1,6 @@
 var presence = require('./misc/presence.js');
 var config = require('./misc/config.js');
-var henrikDevAPIKey;
+var globalHenrikDevAPIKey;
 
 class valorant {
     riotPUUID;
@@ -14,7 +14,7 @@ class valorant {
     constructor(henrikDevAPIKey, riotPUUID, riotID, riotTag, updateInterval, superPresence, superConfig) {
         presence = superPresence;
         config = superConfig;
-        this.henrikDevAPIKey = henrikDevAPIKey;
+        globalHenrikDevAPIKey = henrikDevAPIKey;
         this.riotPUUID = riotPUUID;
         this.riotID = riotID;
         this.riotTag = riotTag;
@@ -81,7 +81,7 @@ async function getValorantUsernameAndRegion(puuid) {
 
     const response = await fetch(apiurl, {
         headers: {
-            'Authorization': henrikDevAPIKey
+            'Authorization': globalHenrikDevAPIKey
         }
     });
     const json = await response.json();
@@ -101,7 +101,7 @@ async function getValorantDataByIdAndTag(id, tag) {
 
         const response = await fetch(apiurl, {
             headers: {
-                'Authorization': henrikDevAPIKey
+                'Authorization': globalHenrikDevAPIKey
             }
         });
         const json = await response.json();
@@ -120,7 +120,7 @@ async function getValorantRank(puuid, region) {
 
     const response = await fetch(apiurl, {
         headers: {
-            'Authorization': henrikDevAPIKey
+            'Authorization': globalHenrikDevAPIKey
         }
     });
     const json = await response.json();
