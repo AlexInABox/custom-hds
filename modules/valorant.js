@@ -1,5 +1,7 @@
 var presence = require('./misc/presence.js');
 var config = require('./misc/config.js');
+var globalHenrikDevAPIKey;
+
 class valorant {
     riotPUUID;
     riotID;
@@ -9,9 +11,10 @@ class valorant {
     idandtag_complete = false;
     puuid_exists = false;
 
-    constructor(riotPUUID, riotID, riotTag, updateInterval, superPresence, superConfig) {
+    constructor(henrikDevAPIKey, riotPUUID, riotID, riotTag, updateInterval, superPresence, superConfig) {
         presence = superPresence;
         config = superConfig;
+        globalHenrikDevAPIKey = henrikDevAPIKey;
         this.riotPUUID = riotPUUID;
         this.riotID = riotID;
         this.riotTag = riotTag;
@@ -51,25 +54,36 @@ module.exports = valorant;
 const fetch = require('node-fetch');
 
 async function getValorantData(puuid) {
-    config.setValorantPUUID(puuid);
-    var idtag, nameandregion, region, rankandRR, rank, rr;
+    try {
+        config.setValorantPUUID(puuid);
+        var idtag, nameandregion, region, rankandRR, rank, rr;
 
-    nameandregion = await getValorantUsernameAndRegion(puuid);
-    idtag = nameandregion[0]; //name#tag
-    config.setValorantRiotID(String(idtag).split("#")[0]);
-    config.setValorantRiotTag(String(idtag).split("#")[1]);
-    region = nameandregion[1]; //eu
-    rankandRR = await getValorantRank(puuid, region); //Platinum 1 44RR
-    rank = rankandRR[0]; //Platinum 1
-    rr = rankandRR[1]; //44RR
+        nameandregion = await getValorantUsernameAndRegion(puuid);
+        idtag = nameandregion[0]; //name#tag
+        config.setValorantRiotID(String(idtag).split("#")[0]);
+        config.setValorantRiotTag(String(idtag).split("#")[1]);
+        region = nameandregion[1]; //eu
+        rankandRR = await getValorantRank(puuid, region); //Platinum 1 44RR
+        rank = rankandRR[0]; //Platinum 1
+        rr = rankandRR[1]; //44RR
 
-    presence.patchValorant(idtag, rank, rr);
+        presence.patchValorant(idtag, rank, rr);
+    } catch (e) {
+        console.log("\x1b[35m", "[VALORANT] Failed to fetch Valorant data using the PUUID, probably because the PUUID is invalid.");
+        console.log("\x1b[35m", "[VALORANT] Trying to repair the PUUID by using the Riot ID and Tag...");
+        getValorantDataByIdAndTag(config.getValorantRiotID(), config.getValorantRiotTag());
+        return;
+    }
 }
 
 async function getValorantUsernameAndRegion(puuid) {
     apiurl = "https://api.henrikdev.xyz/valorant/v1/by-puuid/account/" + puuid;
 
-    const response = await fetch(apiurl);
+    const response = await fetch(apiurl, {
+        headers: {
+            'Authorization': globalHenrikDevAPIKey
+        }
+    });
     const json = await response.json();
 
     const name = json.data.name;
@@ -82,20 +96,33 @@ async function getValorantUsernameAndRegion(puuid) {
 }
 
 async function getValorantDataByIdAndTag(id, tag) {
-    apiurl = "https://api.henrikdev.xyz/valorant/v1/account/" + id + "/" + tag;
+    try {
+        apiurl = "https://api.henrikdev.xyz/valorant/v1/account/" + id + "/" + tag;
 
-    const response = await fetch(apiurl);
-    const json = await response.json();
+        const response = await fetch(apiurl, {
+            headers: {
+                'Authorization': globalHenrikDevAPIKey
+            }
+        });
+        const json = await response.json();
 
-    console.log("\x1b[35m", "[VALORANT] Fetched PUUID: " + json.data.puuid + "\x1b[0m");
-    getValorantData(json.data.puuid);
+        console.log("\x1b[35m", "[VALORANT] Fetched PUUID: " + json.data.puuid + "\x1b[0m");
+        getValorantData(json.data.puuid);
+    } catch (e) {
+        console.log("\x1b[35m", "[VALORANT] Failed to fetch Valorant data, probably because the Riot ID and Tag are invalid.");
+        return;
+    }
 }
 
 
 async function getValorantRank(puuid, region) {
     apiurl = "https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr/" + region + "/" + puuid;
 
-    const response = await fetch(apiurl);
+    const response = await fetch(apiurl, {
+        headers: {
+            'Authorization': globalHenrikDevAPIKey
+        }
+    });
     const json = await response.json();
 
     return [json.data.currenttierpatched, json.data.ranking_in_tier]

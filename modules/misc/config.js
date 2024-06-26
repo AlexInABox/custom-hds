@@ -9,6 +9,7 @@ var config_valid = {
     "valorant": false,
     "discord": false,
     "duolingo": false,
+    "applePay": false,
     "youtube": {
         "videos": false,
         "music": false,
@@ -28,11 +29,8 @@ class config {
 
         config_valid.location = realConfig.location.active;
 
-        if (realConfig.location.active && (realConfig.location.credentials.LIFE360_USERNAME === "" || realConfig.location.credentials.LIFE360_PASSWORD === "" || realConfig.location.credentials.GEOAPIFY_API_KEY === "")) {
+        if (realConfig.location.active && realConfig.location.credentials.GEOAPIFY_API_KEY === "") {
             config_valid.location = false;
-        }
-        if (realConfig.location.updateInterval === "") {
-            realConfig.location.updateInterval = 30;
         }
 
         config_valid.netflix = realConfig.netflix.active;
@@ -61,6 +59,9 @@ class config {
         if (realConfig.valorant.active && ((realConfig.valorant.riotID === "" || realConfig.valorant.riotTag === "") && realConfig.valorant.riotPUUID === "")) {
             config_valid.valorant = false;
         }
+        if (realConfig.valorant.henrikDevAPIKey === "") {
+            config_valid.valorant = false;
+        }
         if (realConfig.valorant.updateInterval === "") {
             realConfig.valorant.updateInterval = 60;
         }
@@ -82,6 +83,8 @@ class config {
         if (realConfig.duolingo.updateInterval === "") {
             realConfig.duolingo.updateInterval = 120;
         }
+
+        config_valid.applePay = realConfig.applePay.active;
 
         config_valid.youtube.videos = realConfig.youtube.videos.active;
         config_valid.youtube.music = realConfig.youtube.music.active;

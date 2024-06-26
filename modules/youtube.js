@@ -189,6 +189,8 @@ async function getLatestYTMusicThumbnail(history) {
             "https://i.ytimg.com/vi/" + videoId + "/3.jpg",
             "https://i.ytimg.com/vi/" + videoId + "/0.jpg"
         ]
+
+        await intialFetchOfDefaultThumbnail();
         for (let i = 0; i < thumbnailURLs.length; i++) {
             try {
                 if (await isNotDefault(thumbnailURLs[i])) {
@@ -204,16 +206,23 @@ async function getLatestYTMusicThumbnail(history) {
     ))
 }
 
-function isNotDefault(url) { //get the uint8Array buffer and compare it to the default buffer string ("lorem ipsum")
-    return new Promise(async (res) => {
+var defaultThumbnailUnit8Array;
+
+function intialFetchOfDefaultThumbnail() {
+    return new Promise(async (finish) => {
         const defaultResponse = await fetch("https://i.ytimg.com/vi/vi/0/maxresdefault.jpg"); //TODO: only fetch once (or once per iteration)
         const defaultBuffer = await defaultResponse.arrayBuffer();
-        const defaultUint8Array = new Uint8Array(defaultBuffer);
+        defaultThumbnailUnit8Array = new Uint8Array(defaultBuffer);
+        finish();
+    })
+}
 
+function isNotDefault(url) { //get the uint8Array buffer and compare it to the default buffer string ("lorem ipsum")
+    return new Promise(async (res) => {
         const response = await fetch(url);
         const buffer = await response.arrayBuffer();
         const uint8Array = new Uint8Array(buffer);
-        res(uint8Array.toString() != defaultUint8Array.toString())
+        res(uint8Array.toString() != defaultThumbnailUnit8Array.toString())
     })
 }
 //End of YTMusic API functions

@@ -16,6 +16,16 @@ class presence {
 
         patchPresence();
     }
+    patchHDSHeartRateWithTimestamp(heartRate, timestamp) {
+        realPresence.health.heartRate = heartRate;
+
+        realPresence.health.lastUpdate.heartRate = timestamp;
+
+        patchPresence();
+    }
+    getHDSHeartRateTimestamp() {
+        return realPresence.health.lastUpdate.heartRate;
+    }
 
     patchHDSSpeed(speed) {
         console.log("\x1b[36m", "[HDS] Received speed: " + speed);
@@ -48,6 +58,11 @@ class presence {
     }
 
     patchNetflix(title, defaultImage, date, showId) {
+        var netflix = realPresence.netflix;
+
+        if (netflix.lastWatched.title == title && netflix.lastWatched.defaultImage == String(defaultImage) && netflix.lastWatched.date == date && netflix.lastWatched.showId == Number(showId))
+            return;
+
         realPresence.netflix.lastWatched.title = title;
         realPresence.netflix.lastWatched.defaultImage = String(defaultImage);
         realPresence.netflix.lastWatched.date = date;
@@ -67,6 +82,11 @@ class presence {
     }
 
     patchValorant(username, rank, rr) {
+        var valorant = realPresence.valorant;
+
+        if (valorant.username == username && valorant.rank == rank && valorant.rr == rr)
+            return;
+
         realPresence.valorant.username = username;
         realPresence.valorant.rank = rank;
         realPresence.valorant.rr = rr;
@@ -86,11 +106,13 @@ class presence {
         patchPresence();
     }
 
-    patchDuolingo(username, streak, xp, language) {
+    patchDuolingo(username, streak, xp, language, language_icon_URL, avatar) {
         realPresence.duolingo.username = username;
         realPresence.duolingo.streak = streak;
         realPresence.duolingo.xp = xp;
         realPresence.duolingo.language = language;
+        realPresence.duolingo.language_icon_URL = language_icon_URL;
+        realPresence.duolingo.avatar = avatar;
 
         realPresence.duolingo.lastUpdate = Date.now();
 
@@ -99,6 +121,16 @@ class presence {
 
     getDuolingo() {
         return realPresence.duolingo;
+    }
+
+    patchApplePay(merchant, amount, cardOrPass) {
+        realPresence.applePay.merchant = merchant;
+        realPresence.applePay.amount = amount;
+        realPresence.applePay.cardOrPass = cardOrPass;
+
+        realPresence.applePay.lastUpdate = Date.now();
+
+        patchPresence();
     }
 
     patchYouTubeMusic(title, artist, url, thumbnail, date) {

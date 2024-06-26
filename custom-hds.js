@@ -7,6 +7,9 @@ var plex = require('./modules/plex.js');
 var valorant = require('./modules/valorant.js');
 var discord = require('./modules/discord.js');
 var duolingo = require('./modules/duolingo.js');
+var applePay = require('./modules/applePay.js');
+//var revolut = require('./modules/revolut.js');
+//var screenTime = require('./modules/screenTime.js');
 var youtube = require('./modules/youtube.js');
 var spotify = require('./modules/spotify.js');
 
@@ -41,8 +44,8 @@ function initializeModules() {
     }
     if (validModules.location) {
         // Initialize location
-        console.log("\x1b[35m", "[LIFE360] Initializing location");
-        location = new location(cfg.location.credentials.LIFE360_USERNAME, cfg.location.credentials.LIFE360_PASSWORD, cfg.location.credentials.GEOAPIFY_API_KEY, cfg.location.updateInterval, presence);
+        console.log("\x1b[35m", "[LOCATION] Initializing location");
+        location = new location(cfg.location.credentials.GEOAPIFY_API_KEY, presence);
     }
     if (validModules.netflix) {
         // Initialize Netflix
@@ -57,7 +60,7 @@ function initializeModules() {
     if (validModules.valorant) {
         // Initialize Valorant
         console.log("\x1b[34m", "[VALORANT] Initializing Valorant");
-        valorant = new valorant(cfg.valorant.riotPUUID, cfg.valorant.riotID, cfg.valorant.riotTag, cfg.valorant.updateInterval, presence, config);
+        valorant = new valorant(cfg.valorant.henrikDevAPIKey, cfg.valorant.riotPUUID, cfg.valorant.riotID, cfg.valorant.riotTag, cfg.valorant.updateInterval, presence, config);
     }
     if (validModules.discord) {
         // Initialize Discord
@@ -68,6 +71,11 @@ function initializeModules() {
         // Initialize Duolingo
         console.log("\x1b[34m", "[DUOLINGO] Initializing Duolingo");
         duolingo = new duolingo(cfg.duolingo.username, cfg.duolingo.cookie, cfg.duolingo.updateInterval, presence);
+    }
+    if (validModules.applePay) {
+        // Initialize Duolingo
+        console.log("\x1b[34m", "[ApplePay] Initializing ApplePay");
+        applePay = new applePay(presence);
     }
     if (validModules.youtube.videos || validModules.youtube.music) {
         // Initialize YouTube with validModules.youtube.videos and validModules.youtube.music

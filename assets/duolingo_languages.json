@@ -1,0 +1,304 @@
+{
+  "languages": [
+    {
+      "code": "asl",
+      "url": "https://ardslot.com/s/asl.svg",
+      "name": "american sign language"
+    },
+    {
+      "code": "ar",
+      "url": "https://ardslot.com/s/ar.svg",
+      "name": "arabic"
+    },
+    {
+      "code": "ay",
+      "url": "https://ardslot.com/s/ay.svg",
+      "name": "aymara"
+    },
+    {
+      "code": "eu",
+      "url": "https://ardslot.com/s/eu.svg",
+      "name": "basque"
+    },
+    {
+      "code": "bn",
+      "url": "https://ardslot.com/s/bn.svg",
+      "name": "bengali"
+    },
+    {
+      "code": "bb",
+      "url": "https://ardslot.com/s/bb.svg",
+      "name": "berber"
+    },
+    {
+      "code": "ca",
+      "url": "https://ardslot.com/s/ca.svg",
+      "name": "catalan"
+    },
+    {
+      "code": "ck",
+      "url": "https://ardslot.com/s/ck.svg",
+      "name": "cherokee"
+    },
+    {
+      "code": "zs",
+      "url": "https://ardslot.com/s/zs.svg",
+      "name": "chinese"
+    },
+    {
+      "code": "cs",
+      "url": "https://ardslot.com/s/cs.svg",
+      "name": "czech"
+    },
+    {
+      "code": "da",
+      "url": "https://ardslot.com/s/da.svg",
+      "name": "danish"
+    },
+    {
+      "code": "dn",
+      "url": "https://ardslot.com/s/dn.svg",
+      "name": "dutch"
+    },
+    {
+      "code": "en",
+      "url": "https://ardslot.com/s/en.svg",
+      "name": "english"
+    },
+    {
+      "code": "eo",
+      "url": "https://ardslot.com/s/eo.svg",
+      "name": "esperanto"
+    },
+    {
+      "code": "fi",
+      "url": "https://ardslot.com/s/fi.svg",
+      "name": "finnish"
+    },
+    {
+      "code": "fr",
+      "url": "https://ardslot.com/s/fr.svg",
+      "name": "french"
+    },
+    {
+      "code": "gl",
+      "url": "https://ardslot.com/s/gl.svg",
+      "name": "galician"
+    },
+    {
+      "code": "de",
+      "url": "https://ardslot.com/s/de.svg",
+      "name": "german"
+    },
+    {
+      "code": "gn",
+      "url": "https://ardslot.com/s/gn.svg",
+      "name": "guarani"
+    },
+    {
+      "code": "gr",
+      "url": "https://ardslot.com/s/gr.svg",
+      "name": "haitian creole"
+    },
+    {
+      "code": "hw",
+      "url": "https://ardslot.com/s/hw.svg",
+      "name": "hawaiian"
+    },
+    {
+      "code": "he",
+      "url": "https://ardslot.com/s/he.svg",
+      "name": "hebrew"
+    },
+    {
+      "code": "hv",
+      "url": "https://ardslot.com/s/hv.svg",
+      "name": "high valyrian"
+    },
+    {
+      "code": "hi",
+      "url": "https://ardslot.com/s/hi.svg",
+      "name": "hindi"
+    },
+    {
+      "code": "hu",
+      "url": "https://ardslot.com/s/hu.svg",
+      "name": "hungarian"
+    },
+    {
+      "code": "id",
+      "url": "https://ardslot.com/s/id.svg",
+      "name": "indonesian"
+    },
+    {
+      "code": "ga",
+      "url": "https://ardslot.com/s/ga.svg",
+      "name": "irish"
+    },
+    {
+      "code": "it",
+      "url": "https://ardslot.com/s/it.svg",
+      "name": "italian"
+    },
+    {
+      "code": "ja",
+      "url": "https://ardslot.com/s/ja.svg",
+      "name": "japanese"
+    },
+    {
+      "code": "kl",
+      "url": "https://ardslot.com/s/kl.svg",
+      "name": "klingon"
+    },
+    {
+      "code": "ko",
+      "url": "https://ardslot.com/s/ko.svg",
+      "name": "korean"
+    },
+    {
+      "code": "la",
+      "url": "https://ardslot.com/s/la.svg",
+      "name": "latin"
+    },
+    {
+      "code": "mg",
+      "url": "https://ardslot.com/s/mg.svg",
+      "name": "malagasy"
+    },
+    {
+      "code": "mi",
+      "url": "https://ardslot.com/s/mi.svg",
+      "name": "maori"
+    },
+    {
+      "code": "mh",
+      "url": "https://ardslot.com/s/mh.svg",
+      "name": "marshallese"
+    },
+    {
+      "code": "nv",
+      "url": "https://ardslot.com/s/nv.svg",
+      "name": "navajo"
+    },
+    {
+      "code": "nb",
+      "url": "https://ardslot.com/s/nb.svg",
+      "name": "norgewian"
+    },
+    {
+      "code": "oc",
+      "url": "https://ardslot.com/s/oc.svg",
+      "name": "occitan"
+    },
+    {
+      "code": "pl",
+      "url": "https://ardslot.com/s/pl.svg",
+      "name": "polish"
+    },
+    {
+      "code": "pt",
+      "url": "https://ardslot.com/s/pt.svg",
+      "name": "portuguese"
+    },
+    {
+      "code": "qu",
+      "url": "https://ardslot.com/s/qu.svg",
+      "name": "quechua"
+    },
+    {
+      "code": "ro",
+      "url": "https://ardslot.com/s/ro.svg",
+      "name": "romanian"
+    },
+    {
+      "code": "ru",
+      "url": "https://ardslot.com/s/ru.svg",
+      "name": "russian"
+    },
+    {
+      "code": "gd",
+      "url": "https://ardslot.com/s/gd.svg",
+      "name": "scottish gaelic"
+    },
+    {
+      "code": "dk",
+      "url": "https://ardslot.com/s/dk.svg",
+      "name": "sioux"
+    },
+    {
+      "code": "es",
+      "url": "https://ardslot.com/s/es.svg",
+      "name": "spanish"
+    },
+    {
+      "code": "sw",
+      "url": "https://ardslot.com/s/sw.svg",
+      "name": "swahili"
+    },
+    {
+      "code": "sv",
+      "url": "https://ardslot.com/s/sv.svg",
+      "name": "swedish"
+    },
+    {
+      "code": "tl",
+      "url": "https://ardslot.com/s/tl.svg",
+      "name": "tagalog"
+    },
+    {
+      "code": "th",
+      "url": "https://ardslot.com/s/th.svg",
+      "name": "thai"
+    },
+    {
+      "code": "bo",
+      "url": "https://ardslot.com/s/bo.svg",
+      "name": "tibetan"
+    },
+    {
+      "code": "tp",
+      "url": "https://ardslot.com/s/tp.svg",
+      "name": "toki pona"
+    },
+    {
+      "code": "tr",
+      "url": "https://ardslot.com/s/tr.svg",
+      "name": "turkish"
+    },
+    {
+      "code": "uk",
+      "url": "https://ardslot.com/s/uk.svg",
+      "name": "ukranian"
+    },
+    {
+      "code": "vi",
+      "url": "https://ardslot.com/s/vi.svg",
+      "name": "vietnamese"
+    },
+    {
+      "code": "cy",
+      "url": "https://ardslot.com/s/cy.svg",
+      "name": "welsh"
+    },
+    {
+      "code": "xh",
+      "url": "https://ardslot.com/s/xh.svg",
+      "name": "xhosa"
+    },
+    {
+      "code": "yi",
+      "url": "https://ardslot.com/s/yi.svg",
+      "name": "yiddish"
+    },
+    {
+      "code": "yo",
+      "url": "https://ardslot.com/s/yo.svg",
+      "name": "yoruba"
+    },
+    {
+      "code": "zu",
+      "url": "https://ardslot.com/s/zu.svg",
+      "name": "zulu"
+    }
+  ]
+}

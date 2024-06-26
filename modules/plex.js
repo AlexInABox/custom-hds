@@ -20,8 +20,21 @@ async function updateplex(serverURL, token, username) {
     var activeSessionsURL = "http://" + serverURL + "/status/sessions?X-Plex-Token=" + token;
     var title, cover, publicURL;
 
-    const response = await fetch(activeSessionsURL); //get xml
-    const data = await new xml2js.Parser().parseStringPromise(await response.text());
+    let response, data;
+    try {
+        response = await fetch(activeSessionsURL); //get xml
+        data = await new xml2js.Parser().parseStringPromise(await response.text());
+    } catch (e) {
+        if (e.code == "ECONNREFUSED") { //server offline or maintenance mode
+            console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the server is offline or in maintenance mode.")
+        } else if (e.code == "ENOTFOUND") { //server not found
+            console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the server URL is incorrect.")
+        }
+        else {
+            console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the token expired.")
+        }
+        return;
+    }
 
     var found = false;
     try {
@@ -33,7 +46,7 @@ async function updateplex(serverURL, token, username) {
             for (var i = 0; i < data.MediaContainer.$.size; i++) {
                 if (data.MediaContainer.Video[i].User[0].$.title == username) {
                     console.log("\x1b[31m", "[PLEX] Found active session with the username " + username + "!");
-                    if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies") {
+                    if (data.MediaContainer.Video[i].$.librarySectionTitle == "Movies" || data.MediaContainer.Video[i].$.librarySectionTitle == "Movies (Anime)") { //TODO: Make the user set all the categories that are movies OR try both and select the one thats not undefined?
                         title = data.MediaContainer.Video[i].$.title;
                         cover = data.MediaContainer.Video[i].$.thumb;
                     } else {
@@ -77,25 +90,30 @@ async function saveCoverForPublicViewing(serverURL, cover, token) {
     const coverSplit = String(cover).split("/");
     const filename = coverSplit[coverSplit.length - 1];
 
-    fetch(imageUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const imagePath = path.join(directoryPath, filename + ".jpg");
-            const writer = fs.createWriteStream(imagePath);
-            response.body.pipe(writer);
+    try {
+        fetch(imageUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const imagePath = path.join(directoryPath, filename + ".jpg");
+                const writer = fs.createWriteStream(imagePath);
+                response.body.pipe(writer);
 
-            return new Promise((resolve, reject) => {
-                writer.on('finish', resolve);
-                writer.on('error', reject);
+                return new Promise((resolve, reject) => {
+                    writer.on('finish', resolve);
+                    writer.on('error', reject);
+                });
+            })
+            .then(() => {
+                console.log("\x1b[31m", "[PLEX] Successfully saved cover for public viewing!");
+            })
+            .catch(error => {
+                console.error("\x1b[31m", "[PLEX] Failed to save cover for public viewing!", error);
             });
-        })
-        .then(() => {
-            console.log("\x1b[31m", "[PLEX] Successfully saved cover for public viewing!");
-        })
-        .catch(error => {
-            console.error("\x1b[31m", "[PLEX] Failed to save cover for public viewing!", error);
-        });
 
+    } catch (e) {
+        console.log("\x1b[31m", "[PLEX] Failed to save cover for public viewing!", e);
+        return;
+    }
 }

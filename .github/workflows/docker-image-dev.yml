@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Image CI - dev
 
 on:
   push:
@@ -28,10 +28,19 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_TOKEN }}
     
-      - name: Build and push
+      - name: Build and push -slim
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: |
             alexinabox/custom-hds:dev
             ghcr.io/alexinabox/custom-hds:dev
+
+      - name: Build and push -alpine
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          file: Dockerfile.alpine
+          tags: |
+            alexinabox/custom-hds:dev-alpine
+            ghcr.io/alexinabox/custom-hds:dev-alpine

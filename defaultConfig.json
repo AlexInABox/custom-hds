@@ -5,17 +5,14 @@
   "location": {
     "active": false,
     "credentials": {
-      "LIFE360_USERNAME": "",
-      "LIFE360_PASSWORD": "",
       "GEOAPIFY_API_KEY": ""
-    },
-    "updateInterval": 60
+    }
   },
   "netflix": {
     "active": false,
     "cookie": "",
     "apilayer_apikey": "",
-    "updateInterval": 600
+    "updateInterval": 900
   },
   "plex": {
     "active": false,
@@ -26,6 +23,7 @@
   },
   "valorant": {
     "active": false,
+    "henrikDevAPIKey": "",
     "riotPUUID": "",
     "riotID": "",
     "riotTag": "",
@@ -41,6 +39,9 @@
     "username": "",
     "cookie": "",
     "updateInterval": 120
+  },
+  "applePay": {
+    "active": false
   },
   "youtube": {
     "music": {
