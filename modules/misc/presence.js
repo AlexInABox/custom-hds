@@ -57,7 +57,7 @@ class presence {
         patchPresence();
     }
 
-    patchNetflix(title, defaultImage, date, showId) {
+    patchNetflix(title, defaultImage, blurhash, date, showId) {
         var netflix = realPresence.netflix;
 
         if (netflix.lastWatched.title == title && netflix.lastWatched.defaultImage == String(defaultImage) && netflix.lastWatched.date == date && netflix.lastWatched.showId == Number(showId))
@@ -65,6 +65,7 @@ class presence {
 
         realPresence.netflix.lastWatched.title = title;
         realPresence.netflix.lastWatched.defaultImage = String(defaultImage);
+        realPresence.netflix.lastWatched.blurhash = String(blurhash);
         realPresence.netflix.lastWatched.date = date;
         realPresence.netflix.lastWatched.showId = Number(showId);
 
@@ -73,9 +74,10 @@ class presence {
         patchPresence();
     }
 
-    patchPlex(title, cover, publicURL) {
+    patchPlex(title, cover, blurhash, publicURL) {
         realPresence.plex.lastWatched.title = title;
         realPresence.plex.lastWatched.cover = cover;
+        realPresence.plex.lastWatched.blurhash = cover;
         realPresence.plex.lastWatched.publicURL = publicURL;
 
         realPresence.plex.lastWatched.lastUpdate = Date.now();
@@ -133,21 +135,23 @@ class presence {
         patchPresence();
     }
 
-    patchYouTubeMusic(title, artist, url, thumbnail, date) {
+    patchYouTubeMusic(title, artist, url, thumbnail, blurhash, date) {
         realPresence.youtube.music.title = title;
         realPresence.youtube.music.artist = artist;
         realPresence.youtube.music.url = url;
         realPresence.youtube.music.thumbnail = thumbnail;
+        realPresence.youtube.music.blurhash = blurhash;
         realPresence.youtube.music.lastUpdate = date;
 
         patchPresence();
     }
 
-    patchYouTubeVideo(title, channel, url, thumbnail, date) {
+    patchYouTubeVideo(title, channel, url, thumbnail, blurhash, date) {
         realPresence.youtube.video.title = title;
         realPresence.youtube.video.channel = channel;
         realPresence.youtube.video.url = url;
         realPresence.youtube.video.thumbnail = thumbnail;
+        realPresence.youtube.music.blurhash = blurhash;
         realPresence.youtube.video.lastUpdate = date;
 
         patchPresence();

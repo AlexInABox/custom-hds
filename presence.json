@@ -19,26 +19,28 @@
     },
     "netflix": {
         "lastWatched": {
-            "title": "",
-            "date": "",
-            "showId": null,
-            "defaultImage": "undefined",
-            "lastUpdate": 1701024579599
+            "title": "The Glory: Season 1: \"Episode 2\"",
+            "date": "28/06/2024",
+            "showId": 81519223,
+            "defaultImage": "https://occ-0-3947-2567.1.nflxso.net/dnm/api/v6/WNk1mr9x_Cd_2itp6pUM7-lXMJg/AAAABZAPfNI5AiWKMgNDnH699bYnuf806rN4CcCSmTAv3_30_3Sl-UOKnGk-2thrCQIHDXWmsp0mOAMfVKtFvp8491dnl5hAILH0gRqZPHOzRa8xEm3Os1Eg9vblVqB359QT8Wu6Pg.jpg?r=a46",
+            "lastUpdate": 1719994536870,
+            "blurhash": "UM8zp3-q-@o$-re,xvWBM_ISacn$W@RioMxb"
         }
     },
     "plex": {
         "lastWatched": {
-            "cover": "/modules/public/plex_covers/1690299824.jpg",
-            "lastUpdate": 1690491274599,
-            "title": "Blue Period: Awakening to the Joy of Painting",
-            "publicURL": ""
+            "cover": "/modules/public/plex_covers/1718848319.jpg",
+            "lastUpdate": 1719996740689,
+            "title": "Cowboy Bebop: Mushroom Samba",
+            "publicURL": "",
+            "blurhash": "/modules/public/plex_covers/1718848319.jpg"
         }
     },
     "valorant": {
-        "username": "Chiwooo#cutie",
-        "rank": "Platinum 1",
-        "rr": 0,
-        "lastUpdate": 1693257610255
+        "username": "iameepy#sleep",
+        "rank": "Gold 1",
+        "rr": 45,
+        "lastUpdate": 1719992820534
     },
     "discord": {
         "username": "grosskoenig",
@@ -48,9 +50,9 @@
     },
     "duolingo": {
         "username": "AlexInABox",
-        "xp": 640,
-        "streak": 2,
-        "lastUpdate": 1701176011694,
+        "xp": 13542,
+        "streak": 196,
+        "lastUpdate": 1719992823011,
         "language": "Swedish",
         "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge",
         "language_icon_URL": "https://ardslot.com/s/sv.svg"
@@ -63,18 +65,19 @@
     },
     "youtube": {
         "video": {
-            "title": "The End of Evangelion - Shinji discovers Unit 02's corpse (a.k.a Shinji screams)",
-            "channel": "Devpop",
-            "url": "https://www.youtube.com/watch?v=dSuYWdn61_o",
-            "thumbnail": "https://i.ytimg.com/vi/dSuYWdn61_o/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhyIEEoPTAP&rs=AOn4CLBxyuFfUeN4gYJlb3JKgd5FCBxDXg",
-            "lastUpdate": 1701259191992
+            "title": "shitpost status",
+            "channel": "Spendog",
+            "url": "https://www.youtube.com/watch?v=wnBYf6No2kw",
+            "thumbnail": "https://i.ytimg.com/vi/wnBYf6No2kw/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgBvgeAAtAFigIMCAAQARhQIFooZTAP&rs=AOn4CLAYXE3wlnl4RAyvZmtK7PpT-dymfw",
+            "lastUpdate": 1719996742962
         },
         "music": {
-            "title": "All Alone (Official Video)",
-            "artist": "Freddie Dredd • 18M views",
-            "lastUpdate": 1693257607800,
-            "thumbnail": "https://i.ytimg.com/vi/mQOV11xi4SM/maxresdefault.jpg",
-            "url": "https://music.youtube.com/watch?v=mQOV11xi4SM"
+            "title": "Lovers Rock",
+            "artist": "TV Girl",
+            "lastUpdate": 1719996622919,
+            "thumbnail": "https://i.ytimg.com/vi/j_sG_Juncn8/maxresdefault.jpg",
+            "url": "https://music.youtube.com/watch?v=j_sG_Juncn8",
+            "blurhash": "UtJ8nvt7x]j[~pj@oLofxta{WAoLoej[ofax"
         }
     },
     "spotify": {

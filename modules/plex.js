@@ -12,7 +12,30 @@ module.exports = plex;
 const fetch = require('node-fetch');
 const xml2js = require('xml2js');
 const fs = require('fs');
+const fss = require('fs').promises;
 const path = require('path');
+
+const sharp = require("sharp");
+const { encode } = require("blurhash");
+
+const encodeImageToBlurhash = async (path) => {
+    try {
+
+        const buffer = await fss.readFile(path);
+        // Process the image using sharp
+        const { data, info } = await sharp(buffer)
+            .raw()
+            .ensureAlpha()
+            .resize(32, 32, { fit: 'inside' })
+            .toBuffer({ resolveWithObject: true });
+
+        // Encode the processed image to BlurHash
+        const blurHash = encode(new Uint8ClampedArray(data), info.width, info.height, 4, 4);
+        return blurHash;
+    } catch (error) {
+        throw new Error(`Failed to encode image to BlurHash: ${error.message}`);
+    }
+};
 
 async function updateplex(serverURL, token, username) {
     console.log("\x1b[31m", "[PLEX] Fetching current stream...");
@@ -78,7 +101,15 @@ async function updateplex(serverURL, token, username) {
     console.log("\x1b[31m", "[PLEX] Title: " + title);
     console.log("\x1b[31m", "[PLEX] Cover: " + coverPath);
     console.log("\x1b[31m", "[PLEX] Public URL: " + publicURL);
-    presence.patchPlex(title, coverPath, publicURL);
+    encodeImageToBlurhash("." + coverPath)
+        .then(hash => {
+            console.log("\x1b[31m", "[PLEX] Successfully generated blurhash: " + String(hash));
+            presence.patchPlex(title, coverPath, hash, publicURL);
+        })
+        .catch(error => {
+            console.error("\x1b[31m", "[PLEX] I failed miserably gereating the blurhash. mb fam- " + error)
+            presence.patchPlex(title, coverPath, undefined, publicURL);
+        });
 }
 
 async function saveCoverForPublicViewing(serverURL, cover, token) {

@@ -16,6 +16,34 @@ module.exports = netflix;
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
+const sharp = require("sharp");
+const { encode } = require("blurhash");
+
+const encodeImageToBlurhash = async (url) => {
+    try {
+        // Fetch the image from the URL
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
+        }
+        const buffer = await response.buffer();
+
+        // Process the image using sharp
+        const { data, info } = await sharp(buffer)
+            .raw()
+            .ensureAlpha()
+            .resize(32, 32, { fit: 'inside' })
+            .toBuffer({ resolveWithObject: true });
+
+        // Encode the processed image to BlurHash
+        const blurHash = encode(new Uint8ClampedArray(data), info.width, info.height, 4, 4);
+        return blurHash;
+    } catch (error) {
+        throw new Error(`Failed to encode image to BlurHash: ${error.message}`);
+    }
+};
+
+
 async function updateNetflix(cookie, apiKey) {
     console.log("\x1b[31m", "[NETFLIX] Fetching latest stream...");
 
@@ -103,14 +131,22 @@ async function fetchDefaultImage(apiKey, showId, title, date) {
                     }
                     console.log("\x1b[31m", "[NETFLIX] Successfully fetched Netflix cover image!")
                     var large_image = body.large_image;
-                    presence.patchNetflix(title, large_image, date, Number(showId));
+                    encodeImageToBlurhash(large_image)
+                        .then(hash => {
+                            console.log("\x1b[31m", "[NETFLIX] Successfully generated blurhash: " + String(hash));
+                            presence.patchNetflix(title, large_image, hash, date, Number(showId));
+                        })
+                        .catch(error => {
+                            console.error("\x1b[31m", "[NETFLIX] I failed miserably gereating the blurhash. mb fam- " + error)
+                            presence.patchNetflix(title, large_image, blurhash, date, Number(showId));
+                        });
                 });
             break;
         } catch (e) {
             if (i == 4) {
                 console.log("\x1b[31m", "[NETFLIX] Failed to fetch Netflix cover image after 5 attempts, exiting...")
                 console.log("\x1b[31m", e)
-                presence.patchNetflix(title, undefined, date, Number(showId));
+                presence.patchNetflix(title, undefined, undefined, date, Number(showId));
                 return;
             }
             console.log("\x1b[31m", "[NETFLIX] Something went wrong, retrying... (" + (i + 1) + " / 5)")

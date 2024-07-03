@@ -12,6 +12,33 @@ module.exports = youtube;
 const fetch = require('node-fetch');
 const { Innertube, UniversalCache } = require('youtubei.js');
 
+const sharp = require("sharp");
+const { encode } = require("blurhash");
+
+const encodeImageToBlurhash = async (url) => {
+    try {
+        // Fetch the image from the URL
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
+        }
+        const buffer = await response.buffer();
+
+        // Process the image using sharp
+        const { data, info } = await sharp(buffer)
+            .raw()
+            .ensureAlpha()
+            .resize(32, 32, { fit: 'inside' })
+            .toBuffer({ resolveWithObject: true });
+
+        // Encode the processed image to BlurHash
+        const blurHash = encode(new Uint8ClampedArray(data), info.width, info.height, 4, 4);
+        return blurHash;
+    } catch (error) {
+        throw new Error(`Failed to encode image to BlurHash: ${error.message}`);
+    }
+};
+
 var yt;
 async function main(musicEnabled, videosEnabled) {
     // You may want to create a persistent cache instead (on Node and Deno).
@@ -59,11 +86,27 @@ async function main(musicEnabled, videosEnabled) {
 
 var vTitle, vChannel, vUrl, vThumbnail, vDate, mTitle, mArtist, mUrl, mThumbnail, mDate;
 function patchPresenceMusic() {
-    presence.patchYouTubeMusic(String(mTitle), String(mArtist), String(mUrl), String(mThumbnail), (mDate));
+    encodeImageToBlurhash(mThumbnail)
+        .then(hash => {
+            console.log("\x1b[31m", "[NETFLIX] Successfully generated blurhash: " + String(hash));
+            presence.patchYouTubeMusic(String(mTitle), String(mArtist), String(mUrl), String(mThumbnail), String(hash), (mDate));
+        })
+        .catch(error => {
+            console.error("\x1b[31m", "[NETFLIX] I failed miserably gereating the blurhash. mb fam- " + error)
+            presence.patchYouTubeMusic(String(mTitle), String(mArtist), String(mUrl), String(mThumbnail), undefined, (mDate));
+        });
 }
 
 function patchPresenceVideo() {
-    presence.patchYouTubeVideo(String(vTitle), String(vChannel), String(vUrl), String(vThumbnail), (vDate));
+    encodeImageToBlurhash(vThumbnail)
+        .then(hash => {
+            console.log("\x1b[31m", "[NETFLIX] Successfully generated blurhash: " + String(hash));
+            presence.patchYouTubeVideo(String(vTitle), String(vChannel), String(vUrl), String(vThumbnail), String(hash), (vDate));
+        })
+        .catch(error => {
+            console.error("\x1b[31m", "[NETFLIX] I failed miserably gereating the blurhash. mb fam- " + error)
+            presence.patchYouTubeVideo(String(vTitle), String(vChannel), String(vUrl), String(vThumbnail), undefined, (vDate));
+        });
 }
 
 async function fetchYTMusicData() {
