@@ -102,8 +102,8 @@ async function fetchDefaultImage(apiKey, showId, title, date) {
                         return;
                     }
                     console.log("\x1b[31m", "[NETFLIX] Successfully fetched Netflix cover image!")
-                    var defaultImage = body.default_image;
-                    presence.patchNetflix(title, defaultImage, date, Number(showId));
+                    var large_image = body.large_image;
+                    presence.patchNetflix(title, large_image, date, Number(showId));
                 });
             break;
         } catch (e) {
