@@ -88,7 +88,7 @@ async function updateplex(serverURL, token, username) {
                 return;
             }
             console.log("\x1b[31m", "[PLEX] Successfully fetched current stream!");
-            saveCoverForPublicViewing(serverURL, cover, token);
+            await saveCoverForPublicViewing(serverURL, cover, token);
         }
     } catch (e) {
         console.log("\x1b[31m", "[PLEX] Failed to fetch Plex data, probably because the token expired.")
@@ -107,7 +107,7 @@ async function updateplex(serverURL, token, username) {
             presence.patchPlex(title, coverPath, hash, publicURL);
         })
         .catch(error => {
-            console.error("\x1b[31m", "[PLEX] I failed miserably gereating the blurhash. mb fam- " + error)
+            console.error("\x1b[31m", "[PLEX] I failed miserably generating the blurhash. mb fam- \n " + error)
             presence.patchPlex(title, coverPath, undefined, publicURL);
         });
 }
