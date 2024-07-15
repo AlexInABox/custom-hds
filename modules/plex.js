@@ -96,19 +96,20 @@ async function updateplex(serverURL, token, username) {
     }
 
     coverPath = "/modules/public/plex_covers/" + String(cover).split("/")[String(cover).split("/").length - 1] + ".jpg";
+    coverName = String(cover).split("/")[String(cover).split("/").length - 1] + ".jpg";
 
     console.log("\x1b[31m", "[PLEX] Patching presence...");
     console.log("\x1b[31m", "[PLEX] Title: " + title);
-    console.log("\x1b[31m", "[PLEX] Cover: " + coverPath);
+    console.log("\x1b[31m", "[PLEX] Cover: " + coverName);
     console.log("\x1b[31m", "[PLEX] Public URL: " + publicURL);
     encodeImageToBlurhash("." + coverPath)
         .then(hash => {
             console.log("\x1b[31m", "[PLEX] Successfully generated blurhash: " + String(hash));
-            presence.patchPlex(title, coverPath, hash, publicURL);
+            presence.patchPlex(title, coverName, hash, publicURL);
         })
         .catch(error => {
             console.error("\x1b[31m", "[PLEX] I failed miserably generating the blurhash. mb fam- \n " + error)
-            presence.patchPlex(title, coverPath, undefined, publicURL);
+            presence.patchPlex(title, coverName, undefined, publicURL);
         });
 }
 
