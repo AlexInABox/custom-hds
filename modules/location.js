@@ -34,6 +34,7 @@ function initializeServer(GEOAPIFY_API_KEY) {
     app.post('/', async (req, res) => {
 
         console.log("\x1b[36m", "[Location] Received a location update request!");
+        console.log("\x1b[36m", "[Location] " + req.body);
 
         try {
             await fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + req.body.lat + "&lon=" + req.body.lon + "&lang=en&limit=1&format=json&apiKey=" + GEOAPIFY_API_KEY, requestOptions)
