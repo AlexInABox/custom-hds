@@ -15,7 +15,7 @@
     "fs": "^0.0.1-security",
     "node-fetch": "2.7.0",
     "path": "^0.12.7",
-    "sharp": "^0.33.4",
+    "sharp": "^0.33.5",
     "xml2js": "^0.6.2",
     "youtubei.js": "latest"
   }
