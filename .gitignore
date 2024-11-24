@@ -2,4 +2,3 @@ node_modules
 .vscode
 modules/.cache
 modules/public/plex_covers/*.jpg
-config.json

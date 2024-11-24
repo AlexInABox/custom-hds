@@ -6,7 +6,6 @@ assets
 .github
 modules/.cache/*
 modules/public/plex_covers/*.jpg
-config.json
 defaultConfig.json
 LICENSE
 README.md
