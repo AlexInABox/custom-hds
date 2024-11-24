@@ -44,6 +44,7 @@
     "active": false
   },
   "youtube": {
+    "cookie": "",
     "music": {
       "active": false
     },

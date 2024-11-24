@@ -116,6 +116,7 @@ function initializeModules() {
     youtube = new youtube(
       cfg.youtube.music.active,
       cfg.youtube.videos.active,
+      cfg.youtube.cookie,
       cfg.youtube.updateInterval,
       presence
     );

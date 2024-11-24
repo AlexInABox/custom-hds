@@ -1,168 +1,200 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 var config_valid = {
-    "hds": false,
-    "location": false,
-    "netflix": false,
-    "plex": false,
-    "valorant": false,
-    "discord": false,
-    "duolingo": false,
-    "applePay": false,
-    "youtube": {
-        "videos": false,
-        "music": false,
-    },
-    "spotify": false,
-}
+  hds: false,
+  location: false,
+  netflix: false,
+  plex: false,
+  valorant: false,
+  discord: false,
+  duolingo: false,
+  applePay: false,
+  youtube: {
+    videos: false,
+    music: false,
+  },
+  spotify: false,
+};
 
 var realConfig;
 
 class config {
-    constructor() {
-        realConfig = require('./../../config.json');
+  constructor() {
+    realConfig = require("./../../config.json");
+  }
+
+  check() {
+    config_valid.hds = realConfig.hds.active;
+
+    config_valid.location = realConfig.location.active;
+
+    if (
+      realConfig.location.active &&
+      realConfig.location.credentials.GEOAPIFY_API_KEY === ""
+    ) {
+      config_valid.location = false;
     }
 
-    check() {
-        config_valid.hds = realConfig.hds.active;
+    config_valid.netflix = realConfig.netflix.active;
 
-        config_valid.location = realConfig.location.active;
-
-        if (realConfig.location.active && realConfig.location.credentials.GEOAPIFY_API_KEY === "") {
-            config_valid.location = false;
-        }
-
-        config_valid.netflix = realConfig.netflix.active;
-
-        if (realConfig.netflix.active && (realConfig.netflix.cookie === "")) {
-            config_valid.netflix = false;
-        }
-        /*if (realConfig.netflix.apilayer_apikey === "") { //no use in totally disabling the module if the apikey is missing
+    if (realConfig.netflix.active && realConfig.netflix.cookie === "") {
+      config_valid.netflix = false;
+    }
+    /*if (realConfig.netflix.apilayer_apikey === "") { //no use in totally disabling the module if the apikey is missing
             config_valid.netflix = false;
         }*/
-        if (realConfig.netflix.updateInterval === "") {
-            realConfig.netflix.updateInterval = 900;
-        }
-
-        config_valid.plex = realConfig.plex.active;
-
-        if (realConfig.plex.active && (realConfig.plex.serverURL === "" || realConfig.plex.token === "" || realConfig.plex.username === "")) {
-            config_valid.plex = false;
-        }
-        if (realConfig.plex.updateInterval === "") {
-            realConfig.plex.updateInterval = 60;
-        }
-
-        config_valid.valorant = realConfig.valorant.active;
-
-        if (realConfig.valorant.active && ((realConfig.valorant.riotID === "" || realConfig.valorant.riotTag === "") && realConfig.valorant.riotPUUID === "")) {
-            config_valid.valorant = false;
-        }
-        if (realConfig.valorant.henrikDevAPIKey === "") {
-            config_valid.valorant = false;
-        }
-        if (realConfig.valorant.updateInterval === "") {
-            realConfig.valorant.updateInterval = 60;
-        }
-
-        config_valid.discord = realConfig.discord.active;
-
-        if (realConfig.discord.active && (realConfig.discord.userID === "")) {
-            config_valid.discord = false;
-        }
-        if (realConfig.discord.updateInterval === "") {
-            realConfig.discord.updateInterval = 30;
-        }
-
-        config_valid.duolingo = realConfig.duolingo.active;
-
-        if (realConfig.duolingo.active && (realConfig.duolingo.username === "" || realConfig.duolingo.cookie === "")) {
-            config_valid.duolingo = false;
-        }
-        if (realConfig.duolingo.updateInterval === "") {
-            realConfig.duolingo.updateInterval = 120;
-        }
-
-        config_valid.applePay = realConfig.applePay.active;
-
-        config_valid.youtube.videos = realConfig.youtube.videos.active;
-        config_valid.youtube.music = realConfig.youtube.music.active;
-
-        if (realConfig.youtube.updateInterval === "") {
-            realConfig.youtube.updateInterval = 60;
-        }
-
-        config_valid.spotify = realConfig.spotify.active;
-
-        if (realConfig.spotify.active && (realConfig.spotify.api.clientID === "" || realConfig.spotify.api.clientSecret === "")) {
-            config_valid.spotify = false;
-        }
-        if (realConfig.spotify.updateInterval === "") {
-            realConfig.spotify.updateInterval = 60;
-        }
-
-        patchConfig(realConfig);
-        console.log("\x1b[33m", "[CONFIG] Config check complete" + "\x1b[0m");
+    if (realConfig.netflix.updateInterval === "") {
+      realConfig.netflix.updateInterval = 900;
     }
 
-    getValid() {
-        return config_valid;
+    config_valid.plex = realConfig.plex.active;
+
+    if (
+      realConfig.plex.active &&
+      (realConfig.plex.serverURL === "" ||
+        realConfig.plex.token === "" ||
+        realConfig.plex.username === "")
+    ) {
+      config_valid.plex = false;
+    }
+    if (realConfig.plex.updateInterval === "") {
+      realConfig.plex.updateInterval = 60;
     }
 
-    get() {
-        return realConfig;
+    config_valid.valorant = realConfig.valorant.active;
+
+    if (
+      realConfig.valorant.active &&
+      (realConfig.valorant.riotID === "" ||
+        realConfig.valorant.riotTag === "") &&
+      realConfig.valorant.riotPUUID === ""
+    ) {
+      config_valid.valorant = false;
+    }
+    if (realConfig.valorant.henrikDevAPIKey === "") {
+      config_valid.valorant = false;
+    }
+    if (realConfig.valorant.updateInterval === "") {
+      realConfig.valorant.updateInterval = 60;
     }
 
-    setValorantPUUID(puuid) {
-        realConfig.valorant.riotPUUID = puuid;
-        console.log("\x1b[33m", "[CONFIG] [VALORANT] Valorant PUUID set to " + puuid + "\x1b[0m");
+    config_valid.discord = realConfig.discord.active;
 
-        patchConfig(realConfig);
+    if (realConfig.discord.active && realConfig.discord.userID === "") {
+      config_valid.discord = false;
+    }
+    if (realConfig.discord.updateInterval === "") {
+      realConfig.discord.updateInterval = 30;
     }
 
-    setValorantRiotID(riotID) {
-        realConfig.valorant.riotID = riotID;
-        console.log("\x1b[33m", "[CONFIG] [VALORANT] Valorant RiotID set to " + riotID + "\x1b[0m");
+    config_valid.duolingo = realConfig.duolingo.active;
 
-        patchConfig(realConfig);
+    if (
+      realConfig.duolingo.active &&
+      (realConfig.duolingo.username === "" || realConfig.duolingo.cookie === "")
+    ) {
+      config_valid.duolingo = false;
+    }
+    if (realConfig.duolingo.updateInterval === "") {
+      realConfig.duolingo.updateInterval = 120;
     }
 
-    setValorantRiotTag(riotTag) {
-        realConfig.valorant.riotTag = riotTag;
-        console.log("\x1b[33m", "[CONFIG] [VALORANT] Valorant RiotTag set to " + riotTag + "\x1b[0m");
+    config_valid.applePay = realConfig.applePay.active;
 
-        patchConfig(realConfig);
+    config_valid.youtube.videos = realConfig.youtube.videos.active;
+    config_valid.youtube.music = realConfig.youtube.music.active;
+
+    if (realConfig.youtube.updateInterval === "") {
+      realConfig.youtube.updateInterval = 60;
+    }
+    if (realConfig.youtube.cookie === "") {
+      config_valid.youtube.videos = false;
+      config_valid.youtube.music = false;
     }
 
-    getValorantPUUID() {
-        return realConfig.valorant.riotPUUID;
+    config_valid.spotify = realConfig.spotify.active;
+
+    if (
+      realConfig.spotify.active &&
+      (realConfig.spotify.api.clientID === "" ||
+        realConfig.spotify.api.clientSecret === "")
+    ) {
+      config_valid.spotify = false;
+    }
+    if (realConfig.spotify.updateInterval === "") {
+      realConfig.spotify.updateInterval = 60;
     }
 
-    getValorantRiotID() {
-        return realConfig.valorant.riotID;
-    }
+    patchConfig(realConfig);
+    console.log("\x1b[33m", "[CONFIG] Config check complete" + "\x1b[0m");
+  }
 
-    getValorantRiotTag() {
-        return realConfig.valorant.riotTag;
-    }
+  getValid() {
+    return config_valid;
+  }
+
+  get() {
+    return realConfig;
+  }
+
+  setValorantPUUID(puuid) {
+    realConfig.valorant.riotPUUID = puuid;
+    console.log(
+      "\x1b[33m",
+      "[CONFIG] [VALORANT] Valorant PUUID set to " + puuid + "\x1b[0m"
+    );
+
+    patchConfig(realConfig);
+  }
+
+  setValorantRiotID(riotID) {
+    realConfig.valorant.riotID = riotID;
+    console.log(
+      "\x1b[33m",
+      "[CONFIG] [VALORANT] Valorant RiotID set to " + riotID + "\x1b[0m"
+    );
+
+    patchConfig(realConfig);
+  }
+
+  setValorantRiotTag(riotTag) {
+    realConfig.valorant.riotTag = riotTag;
+    console.log(
+      "\x1b[33m",
+      "[CONFIG] [VALORANT] Valorant RiotTag set to " + riotTag + "\x1b[0m"
+    );
+
+    patchConfig(realConfig);
+  }
+
+  getValorantPUUID() {
+    return realConfig.valorant.riotPUUID;
+  }
+
+  getValorantRiotID() {
+    return realConfig.valorant.riotID;
+  }
+
+  getValorantRiotTag() {
+    return realConfig.valorant.riotTag;
+  }
 }
 
 module.exports = config;
 
-
 async function patchConfig(config) {
-    console.log("\x1b[33m", "[CONFIG] Patching config.json...", "\x1b[0m");
-    fs.writeFileSync(
-        path.resolve(__dirname, "./../../config.json"),
-        JSON.stringify(config, null, 2),
-        (err) => {
-            if (err) {
-                console.error("[CONFIG] " + err);
-            }
-            // file written successfully
-        }
-    );
+  console.log("\x1b[33m", "[CONFIG] Patching config.json...", "\x1b[0m");
+  fs.writeFileSync(
+    path.resolve(__dirname, "./../../config.json"),
+    JSON.stringify(config, null, 2),
+    (err) => {
+      if (err) {
+        console.error("[CONFIG] " + err);
+      }
+      // file written successfully
+    }
+  );
 }
 
 //PSEUDO:
@@ -170,7 +202,6 @@ async function patchConfig(config) {
 // verify if the config values are correct
 // if correct, set the private variable in this file to true
 // if not, set the private variable in this file to false
-
 
 // PSEUDO:
 // function configCheck() {
@@ -186,4 +217,4 @@ async function patchConfig(config) {
 //     ...
 //     return true;
 // }
-//     
+//
