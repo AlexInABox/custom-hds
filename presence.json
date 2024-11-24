@@ -1,92 +1,92 @@
 {
-    "health": {
-        "heartRate": 79,
-        "speed": 0,
-        "oxygenSaturation": 0.98,
-        "lastUpdate": {
-            "heartRate": 1700953560000,
-            "speed": 1683292128107,
-            "oxygenSaturation": 1688321405699
-        }
-    },
-    "location": {
-        "latitude": 53.16,
-        "longitude": 12.31,
-        "lastUpdate": 1705951194527,
-        "district": "Charlottenburg-Wilmersdorf",
-        "country": "Germany",
-        "city": "Berlin"
-    },
-    "netflix": {
-        "lastWatched": {
-            "title": "The Glory: Season 1: \"Episode 2\"",
-            "date": "28/06/2024",
-            "showId": 81519223,
-            "defaultImage": "https://occ-0-3947-2567.1.nflxso.net/dnm/api/v6/WNk1mr9x_Cd_2itp6pUM7-lXMJg/AAAABZAPfNI5AiWKMgNDnH699bYnuf806rN4CcCSmTAv3_30_3Sl-UOKnGk-2thrCQIHDXWmsp0mOAMfVKtFvp8491dnl5hAILH0gRqZPHOzRa8xEm3Os1Eg9vblVqB359QT8Wu6Pg.jpg?r=a46",
-            "lastUpdate": 1719994536870,
-            "blurhash": "UM8zp3-q-@o$-re,xvWBM_ISacn$W@RioMxb"
-        }
-    },
-    "plex": {
-        "lastWatched": {
-            "cover": "/modules/public/plex_covers/1718848319.jpg",
-            "lastUpdate": 1719996740689,
-            "title": "Cowboy Bebop: Mushroom Samba",
-            "publicURL": "",
-            "blurhash": "/modules/public/plex_covers/1718848319.jpg"
-        }
-    },
-    "valorant": {
-        "username": "iameepy#sleep",
-        "rank": "Gold 1",
-        "rr": 45,
-        "lastUpdate": 1719992820534
-    },
-    "discord": {
-        "username": "grosskoenig",
-        "status": "online",
-        "activity": "Valorant",
-        "lastUpdate": 1683292128107
-    },
-    "duolingo": {
-        "username": "AlexInABox",
-        "xp": 13542,
-        "streak": 196,
-        "lastUpdate": 1719992823011,
-        "language": "Swedish",
-        "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge",
-        "language_icon_URL": "https://ardslot.com/s/sv.svg"
-    },
-    "applePay": {
-        "merchant": "Apple",
-        "amount": 19.99,
-        "cardOrPass": "card",
-        "lastUpdate": 1689360107363
-    },
-    "youtube": {
-        "video": {
-            "title": "shitpost status",
-            "channel": "Spendog",
-            "url": "https://www.youtube.com/watch?v=wnBYf6No2kw",
-            "thumbnail": "https://i.ytimg.com/vi/wnBYf6No2kw/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgBvgeAAtAFigIMCAAQARhQIFooZTAP&rs=AOn4CLAYXE3wlnl4RAyvZmtK7PpT-dymfw",
-            "lastUpdate": 1719996742962
-        },
-        "music": {
-            "title": "Lovers Rock",
-            "artist": "TV Girl",
-            "lastUpdate": 1719996622919,
-            "thumbnail": "https://i.ytimg.com/vi/j_sG_Juncn8/maxresdefault.jpg",
-            "url": "https://music.youtube.com/watch?v=j_sG_Juncn8",
-            "blurhash": "UtJ8nvt7x]j[~pj@oLofxta{WAoLoej[ofax"
-        }
-    },
-    "spotify": {
-        "song": {
-            "title": "Do Better",
-            "artist": "Cuco",
-            "url": "https://open.spotify.com/track/6QgjcU0zLnzq5OrUoSZ3OK?si=8e9e9e9e9e9e9e9e",
-            "cover": "https://i.scdn.co/image/ab67616d0000b273e9e9e9e9e9e9e9e9e9e9e9e9",
-            "date": 1683292128107
-        }
+  "health": {
+    "heartRate": 666,
+    "speed": 0,
+    "oxygenSaturation": 0.98,
+    "lastUpdate": {
+      "heartRate": 1700953560000,
+      "speed": 1683292128107,
+      "oxygenSaturation": 1688321405699
     }
+  },
+  "location": {
+    "latitude": 53.16,
+    "longitude": 12.31,
+    "lastUpdate": 1705951194527,
+    "district": "Charlottenburg-Wilmersdorf",
+    "country": "Germany",
+    "city": "Berlin"
+  },
+  "netflix": {
+    "lastWatched": {
+      "title": "The Glory: Season 1: \"Episode 2\"",
+      "date": "28/06/2024",
+      "showId": 81519223,
+      "defaultImage": "https://occ-0-3947-2567.1.nflxso.net/dnm/api/v6/WNk1mr9x_Cd_2itp6pUM7-lXMJg/AAAABZAPfNI5AiWKMgNDnH699bYnuf806rN4CcCSmTAv3_30_3Sl-UOKnGk-2thrCQIHDXWmsp0mOAMfVKtFvp8491dnl5hAILH0gRqZPHOzRa8xEm3Os1Eg9vblVqB359QT8Wu6Pg.jpg?r=a46",
+      "lastUpdate": 1719994536870,
+      "blurhash": "UM8zp3-q-@o$-re,xvWBM_ISacn$W@RioMxb"
+    }
+  },
+  "plex": {
+    "lastWatched": {
+      "cover": "/modules/public/plex_covers/1718848319.jpg",
+      "lastUpdate": 1719996740689,
+      "title": "Cowboy Bebop: Mushroom Samba",
+      "publicURL": "",
+      "blurhash": "/modules/public/plex_covers/1718848319.jpg"
+    }
+  },
+  "valorant": {
+    "username": "iameepy#sleep",
+    "rank": "Gold 1",
+    "rr": 45,
+    "lastUpdate": 1719992820534
+  },
+  "discord": {
+    "username": "grosskoenig",
+    "status": "online",
+    "activity": "Valorant",
+    "lastUpdate": 1683292128107
+  },
+  "duolingo": {
+    "username": "AlexInABox",
+    "xp": 13542,
+    "streak": 196,
+    "lastUpdate": 1719992823011,
+    "language": "Swedish",
+    "avatar": "//simg-ssl.duolingo.com/avatars/1175524279/NEGY40B216/xxlarge",
+    "language_icon_URL": "https://ardslot.com/s/sv.svg"
+  },
+  "applePay": {
+    "merchant": "Apple",
+    "amount": 19.99,
+    "cardOrPass": "card",
+    "lastUpdate": 1689360107363
+  },
+  "youtube": {
+    "video": {
+      "title": "shitpost status",
+      "channel": "Spendog",
+      "url": "https://www.youtube.com/watch?v=wnBYf6No2kw",
+      "thumbnail": "https://i.ytimg.com/vi/wnBYf6No2kw/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgBvgeAAtAFigIMCAAQARhQIFooZTAP&rs=AOn4CLAYXE3wlnl4RAyvZmtK7PpT-dymfw",
+      "lastUpdate": 1719996742962
+    },
+    "music": {
+      "title": "Lovers Rock",
+      "artist": "TV Girl",
+      "lastUpdate": 1719996622919,
+      "thumbnail": "https://i.ytimg.com/vi/j_sG_Juncn8/maxresdefault.jpg",
+      "url": "https://music.youtube.com/watch?v=j_sG_Juncn8",
+      "blurhash": "UtJ8nvt7x]j[~pj@oLofxta{WAoLoej[ofax"
+    }
+  },
+  "spotify": {
+    "song": {
+      "title": "Do Better",
+      "artist": "Cuco",
+      "url": "https://open.spotify.com/track/6QgjcU0zLnzq5OrUoSZ3OK?si=8e9e9e9e9e9e9e9e",
+      "cover": "https://i.scdn.co/image/ab67616d0000b273e9e9e9e9e9e9e9e9e9e9e9e9",
+      "date": 1683292128107
+    }
+  }
 }

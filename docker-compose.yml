@@ -1,7 +1,7 @@
 services:
   custom-hds:
     #image: alexinabox/custom-hds:dev
-    image: alexinabox/custom-hds:latest
+    image: alexinabox/custom-hds:dev
     ports:
       - "80:80"
       - "81:81"
