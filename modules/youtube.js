@@ -17,7 +17,8 @@ class youtube {
 module.exports = youtube;
 
 const fetch = require("node-fetch");
-const { Innertube } = require("youtubei.js");
+const { Innertube, Log } = require("youtubei.js");
+Log.setLevel(Log.Level.NONE);
 
 const sharp = require("sharp");
 const { encode } = require("blurhash");
