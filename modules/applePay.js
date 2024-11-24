@@ -1,14 +1,12 @@
-var presence = require('./misc/presence.js');
+var presence = require("./misc/presence.js");
 class applePay {
+  constructor(superPresence) {
+    presence = superPresence;
 
-    constructor(superPresence) {
-        presence = superPresence;
+    initializeServer();
+  }
 
-        initializeServer();
-    }
-
-    update() { }
-
+  update() {}
 }
 
 //Everytime a payment has been made via ApplePay on the users iPhone the shortcut fires and sends
@@ -18,9 +16,9 @@ class applePay {
 
 module.exports = applePay;
 
-const express = require('express');
+const express = require("express");
 const app = express();
-const port = 2082; //cloudflare http port
+const port = 83;
 
 //variables
 var merchant;
@@ -29,24 +27,30 @@ var cardOrPass;
 //end-of variables
 
 function initializeServer() {
-    app.use(express.json());
+  app.use(express.json());
 
-    app.listen(port, () => {
-        console.log("\x1b[36m", "[ApplePay] ApplePay is now listening on port " + port);
-    });
+  app.listen(port, () => {
+    console.log(
+      "\x1b[36m",
+      "[ApplePay] ApplePay is now listening on port " + port
+    );
+  });
 
-    app.put('/', (req, res) => {
+  app.put("/", (req, res) => {
+    console.log("\x1b[36m", "[ApplePay] Received a PUT request!");
 
-        console.log("\x1b[36m", "[ApplePay] Received a PUT request!");
+    message = String(req.body);
+    merchant = message.merchant;
+    amount = message.amount;
+    cardOrPass = message.cardOrPass;
 
-        message = String(req.body);
-        merchant = message.merchant;
-        amount = message.amount;
-        cardOrPass = message.cardOrPass;
+    res.sendStatus(200);
+    //Patch presence
 
-        res.sendStatus(200);
-        //Patch presence
-
-        presence.patchApplePay(String(merchant), Number(amount), String(cardOrPass));
-    })
+    presence.patchApplePay(
+      String(merchant),
+      Number(amount),
+      String(cardOrPass)
+    );
+  });
 }
