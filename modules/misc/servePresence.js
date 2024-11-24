@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
-var realPresence;
+let realPresence;
 
 class servePresence {
   constructor() {
-    realPresence = require("./../../presence.json");
+    realPresence = loadPresence();
     initializeServer();
   }
 
@@ -13,14 +13,28 @@ class servePresence {
 }
 module.exports = servePresence;
 
-setInterval(function () {
-  delete require.cache[require.resolve("./../../presence.json")];
-  realPresence = require("./../../presence.json");
-}, 1500);
-
 const express = require("express");
 const app = express();
 const port = 80;
+
+function loadPresence() {
+  try {
+    const data = fs.readFileSync(
+      path.resolve(__dirname, "./../../presence.json"),
+      "utf8"
+    );
+    return JSON.parse(data);
+  } catch (err) {
+    console.error(
+      "\x1b[36m",
+      "[servePresence] Failed to reload presence " + err
+    );
+    return {}; // Return an empty object if the file fails to load
+  }
+}
+setInterval(function () {
+  realPresence = loadPresence();
+}, 1500);
 
 function initializeServer() {
   app.use(express.json());
