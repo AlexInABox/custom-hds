@@ -9,3 +9,4 @@ services:
     volumes:
       - "./config.json:/custom-hds/config.json"
       - "/var/www/example:/custom-hds/public/plex_covers"
+      - "./.cache:/custom-hds/modules/.cache"
