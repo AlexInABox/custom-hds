@@ -37,6 +37,17 @@ setInterval(function () {
 }, 1500);
 
 function initializeServer() {
+  // Middleware to add CORS headers
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
+    res.setHeader("Access-Control-Allow-Methods", "GET"); // Allowed HTTP methods
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    ); // Allowed headers
+    next();
+  });
+
   app.use(express.json());
 
   app.listen(port, () => {
