@@ -82,10 +82,10 @@ class presence {
   }
 
   patchPlex(title, cover, blurhash, publicURL) {
-    realPresence.plex.lastWatched.title = title;
-    realPresence.plex.lastWatched.cover = cover;
-    realPresence.plex.lastWatched.blurhash = cover;
-    realPresence.plex.lastWatched.publicURL = publicURL;
+    realPresence.plex.lastWatched.title = String(title);
+    realPresence.plex.lastWatched.cover = String(cover);
+    realPresence.plex.lastWatched.blurhash = String(blurhash);
+    realPresence.plex.lastWatched.publicURL = String(publicURL);
 
     realPresence.plex.lastWatched.lastUpdate = Date.now();
   }
