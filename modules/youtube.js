@@ -290,6 +290,7 @@ function getLatestYTMusicURL(history) {
 
 //go through all possible thumbnail urls (sorted by quality descending) and return the first one that is not the default thumbnail
 async function getLatestYTMusicThumbnail(history) {
+  /*
   return new Promise(async (res) => {
     const videoId = history.contents_memo.get("MusicResponsiveListItem")[0].id;
     const thumbnailURLs = [
@@ -327,6 +328,10 @@ async function getLatestYTMusicThumbnail(history) {
     }
     return res("https://img.youtube.com/vi/0/maxresdefault.jpg");
   });
+  */
+
+  const videoId = history.contents_memo.get("MusicResponsiveListItem")[0].id;
+  return "https://yttf.zeitvertreib.vip/?url=https://music.youtube.com/watch?v=" + videoId;
 }
 
 var defaultThumbnailUnit8Array;
